@@ -1,5 +1,5 @@
-
 import os
+
 
 class Shell:
 
@@ -11,10 +11,8 @@ class Shell:
             content = f.read()
         return content
 
-
     def run_shell(self):
         while True:
-
 
             self.read_command()
             self.run_command(self.command)
@@ -41,7 +39,6 @@ class Shell:
         elif command == "help":
             self.print_help()
 
-
     def read_command(self):
         self.command = input("Shell>")
 
@@ -60,8 +57,6 @@ class Shell:
 
     Made by Digital Ninjas
     김현용, 김준휘, 모유찬, 민재원, 이성규, 이재윤""")
-
-
 
 
 if __name__ == "__main__":

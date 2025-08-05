@@ -16,6 +16,7 @@ def test_shell_exit(capsys):
 
     assert captured.out == "Shell>Shell Exited Successfully.\n"
 
+
 def test_run_command_write():
     with patch.object(Shell, 'run_command', return_value="[Write] Done") as mock_method:
         shell = Shell()
@@ -24,6 +25,7 @@ def test_run_command_write():
         assert result == "[Write] Done"
 
         mock_method.assert_called_once_with("write 3 0x1289CDEF")
+
 
 def test_run_command_read():
     with patch.object(Shell, 'run_command', return_value="[Read] LBA : 0x00000000") as mock_method:
