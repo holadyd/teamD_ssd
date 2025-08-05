@@ -23,12 +23,40 @@ def test_write_basic_flow_with_value(args):
     :param args: ['W',lba,value]
     :return: lba 주소에 value를 write 후 lab 주소의 값이 정상적으로 read 동작하는지 확인
     '''
-    _, lba, value = args
+    op, lba, value = args
     # ssd 클래스 생성
+    assert op == 'W'
     ssd = SSD()
     ssd.write(lba, value)
     # 캡처된 출력에 예상 메시지가 포함되어 있는지 검증
     assert ssd.read(lba) == value
+
+
+@pytest.mark.parametrize("args", [
+    ['W', '144', '0x51D0C3A9'],
+    ['W', '2535', '0xC6F89B2E'],
+    ['W', '-11', '0x03A4E5F6'],
+    ['W', '666', '0xF9B1C2A3'],
+    ['W', '224', '0x7D8E9A0B'],
+    ['W', '10591', '0x2B3C4D5E'],
+    ['W', '-988', '0xE1F2A3B4'],
+    ['W', '-551', '0x9C8D7E6F'],
+    ['W', '-95', '0x3F4A5B6C'],
+    ['W', '243', '0xA1B2C3D4']
+])
+def test_write_invalid_lba(args):
+    '''
+    2번째 매개변수(lab)는 0-99 외의 값이 들어오는 경우 값을 기록 후 ERROR 반환.
+    :param args: ['W',lba,value]
+    :return: invalid 한 lba 주소에 쓰기 동작할때 ERROR 를 return
+    '''
+    op, lba, value = args
+    # ssd 클래스 생성
+    assert op == 'W'
+    ssd = SSD()
+    ssd.write(lba, value)
+    # 캡처된 출력에 예상 메시지가 포함되어 있는지 검증
+    assert ssd.read(lba) == 'ERROR'
 
 
 @pytest.mark.parametrize("args", [
