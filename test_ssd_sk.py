@@ -46,3 +46,19 @@ def test_read_when_not_written():
     # assert
     assert ret1 == "0x00000000"
     assert ret2 == "0x00000000"
+
+
+def test_read_value_store_only_one_data():
+    ## arrange
+    ssd = SSD()
+
+    ## act
+    ret1 = ssd.read(0)
+    ret2 = ssd.read(99)
+
+    list_ret1 = ret1.split("\n")
+    list_ret2 = ret2.split("\n")
+
+    ## assert
+    assert len(list_ret1) == 1
+    assert len(list_ret2) == 1
