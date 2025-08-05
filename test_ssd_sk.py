@@ -62,3 +62,20 @@ def test_read_value_store_only_one_data():
     ## assert
     assert len(list_ret1) == 1
     assert len(list_ret2) == 1
+
+
+def test_write_3_args():
+    ## Arrange
+    command_line1 = "W 10 0x00000001 abc"
+    command_line2 = "W 11 "
+
+    command_split1 = command_line1.split()
+    command_split2 = command_line2.split()
+
+    ## act
+    ret1 = len(command_split1)
+    ret2 = len(command_split2)
+
+    ## assert
+    assert ret1 == 3
+    assert ret2 == 3
