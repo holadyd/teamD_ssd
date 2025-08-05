@@ -22,7 +22,7 @@ class Shell:
                 break
 
     def run_command(self, command):
-        if self.is_valid_input(command):
+        if self.is_invalid_input(command):
             return
         commands = command.strip().split(" ")
 
@@ -61,8 +61,49 @@ class Shell:
     Made by Digital Ninjas
     김현용, 김준휘, 모유찬, 민재원, 이성규, 이재윤""")
 
-    def is_valid_input(self, command:str):
-        pass
+    def is_invalid_input(self, command: str):
+        if self.is_invalid_format(command):
+            return True
+        return False
+
+    def is_invalid_format(self, command):
+        one_arg_lst = ["help", "exit", "fullread"]
+        two_arg_lst = ["read", "fullwrite"]
+        three_arg_lst = ["write"]
+        command_args = command.strip().split(" ")
+        if command_args[0] not in one_arg_lst and \
+                command_args[0] not in two_arg_lst and \
+                command_args[0] not in three_arg_lst :
+            print("Error")
+            return True
+        if command_args[0] in one_arg_lst:
+            if len(command_args) != 1:
+                print("Error")
+                return True
+        if command_args[0] in two_arg_lst:
+            if len(command_args) != 2:
+                print("Error")
+                return True
+            if not self.is_valid_number(command_args[1]):
+                return True
+        if command_args[0] in three_arg_lst:
+            if len(command_args) != 3:
+                print("Error")
+                return True
+            if not self.is_valid_number(command_args[1]):
+                return True
+            if not self.is_valid_number(command_args[2]):
+                return True
+
+        return False
+
+    def is_valid_number(self, num):
+        try:
+            int(num, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
+            return True
+        except ValueError:
+            return False
+
 
 if __name__ == "__main__":
     shell = Shell()

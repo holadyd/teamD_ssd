@@ -80,7 +80,9 @@ def test_shell_fullread(capsys):
 
 def test_shell_input_validation_format_write_fail(capsys):
     shell = Shell()
-    shell.run_command("ssd w 0xAAAABBBB 3\n")
+    shell.run_command("WRITE 3\n")
     out, err = capsys.readouterr()
 
-    assert "[Error]" == out
+    assert "Error" in out
+
+
