@@ -19,3 +19,13 @@ def test_read_2_args():
 
     assert result.startswith("0x") and len(result) == 10
 
+# ssd_u3
+@pytest.mark.parametrize("args", [
+    (), # 인자 1개
+    (1,),   # 인자 2개
+    (1, 2, 3),  # 인자 3개
+])
+def test_read_not_2_args(args):
+    ssd = SSD()
+    with pytest.raises(ValueError):
+        ssd.read(*args)
