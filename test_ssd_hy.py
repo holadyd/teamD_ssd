@@ -29,3 +29,9 @@ def test_read_not_2_args(args):
     ssd = SSD()
     with pytest.raises(ValueError):
         ssd.read(*args)
+
+# ssd_u4
+def test_output_file_exist():
+    ssd = SSD()
+
+    assert os.path.exists('ssd_output.txt'), 'ssd_output.txt 파일이 존재하지 않습니다.'
