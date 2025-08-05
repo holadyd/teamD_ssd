@@ -16,11 +16,15 @@ if __name__ == '__main__':
     # 매개변수 추가
     parser.add_argument('command', type=str, help='첫 번째 매개변수 (예: W)')
     parser.add_argument('address', type=int, help='두 번째 매개변수 (정수)')
-    parser.add_argument('value', type=str, help='세 번째 매개변수 (16진수 값)')
+    parser.add_argument('--value', type=str, nargs='?', help='세 번째 매개변수 (16진수 값)', default=None)
 
-    # 명령줄에서 전달된 모든 인자 파싱
     args = parser.parse_args()
 
     print(f"첫 번째 매개변수 (명령어 : W): {args.command}")
     print(f"두 번째 매개변수 (주소 : LBA): {args.address}")
-    print(f"세 번째 매개변수 (값 : VALUE): {args.value}")
+
+    # 'value'가 있는지 확인하고 처리
+    if args.value:
+        print(f"세 번째 매개변수 (값 : VALUE): {args.value}")
+    else:
+        pass
