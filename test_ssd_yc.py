@@ -30,8 +30,31 @@ def test_write_basic_flow_with_value(args):
     assert ssd.read(lba) == value
 
 
-@pytest.mark.skip
-def test_write_3nd_arg_is_valid(): ...
+@pytest.mark.parametrize("args", [
+    ['W', '68', '0x51D0C3A9'],
+    ['W', '9', '0xC6F89B2E'],
+    ['W', '22', '0x03A4E5F6'],
+    ['W', '77', '0xF9B1C2A3'],
+    ['W', '41', '0x7D8E9A0B'],
+    ['W', '50', '0x2B3C4D5E'],
+    ['W', '88', '0xE1F2A3B4'],
+    ['W', '1', '0x9C8D7E6F'],
+    ['W', '95', '0x3F4A5B6C'],
+    ['W', '3', '0xA1B2C3D4']
+])
+def test_write_3nd_arg_is_valid(args):
+    '''
+
+    :param args: 'W','LBA','VALUE
+    :param expected_return: VALUE
+    :return: 3번째 매개변수는 0x0000000 형태다
+    '''
+    op,lba,value = args
+    ssd = SSD()
+    assert op == 'W'
+    ssd.write(lba,value)
+    assert ssd.read(lba) == value
+
 
 
 @pytest.mark.skip
