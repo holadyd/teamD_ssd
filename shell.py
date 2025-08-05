@@ -22,9 +22,10 @@ class Shell:
                 break
 
     def run_command(self, command):
-        commands = command.strip().split(" ")
-        if self.is_valid_input(commands):
+        if self.is_valid_input(command):
             return
+        commands = command.strip().split(" ")
+
         if command.startswith("write"):
             os.system(f"python ssd.py W, {commands[1]}, {commands[2]}")
             print("[Write] Done")
@@ -60,7 +61,7 @@ class Shell:
     Made by Digital Ninjas
     김현용, 김준휘, 모유찬, 민재원, 이성규, 이재윤""")
 
-    def is_valid_input(self, command_args:list):
+    def is_valid_input(self, command:str):
         pass
 
 if __name__ == "__main__":
