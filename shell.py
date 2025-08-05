@@ -26,6 +26,10 @@ class Shell:
         if command == "fullwrite 0xAAAABBBB\n":
             for _ in range(100):
                 print("[Write] Done")
+        elif command == "fullread\n":
+            for _ in range(100):
+                print("[Read] LBA 00 : 0xAAAABBBB")
+
 
     def read_command(self):
         self.command = input("Shell>")
