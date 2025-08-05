@@ -156,7 +156,7 @@ def test_write_2nd_invalid_args():
     assert ret2 == "ERROR"
 
 
-
+# ssd_u10
 @pytest.mark.parametrize("args", [
     ['W', '68', '0x51D0C3A9'],
     ['W', '9', '0xC6F89B2E'],
@@ -183,7 +183,7 @@ def test_write_basic_flow_with_value(args):
     # 캡처된 출력에 예상 메시지가 포함되어 있는지 검증
     assert ssd.read(lba) == value
 
-
+# ssd_u16
 @pytest.mark.parametrize("args", [
     ['W', '144', '0x51D0C3A9'],
     ['W', '2535', '0xC6F89B2E'],
@@ -210,7 +210,7 @@ def test_write_invalid_lba(args):
     # 캡처된 출력에 예상 메시지가 포함되어 있는지 검증
     assert ssd.read(lba) == 'ERROR'
 
-
+# ssd_u11
 @pytest.mark.parametrize("args", [
     ['W', '68', '0x51D0C3A9'],
     ['W', '9', '0xC6F89B2E'],
@@ -235,7 +235,7 @@ def test_write_3nd_arg_is_valid(args):
     ssd.write(lba, value)
     assert ssd.read(lba) == value
 
-
+# ssd_u17
 @pytest.mark.parametrize("args", [
     ['W', '68', '0x51D0'],  # 숫자 8자리 x
     ['W', '9', '0xC6F89'],  # 숫자 8자리 x
@@ -256,7 +256,7 @@ def test_write_3nd_arg_is_invalid(args):
     ssd.write(lba, value)
     assert ssd.read(lba) == 'ERROR'
 
-
+# ssd_u12
 @pytest.mark.parametrize("args", [
     ['W', '68', '0x51D0C3A9'],
     ['W', '9', '0xC6F89B2E'],
@@ -280,7 +280,7 @@ def test_write_valid_does_not_append_output(args):
     ssd.write(lba, value)
     assert '\n' not in ssd.read(lba)
 
-
+# ssd_u13
 def test_write_read_ssd_nand_file(mocker: MockFixture):
     '''
     ssd_nand 파일 읽는 함수를 호출한다.
@@ -295,7 +295,7 @@ def test_write_read_ssd_nand_file(mocker: MockFixture):
     ssd.write(99, '0xFFFFFFFF')
     mock_file.assert_called_once_with('ssd_nand.txt', 'r')
 
-
+# ssd_u14
 def test_write_create_ssd_nand_file(mocker: MockFixture):
     '''
     ssd_nand 파일 읽는(쓰는모드) 함수를 호출한다.
