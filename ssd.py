@@ -1,13 +1,12 @@
 import argparse
 
+
 class SSD:
     def read(self, lba):
         pass
 
     def write(self, lba, value):
         pass
-
-
 
 
 if __name__ == '__main__':
@@ -25,4 +24,3 @@ if __name__ == '__main__':
     print(f"첫 번째 매개변수 (명령어 : W): {args.command}")
     print(f"두 번째 매개변수 (주소 : LBA): {args.address}")
     print(f"세 번째 매개변수 (값 : VALUE): {args.value}")
-
