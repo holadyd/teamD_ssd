@@ -14,13 +14,29 @@ def test_shell_exit(capsys):
 
     assert captured.out == "Shell>Shell Exited Successfully.\n"
 
+
 def test_shell_help(capsys):
     shell = Shell()
     shell.run_command("help")
 
     captured = capsys.readouterr()
+    expected = ('***SSD Test Shell Help***\n'
+                '      write         지정한 LBA에 Data를 기록한다.\n'
+                '        Usage) write [LBA] [Data]\n'
+                '      fullwrite     모든 LBA에 Data를 기록한다.\n'
+                '        Usage) fullwrite [Data]\n'
+                '      read          지정한 LBA의 Data를 출력한다.\n'
+                '        Usage) read [LBA]\n'
+                '      fullread      모든 LBA에 대해 Data를 출력한다.\n'
+                '        Usage) fullread\n'
+                '      exit          Test Shell을 종료한다.\n'
+                '      help          도움말을 출력한다.\n'
+                '      \n'
+                '\n'
+                '    Made by Digital Ninjas\n'
+                '    김현용, 김준휘, 모유찬, 민재원, 이성규, 이재윤\n')
 
-    assert captured.out == "Shell>Shell Exited Successfully.\n"
+    assert captured.out == expected
 
 
 def test_shell_fullwrite(capsys):
