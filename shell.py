@@ -11,13 +11,19 @@ class Shell:
 
     def run_shell(self):
         while True:
+
+
             self.read_command()
+            self.run_command()
 
             if self.command == "exit":
                 print("Shell Exited Successfully.")
                 break
 
 
+
+    def run_command(self):
+        ...
 
     def read_command(self):
         self.command = input("Shell>")
