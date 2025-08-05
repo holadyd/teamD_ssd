@@ -116,5 +116,16 @@ def test_write_read_ssd_nand_file(mocker: MockFixture):
     mock_file.assert_called_once_with('ssd_nand.txt', 'r')
 
 
-@pytest.mark.skip
-def test_write_create_ssd_nand_file(): ...
+def test_write_create_ssd_nand_file(mocker: MockFixture):
+    '''
+    ssd_nand 파일 읽는(쓰는모드) 함수를 호출한다.
+    :param mocker: Mocker
+    :return: builtin open(write모드) 했는지?
+    '''
+    mock_file = mocker.patch(
+        'builtins.open',
+        mocker.mock_open(read_data="Mocked file content")
+    )
+    ssd = SSD()
+    ssd.write(99, '0xFFFFFFFF')
+    mock_file.assert_called_once_with('ssd_nand.txt', 'w')
