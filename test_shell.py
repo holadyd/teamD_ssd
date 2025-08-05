@@ -62,7 +62,7 @@ def test_shell_help(capsys):
 
 def test_shell_fullwrite(capsys):
     shell = Shell()
-    shell.run_command("fullwrite 0xAAAABBBB\n")()
+    shell.run_command("fullwrite 0xAAAABBBB\n")
     out, err = capsys.readouterr()
     write_count = out.count("[Write] Done\n")
     assert write_count == 100

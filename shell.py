@@ -23,10 +23,10 @@ class Shell:
 
     def run_command(self, command):
         commands = command.strip().split(" ")
-        if self.command.startswith("write"):
+        if command.startswith("write"):
             os.system(f"python ssd.py W, {commands[1]}, {commands[2]}")
             print("[Write] Done")
-        elif self.command.startswith("R"):
+        elif command.startswith("R"):
             os.system(f"python ssd.py R, {commands[1]}")
             result = self.read_output()
             print(f"[Read] LBA {commands[1]} : {result}")
