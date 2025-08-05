@@ -1,7 +1,7 @@
 <img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/50815c8a-b73c-45f3-a699-b2009bba93b4" />
 
 
-# Project teamD SSD: 가상 SSD 및 테스트 셸 개발
+# Digital Ninjas SSD: 가상 SSD 및 테스트 셸 개발
 
 ## 🌟 프로젝트 개요
 
