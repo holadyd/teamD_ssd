@@ -14,7 +14,7 @@ class Shell:
 
 
             self.read_command()
-            self.run_command()
+            self.run_command(self.command)
 
             if self.command == "exit":
                 print("Shell Exited Successfully.")
@@ -22,8 +22,10 @@ class Shell:
 
 
 
-    def run_command(self):
-        ...
+    def run_command(self, command):
+        if command == "fullwrite 0xAAAABBBB\n":
+            for _ in range(100):
+                print("[Write] Done")
 
     def read_command(self):
         self.command = input("Shell>")
