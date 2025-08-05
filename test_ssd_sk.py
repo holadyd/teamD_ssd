@@ -79,3 +79,31 @@ def test_write_3_args():
     ## assert
     assert ret1 == 3
     assert ret2 == 3
+
+
+
+def test_write_2nd_invalid_args():
+    ## Arrange
+    command_line1 = "W -1 0x00000001"
+    command_line2 = "W 100 0x00000002"
+
+    command_split1 = command_line1.split()
+    command_split2 = command_line2.split()
+
+    ssd = SSD()
+
+    lba1 = command_split1[1]
+    lba2 = command_split2[1]
+
+    value1 = command_split1[2]
+    value2 = command_split2[2]
+
+    ## act & assert
+    ssd.write(lba1, value1)
+    ret1 = ssd.read(lba1)
+    assert ret1 == "ERROR"
+
+    ssd.write(lba2, value2)
+    ret2 = ssd.read(lba2)
+    assert ret2 == "ERROR"
+
