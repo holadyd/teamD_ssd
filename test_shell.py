@@ -80,7 +80,20 @@ def test_shell_fullread(capsys):
 
 def test_shell_input_validation_format_write_fail(capsys):
     shell = Shell()
-    shell.run_command("WRITE 3\n")
+    shell.run_command("write abc abc\n")
+    out, err = capsys.readouterr()
+    assert "Error" in out
+
+def test_shell_input_validation_format_read_fail(capsys):
+    shell = Shell()
+    shell.run_command("read abc\n")
+    out, err = capsys.readouterr()
+
+    assert "Error" in out
+
+def test_shell_input_validation_format_fullwrite_fail(capsys):
+    shell = Shell()
+    shell.run_command("fullwrite abc\n")
     out, err = capsys.readouterr()
 
     assert "Error" in out

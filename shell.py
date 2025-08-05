@@ -85,16 +85,18 @@ class Shell:
                 print("Error")
                 return True
             if not self.is_valid_number(command_args[1]):
+                print("Error")
                 return True
         if command_args[0] in three_arg_lst:
             if len(command_args) != 3:
                 print("Error")
                 return True
             if not self.is_valid_number(command_args[1]):
+                print("Error")
                 return True
             if not self.is_valid_number(command_args[2]):
+                print("Error")
                 return True
-
         return False
 
     def is_valid_number(self, num):
