@@ -77,3 +77,10 @@ def test_shell_fullread(capsys):
     pattern = r"\[Read\] LBA \d{1,2} : 0x[0-9A-Fa-f]{8}"
     matches = re.findall(pattern, out)
     assert len(matches) == 100
+
+def test_shell_input_validation_format_write_fail(capsys):
+    shell = Shell()
+    shell.run_command("ssd w 0xAAAABBBB 3\n")
+    out, err = capsys.readouterr()
+
+    assert "[Error]" == out
