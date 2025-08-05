@@ -13,4 +13,4 @@ def test_shell_exit(capsys):
 
     # captured = capsys.readouterr()
 
-    assert captured.out == "Shell>\nShell Exited Successfully.\n"
+    assert captured.out == "Shell>Shell Exited Successfully.\n"

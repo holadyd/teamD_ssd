@@ -9,27 +9,18 @@ class Shell:
     def __init__(self):
         self.command = None
 
-    def __del__(self):
-        print("Shell Exited Successfully.")
-        # exit()
-
     def run_shell(self):
         while True:
-            self.print_shell()
             self.read_command()
 
             if self.command == "exit":
-                try:
-                    break
-                finally:
-                    self.__del__()
+                print("Shell Exited Successfully.")
+                break
 
 
-    def print_shell(self):
-        print("Shell>")
 
     def read_command(self):
-        self.command = input()
+        self.command = input("Shell>")
 
 
 if __name__=="__main__":
