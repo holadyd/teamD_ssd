@@ -77,3 +77,15 @@ def test_shell_fullread(capsys):
     pattern = r"\[Read\] LBA \d{1,2} : 0x[0-9A-Fa-f]{8}"
     matches = re.findall(pattern, out)
     assert len(matches) == 100
+
+
+def test_shell_input_validation_lba_range_fail(capsys):
+    # sys.stdin = StringIO("read 99\nexit\n")
+
+    shell = Shell()
+    shell.run_command("read 300")
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "invalid address\n"
+

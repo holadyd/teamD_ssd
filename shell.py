@@ -25,6 +25,10 @@ class Shell:
         if self.is_valid_input(command):
             return
         commands = command.strip().split(" ")
+        if commands[0] in ["write", "read"]:
+            if self.is_invalid_address(commands[1]):
+                print("invalid address")
+                return
 
         if command.startswith("write"):
             os.system(f"python ssd.py W, {commands[1]}, {commands[2]}")
@@ -63,6 +67,10 @@ class Shell:
 
     def is_valid_input(self, command:str):
         pass
+
+    def is_invalid_address(self, address):
+        return not 0 <= int(address) <= 99
+
 
 if __name__ == "__main__":
     shell = Shell()
