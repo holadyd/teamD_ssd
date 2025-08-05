@@ -31,7 +31,6 @@ def test_shell_help(capsys):
                 '        Usage) fullread\n'
                 '      exit          Test Shell을 종료한다.\n'
                 '      help          도움말을 출력한다.\n'
-                '      \n'
                 '\n'
                 '    Made by Digital Ninjas\n'
                 '    김현용, 김준휘, 모유찬, 민재원, 이성규, 이재윤\n')
