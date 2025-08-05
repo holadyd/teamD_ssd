@@ -46,14 +46,35 @@ def test_write_3nd_arg_is_valid(args):
     '''
 
     :param args: 'W','LBA','VALUE
-    :param expected_return: VALUE
-    :return: 3번째 매개변수는 0x0000000 형태다
+    :return: 3번째 매개변수는 0x0000000 형태인 경우 read value 값을 정상 읽어온다.
     '''
     op,lba,value = args
     ssd = SSD()
     assert op == 'W'
     ssd.write(lba,value)
     assert ssd.read(lba) == value
+
+
+@pytest.mark.parametrize("args", [
+    ['W', '68', '0x51D0'], #숫자 8자리 x
+    ['W', '9', '0xC6F89'],#숫자 8자리 x
+    ['W', '22', '0x05F6'],#숫자 8자리 x
+    ['W', '77', 'F9B1C2A3'], #0x없는 경우
+    ['W', '41', '7D8E9A0B'], #0x없는 경우
+    ['W', '50', '2B3C4D5E'], #0x없는 경우
+])
+def test_write_3nd_arg_is_invalid(args):
+    '''
+
+    :param args: 'W','LBA','VALUE
+    :return: 3번째 매개변수는 0x0000000 형태 가 아닌 경우 read value로 'ERROR'반환
+    '''
+    op,lba,value = args
+    ssd = SSD()
+    assert op == 'W'
+    ssd.write(lba,value)
+    assert ssd.read(lba) == 'ERROR'
+
 
 
 
