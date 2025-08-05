@@ -35,3 +35,9 @@ def test_output_file_exist():
     ssd = SSD()
 
     assert os.path.exists('ssd_output.txt'), 'ssd_output.txt 파일이 존재하지 않습니다.'
+
+# ssd_u5
+def test_nand_file_exit():
+    ssd = SSD()
+
+    assert os.path.exists('ssd_nand.txt'), 'ssd_nand.txt 파일이 존재하지 않습니다.'
