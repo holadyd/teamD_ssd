@@ -13,7 +13,7 @@ def test_console_not_print(capsys):
     assert captured.out == ""
 
 # ssd_u2
-def test_read_2_args():
+def test_read_1_args():
     ssd = SSD()
     result = ssd.read(42)
 
@@ -21,11 +21,11 @@ def test_read_2_args():
 
 # ssd_u3
 @pytest.mark.parametrize("args", [
-    (), # 인자 1개
-    (1,),   # 인자 2개
+    (), # 인자 0개
+    (1,2),   # 인자 2개
     (1, 2, 3),  # 인자 3개
 ])
-def test_read_not_2_args(args):
+def test_read_not_1_args(args):
     ssd = SSD()
     with pytest.raises(ValueError):
         ssd.read(*args)
