@@ -20,7 +20,7 @@ class SSD:
                 # 모든 lba value를 "0x00000000"로 초기화
                 initial_data_dict[key] = self.initial_data  # 딕셔너리에 추가
 
-            with open(self.nand_file, "w") as f:    # file에 작성
+            with open(self.nand_file, "w") as f:  # file에 작성
                 json.dump(initial_data_dict, f, indent=2)
 
         # init ssd_output.txt file
@@ -28,7 +28,7 @@ class SSD:
             initial_data_dict = {}
             initial_data_dict["0"] = self.initial_data  # 딕셔너리에 추가
 
-            with open(self.output_file, "w") as f:    # file에 작성
+            with open(self.output_file, "w") as f:  # file에 작성
                 json.dump(initial_data_dict, f, indent=2)
 
     def read(self, lba):
@@ -63,7 +63,8 @@ class SSD:
 
     def write(self, lba, value):
         if not self._check_parameter_validation(lba, value):
-            pass
+            self._write_value_to_ssd_output("ERROR")
+            return
 
         nand_data = None
         # 파일 핸들러를 사용해 'r' 모드로 파일 열기
@@ -94,7 +95,7 @@ class SSD:
                 return False
 
             if not str(value).startswith("0x"):
-                return  False
+                return False
             if not (0x0 <= int(value, 0) <= 0xFFFFFFFF):
                 return False
 
