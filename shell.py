@@ -2,6 +2,7 @@ import json
 from enum import Enum
 import os
 from hmac import compare_digest
+import random
 from random import randrange
 
 
@@ -14,6 +15,7 @@ class Shell:
                             '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging']
         self.two_arg_lst = ["read", "fullwrite"]
         self.three_arg_lst = ["write"]
+        self.prev_written_values = []
 
     def read_output(self):
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
@@ -193,8 +195,14 @@ class Shell:
         print("PASS")
 
     def run_script_1(self):
-        for _ in range(50):
-            print("PASS")
+        unique_values = self.generate_unique_random(100)
+        for addr_shift in range(10):
+            compare_list = []
+            for start_addr in range(5) :
+                unique_value = unique_values[addr_shift * 10 + start_addr]
+                self.ssd_write(start_addr + addr_shift, unique_value, for_script=True)
+                compare_list.append((start_addr, unique_value))
+            self.read_compare(compare_list)
 
     def run_script_2(self):
 
@@ -224,6 +232,17 @@ class Shell:
             self.ssd_write(0, value1, for_script=True)
             self.ssd_write(99, value2, for_script=True)
             self.read_compare(compare_list)
+
+    def generate_unique_random(self, count):
+        min_val, max_val = (0, 0xFFFFFFFF)
+        unique_values = set()
+
+        while len(unique_values) < count:
+            val = random.randint(min_val, max_val)
+            if val not in self.prev_written_values and val not in unique_values:
+                unique_values.add(val)
+
+        return list(unique_values)
 
 
 if __name__ == "__main__":
