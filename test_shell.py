@@ -158,7 +158,7 @@ def test_script_2_write_read_aging(capsys, mocker):
 
     assert captured.out == "PASS\n"*30
 
-def func():
+def func(list):
     print("PASS")
 
 

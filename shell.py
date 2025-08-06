@@ -69,8 +69,11 @@ class Shell:
         else:
             print(f"[Read] LBA {address} : {result}")
 
-    def ssd_write(self, address, content):
+    def ssd_write(self, address, content, for_script=False):
         os.system(f"python ssd.py W {address} {content}")
+        if for_script:
+            return
+
         print("[Write] Done")
 
     def read_command(self, command=None):
@@ -205,13 +208,12 @@ class Shell:
             (4, 0xFFFF)
         ]
         for _ in range(30):
-            print("PASS")
-            # self.ssd_write(4, 0xFFFF)
-            # self.ssd_write(0, 0xFFFF)
-            # self.ssd_write(3, 0xFFFF)
-            # self.ssd_write(1, 0xFFFF)
-            # self.ssd_write(2, 0xFFFF)
-            # self.read_compare(compare_list)
+            self.ssd_write(4, 0xFFFF, for_script=True)
+            self.ssd_write(0, 0xFFFF, for_script=True)
+            self.ssd_write(3, 0xFFFF, for_script=True)
+            self.ssd_write(1, 0xFFFF, for_script=True)
+            self.ssd_write(2, 0xFFFF, for_script=True)
+            self.read_compare(compare_list)
 
     def run_script_3(self):
         pass
