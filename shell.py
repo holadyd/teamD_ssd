@@ -1,5 +1,5 @@
 import os
-
+import json
 
 class Shell:
 
@@ -8,8 +8,8 @@ class Shell:
 
     def read_output(self):
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
-            content = f.read()
-        return content
+            data = json.load(f)
+        return data
 
     def run_shell(self):
         while True:
@@ -27,20 +27,23 @@ class Shell:
     def run_command(self):
         commands = self.command.strip().split(" ")
 
-        if self.command.startswith("write"):
-            os.system(f"python ssd.py W, {commands[1]}, {commands[2]}")
+        if commands[0] == "write":
+            os.system(f"python ssd.py W {commands[1]} {commands[2]}")
             print("[Write] Done")
-        elif self.command.startswith("read"):
-            os.system(f"python ssd.py R, {commands[1]}")
-            result = self.read_output()
+        elif commands[0] == "read":
+            os.system(f"python ssd.py R {commands[1]}")
+            result = self.read_output()[commands[1]]
             print(f"[Read] LBA {commands[1]} : {result}")
-        elif self.command == "fullwrite 0xAAAABBBB\n":
-            for _ in range(100):
+        elif commands[0] == "fullwrite":
+            for address in range(100):
+                os.system(f"python ssd.py W, {address}, {commands[1]}")
                 print("[Write] Done")
-        elif self.command == "fullread\n":
-            for _ in range(100):
-                print("[Read] LBA 00 : 0xAAAABBBB")
-        elif self.command == "help":
+        elif commands[0] == "fullread":
+            for address in range(100):
+                os.system(f"python ssd.py R {address}")
+                result = self.read_output()[address]
+                print(f"[Read] LBA {address} : {result}")
+        elif commands[0] == "help":
             self.print_help()
 
     def read_command(self, command=None):
