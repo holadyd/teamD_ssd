@@ -55,11 +55,8 @@ class Shell:
             self.run_script_2()
         elif commands[0] in ['3_', '3_WriteReadAging']:
             self.run_script_3()
-            
 
         return True
-    
-    
 
     def ssd_read(self, address, for_script=False):
         os.system(f"python ssd.py R {address}")
@@ -193,7 +190,6 @@ class Shell:
                 print("FAIL")
                 return
         print("PASS")
-
 
     def run_script_1(self):
         pass
