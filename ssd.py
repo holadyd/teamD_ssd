@@ -62,6 +62,31 @@ class SSD:
     def write(self, lba, value):
         pass
 
+    def _check_parameter_validation(self, lba, value=None) -> bool:
+        # value  invalid Check
+        if value is not None:
+            try:
+                int(value, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
+            except ValueError:
+                return False
+
+            if not str(value).startswith("0x"):
+                return  False
+            if not (0x0 <= int(value, 0) <= 0xFFFFFFFF):
+                return False
+
+        # lba invalid Check
+        # 1. int 인지 체크
+        try:
+            int(lba)
+        except (ValueError, TypeError):
+            return False
+
+        # 2. 0~ 99 인지 체크 
+        if 0 <= int(lba) <= 99:
+            return True
+        return False
+
 
 if __name__ == '__main__':
     # argparse.ArgumentParser 객체 생성

@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 import pytest
 from ssd import SSD
-from pytest_mock import MockFixture
+from pytest_mock import MockFixture, MockerFixture
 
 # 이 fixture는 각 테스트 함수 실행 후 항상 자동 실행됨
 @pytest.fixture(autouse=True)
@@ -402,3 +402,70 @@ def test_read_store_ERROR_when_invalid_LBA():
 
     # assert
     assert data2["0"] == "ERROR"
+
+# ssd_u18
+@pytest.mark.parametrize("lba", [-1, -100, -9999, 9999, 100])
+def test_lba_invalid(lba):
+    # arrange
+    ssd = SSD()
+
+    # act
+    ret = ssd._check_parameter_validation(lba)
+
+    # assert
+    assert ret is False
+
+
+# ssd_u19
+@pytest.mark.parametrize("lba, value", [
+    ("10", "0x0000000H"),
+    ("11", "0xFFFFFZZZ"),
+    ("55", "ABCD"),
+    ("99", "000000000")
+])
+def test_value_invalid_when_write(lba, value, mocker: MockerFixture):
+    # arrange
+    ssd = SSD()
+    #ssd = mocker.Mock(spec=SSD)
+    #ssd._check_parameter_validation.return_value = True
+
+    # act
+    ret = ssd._check_parameter_validation(lba, value)
+
+    # assert
+    assert ret is False
+
+
+# ssd_u22
+@pytest.mark.parametrize("lba", [i for i in range(100)])
+def test_lba_valid(lba, mocker: MockerFixture):
+    # arrange
+    ssd = SSD()
+    #ssd = mocker.Mock(spec=SSD)
+    #ssd._check_parameter_validation.return_value = False
+
+    # act
+    ret = ssd._check_parameter_validation(lba)
+
+    # assert
+    assert ret is True
+
+
+# ssd_23
+@pytest.mark.parametrize("lba, value", [
+    ("0", "0x00000000"),
+    ("99", "0xFFFFFFFF"),
+    ("6", "0xAA"),
+    ("18", "0xFF")
+])
+def test_value_valid_when_write(lba, value, mocker: MockerFixture):
+    # arrange
+    ssd = SSD()
+    #ssd = mocker.Mock(spec=SSD)
+    #ssd._check_parameter_validation.return_value = False
+
+    # act
+    ret = ssd._check_parameter_validation(lba, value)
+
+    # assert
+    assert ret is True
