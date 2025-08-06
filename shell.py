@@ -63,7 +63,7 @@ class Shell:
 
     def ssd_read(self, address, for_script=False):
         os.system(f"python ssd.py R {address}")
-        result = self.read_output()[address]
+        result = self.read_output()["0"]
         if for_script:
             return result
         else:
