@@ -106,19 +106,25 @@ def main():
     # 'value'가 있는지 확인하고 처리
     # 인자 개수 조건 검사 (예: command + address + optional value)
     if args.command is None or args.lba is None:
+        ssd = SSD()
+        ssd._write_value_to_ssd_output("ERROR")
         raise Exception("필수 인자가 누락되었습니다.")
 
     if args.command == "R":
-        if args.value is not None:
-            raise Exception("R 명령어에는 value 인자가 필요없습니다.")
         ssd = SSD()
+        if args.value is not None:
+            ssd._write_value_to_ssd_output("ERROR")
+            raise Exception("R 명령어에는 value 인자가 필요없습니다.")
         ssd.read(args.lba)
     elif args.command == "W":
-        if args.value is None:
-            raise Exception("W 명령어에는 value 인자가 필요합니다.")
         ssd = SSD()
+        if args.value is None:
+            ssd._write_value_to_ssd_output("ERROR")
+            raise Exception("W 명령어에는 value 인자가 필요합니다.")
         ssd.write(lba=args.lba, value=args.value)
     else:
+        ssd = SSD()
+        ssd._write_value_to_ssd_output("ERROR")
         raise Exception("CMD가 잘못 되었습니다.")
 
 
