@@ -201,8 +201,9 @@ class Shell:
             compare_list = []
             for start_addr in range(5) :
                 unique_value = unique_values[addr_shift * 10 + start_addr]
-                self.ssd_write(f'{start_addr + addr_shift}', f'0x{unique_value:08x}', for_script=True)
-                compare_list.append((f'{start_addr+ addr_shift}', f'0x{unique_value:08x}'))
+                self.ssd_write(f'{start_addr + addr_shift}', f'0x{unique_value:08X}', for_script=True)
+                compare_list.append((f'{start_addr+ addr_shift}', f'0x{unique_value:08X}'))
+
             self.read_compare(compare_list)
 
     def run_script_2(self):
@@ -224,8 +225,8 @@ class Shell:
 
     def run_script_3(self):
         for _ in range(200):
-            value1 = f'0x{randrange(0xFFFFFFFF + 1):08x}'
-            value2 = f'0x{randrange(0xFFFFFFFF + 1):08x}'
+            value1 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
+            value2 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
             compare_list = [
                 ("0", value1),
                 ("99", value2)
