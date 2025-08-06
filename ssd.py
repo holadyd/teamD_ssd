@@ -67,7 +67,11 @@ class SSD:
 
         # 파일 핸들러를 사용해 'w' 모드로 파일 열기
         with self._open_file(self.nand_file, 'w') as f:
-            nand_data[str(lba)] = value
+            str_value = str(value)
+            if not str_value.startswith('0x'):
+                str_value = hex(int(str_value))
+            converted_value = str_value[:2] + f'0000000{str_value[2:]}'[-8:]
+            nand_data[str(lba)] = converted_value
             json.dump(nand_data, f, indent=2)
 
     @contextmanager
@@ -116,9 +120,9 @@ def main():
     parser.add_argument('value', type=str, nargs='?', help='세 번째 매개변수 SSD Write시 Value', default=None)
     args = parser.parse_args()
 
-    #print(f"첫 번째 매개변수 (명령어 : W): {args.command}")
-    #print(f"두 번째 매개변수 (주소 : LBA): {args.lba}")
-    #print(f"세 번째 매개변수 (값 : VALUE): {args.value}")
+    # print(f"첫 번째 매개변수 (명령어 : W): {args.command}")
+    # print(f"두 번째 매개변수 (주소 : LBA): {args.lba}")
+    # print(f"세 번째 매개변수 (값 : VALUE): {args.value}")
 
     # 'value'가 있는지 확인하고 처리
     # 인자 개수 조건 검사 (예: command + address + optional value)
