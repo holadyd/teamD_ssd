@@ -1,11 +1,21 @@
 import json
 import os
 from pathlib import Path
-
 import pytest
 from ssd import SSD
 from pytest_mock import MockFixture
 
+# 이 fixture는 각 테스트 함수 실행 후 항상 자동 실행됨
+@pytest.fixture(autouse=True)
+def cleanup_files():
+    # Test Setup
+
+    yield  # 테스트 실행
+
+    # Test Teardown
+    for file in ["ssd_nand.txt", "ssd_output.txt"]:
+        if os.path.exists(file):
+            os.remove(file)
 
 # ssd_u1
 def test_console_not_print(capsys):
