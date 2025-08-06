@@ -5,6 +5,8 @@ class Shell:
 
     def __init__(self):
         self.command = None
+        self.ret = True
+
 
     def read_output(self):
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
@@ -12,17 +14,14 @@ class Shell:
         return content
 
     def run_shell(self):
-        while True:
+        while self.ret:
 
             self.read_command()
 
-            self.valid_check()
+            if self.valid_check():
+                self.ret = self.run_command()
 
-            self.run_command()
 
-            if self.command == "exit":
-                print("Shell Exited Successfully.")
-                break
 
     def run_command(self):
         commands = self.command.strip().split(" ")
@@ -34,14 +33,19 @@ class Shell:
             os.system(f"python ssd.py R, {commands[1]}")
             result = self.read_output()
             print(f"[Read] LBA {commands[1]} : {result}")
-        elif self.command == "fullwrite 0xAAAABBBB\n":
+        elif self.command == "fullwrite 0xAAAABBBB":
             for _ in range(100):
                 print("[Write] Done")
-        elif self.command == "fullread\n":
+        elif self.command == "fullread":
             for _ in range(100):
                 print("[Read] LBA 00 : 0xAAAABBBB")
         elif self.command == "help":
             self.print_help()
+        elif self.command == "exit":
+            print("Shell Exited Successfully.")
+            return False
+
+        return True
 
     def read_command(self, command=None):
         if command == None:
@@ -103,6 +107,7 @@ class Shell:
             if not self.is_data_in_range(command_args[2]):
                 print("Error")
                 return False
+
         return True
 
     def is_data_in_range(self, num):
