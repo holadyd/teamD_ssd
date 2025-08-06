@@ -1,6 +1,9 @@
 import json
 from enum import Enum
 import os
+from hmac import compare_digest
+import random
+from random import randrange
 
 
 class Shell:
@@ -8,9 +11,11 @@ class Shell:
     def __init__(self):
         self.command = None
         self.ret = True
-        self.one_arg_lst = ["help", "exit", "fullread"]
+        self.one_arg_lst = ["help", "exit", "fullread", '1_', '1_FullWriteAndReadCompare',
+                            '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging']
         self.two_arg_lst = ["read", "fullwrite"]
         self.three_arg_lst = ["write"]
+        self.prev_written_values = []
 
     def read_output(self):
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
@@ -47,16 +52,28 @@ class Shell:
         elif commands[0] == "exit":
             print("Shell Exited Successfully.")
             return False
+        elif commands[0] in ['1_', '1_FullWriteAndReadCompare']:
+            self.run_script_1()
+        elif commands[0] in ['2_', '2_PartialLBAWrite']:
+            self.run_script_2()
+        elif commands[0] in ['3_', '3_WriteReadAging']:
+            self.run_script_3()
 
         return True
 
-    def ssd_read(self, address):
+    def ssd_read(self, address, for_script=False):
         os.system(f"python ssd.py R {address}")
         result = self.read_output()[address]
-        print(f"[Read] LBA {address} : {result}")
+        if for_script:
+            return result
+        else:
+            print(f"[Read] LBA {address} : {result}")
 
-    def ssd_write(self, address, content):
-        os.system(f"python ssd.py W, {address}, {content}")
+    def ssd_write(self, address, content, for_script=False):
+        os.system(f"python ssd.py W {address} {content}")
+        if for_script:
+            return
+
         print("[Write] Done")
 
     def read_command(self, command=None):
@@ -168,6 +185,64 @@ class Shell:
             print("[Error] INVALID_DATA")
         elif error_type == self.ErrorPrintEnum.INVALID_LBA_RANGE:
             print("[Error] INVALID_DATA")
+
+    def read_compare(self, compare_list):
+        for (address, value) in compare_list:
+            ret = self.ssd_read(address, for_script=True)
+            if ret != value:
+                print("FAIL")
+                return
+        print("PASS")
+
+    def run_script_1(self):
+        unique_values = self.generate_unique_random(100)
+        for addr_shift in range(10):
+            compare_list = []
+            for start_addr in range(5) :
+                unique_value = unique_values[addr_shift * 10 + start_addr]
+                self.ssd_write(start_addr + addr_shift, unique_value, for_script=True)
+                compare_list.append((start_addr, unique_value))
+            self.read_compare(compare_list)
+
+    def run_script_2(self):
+
+        compare_list = [
+            (0, 0xFFFF),
+            (1, 0xFFFF),
+            (2, 0xFFFF),
+            (3, 0xFFFF),
+            (4, 0xFFFF)
+        ]
+        for _ in range(30):
+            self.ssd_write(4, 0xFFFF, for_script=True)
+            self.ssd_write(0, 0xFFFF, for_script=True)
+            self.ssd_write(3, 0xFFFF, for_script=True)
+            self.ssd_write(1, 0xFFFF, for_script=True)
+            self.ssd_write(2, 0xFFFF, for_script=True)
+            self.read_compare(compare_list)
+
+    def run_script_3(self):
+        value1 = randrange(0xFFFFFFFF+1)
+        value2 = randrange(0xFFFFFFFF+1)
+        compare_list = [
+            (0, value1),
+            (1, value2)
+        ]
+        for _ in range(200):
+            self.ssd_write(0, value1, for_script=True)
+            self.ssd_write(99, value2, for_script=True)
+            self.read_compare(compare_list)
+
+    def generate_unique_random(self, count):
+        min_val, max_val = (0, 0xFFFFFFFF)
+        unique_values = set()
+
+        while len(unique_values) < count:
+            val = random.randint(min_val, max_val)
+            if val not in self.prev_written_values and val not in unique_values:
+                unique_values.add(val)
+
+        return list(unique_values)
 
 
 if __name__ == "__main__":
