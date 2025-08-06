@@ -119,7 +119,7 @@ def test_shell_input_validation_lba_range_fail(capsys):
 
     captured = capsys.readouterr()
 
-    assert captured.out == "invalid address\n"
+    assert captured.out == "[Error] INVALID_DATA\n"
 
 
 def test_shell_input_validation_data_range_fail(capsys):
