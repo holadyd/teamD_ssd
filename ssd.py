@@ -21,6 +21,14 @@ class SSD:
             with open(self.nand_file, "w") as f:    # file에 작성
                 json.dump(initial_data_dict, f, indent=2)
 
+        # init ssd_output.txt file
+        if not os.path.exists(self.output_file):
+            initial_data_dict = {}
+            initial_data_dict["0"] = self.initial_data  # 딕셔너리에 추가
+
+            with open(self.output_file, "w") as f:    # file에 작성
+                json.dump(initial_data_dict, f, indent=2)
+
 
     def read(self, lba):
         pass
