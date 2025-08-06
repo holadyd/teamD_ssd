@@ -388,3 +388,17 @@ def test_init_ssd_output_file():
 
     # 테스트 후 정리
     nand_path.unlink()
+
+# ssd_u24
+def test_read_store_ERROR_when_invalid_LBA():
+    ## arrange
+    ssd = SSD()
+
+    ## act
+    ssd.read(101)
+
+    with open("ssd_output.txt", "r") as f:
+        data2 = json.load(f)
+
+    # assert
+    assert data2["0"] == "ERROR"
