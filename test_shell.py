@@ -142,3 +142,26 @@ def test_shell_input_validation_invalid_command(capsys):
     captured = capsys.readouterr()
 
     assert "Error" in captured.out
+
+
+def test_read_compare_pass(mocker, capsys):
+    shell = Shell()
+
+    mocker.patch.object(shell, 'ssd_read', side_effect=[100, 200])
+
+    compare_list = [(1, 100), (2, 200)]
+    shell.read_compare(compare_list)
+
+    captured = capsys.readouterr()
+    assert "PASS" in captured.out
+
+def test_read_compare_fail(mocker, capsys):
+    shell = Shell()
+
+    mocker.patch.object(shell, 'ssd_read', side_effect=[101, 201])
+
+    compare_list = [(1, 100), (2, 200)]
+    shell.read_compare(compare_list)
+
+    captured = capsys.readouterr()
+    assert "FAIL" in captured.out
