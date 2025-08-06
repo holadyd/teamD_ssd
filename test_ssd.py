@@ -355,9 +355,9 @@ def test_value_invalid_when_write(lba, value, mocker: MockerFixture):
 @pytest.mark.parametrize("lba", [i for i in range(100)])
 def test_lba_valid(lba, mocker: MockerFixture):
     # arrange
-    # ssd = SSD()
-    ssd = mocker.Mock(spec=SSD)
-    ssd._check_parameter_validation.return_value = False
+    ssd = SSD()
+    #ssd = mocker.Mock(spec=SSD)
+    #ssd._check_parameter_validation.return_value = False
 
     # act
     ret = ssd._check_parameter_validation(lba)
