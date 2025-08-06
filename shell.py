@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 
 class Shell:
 
@@ -27,24 +28,32 @@ class Shell:
     def run_command(self):
         commands = self.command.strip().split(" ")
 
+        if commands[0] == "help":
+            self.print_help()
+
         if commands[0] == "write":
-            os.system(f"python ssd.py W {commands[1]} {commands[2]}")
-            print("[Write] Done")
+            address = commands[1]
+            content = commands[2]
+            self.ssd_write(address, content)
         elif commands[0] == "read":
-            os.system(f"python ssd.py R {commands[1]}")
-            result = self.read_output()[commands[1]]
-            print(f"[Read] LBA {commands[1]} : {result}")
+            address = commands[1]
+            self.ssd_read(address)
         elif commands[0] == "fullwrite":
             for address in range(100):
-                os.system(f"python ssd.py W, {address}, {commands[1]}")
-                print("[Write] Done")
+                content = commands[1]
+                self.ssd_write(address, content)
         elif commands[0] == "fullread":
             for address in range(100):
-                os.system(f"python ssd.py R {address}")
-                result = self.read_output()[address]
-                print(f"[Read] LBA {address} : {result}")
-        elif commands[0] == "help":
-            self.print_help()
+                self.ssd_read(address)
+
+    def ssd_read(self, address):
+        os.system(f"python ssd.py R {address}")
+        result = self.read_output()[address]
+        print(f"[Read] LBA {address} : {result}")
+
+    def ssd_write(self, address, content):
+        os.system(f"python ssd.py W, {address}, {content}")
+        print("[Write] Done")
 
     def read_command(self, command=None):
         if command == None:
