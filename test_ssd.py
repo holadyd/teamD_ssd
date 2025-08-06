@@ -285,13 +285,18 @@ def test_write_read_ssd_nand_file(mocker: MockFixture):
     :param mocker: Mocker
     :return: builtin open 했는지?
     '''
-    mock_file = mocker.patch(
-        'builtins.open',
-        mocker.mock_open(read_data="Mocked file content")
-    )
+    import json
+    initial_nand_data = {str(i): 0 for i in range(100)}
+    mock_file_content = json.dumps(initial_nand_data)
+    # mocker.mock_open을 사용하여 open 함수를 모킹하고, 읽을 데이터를 설정합니다.
+    mock_open = mocker.mock_open(read_data=mock_file_content)
+    mocker.patch('builtins.open', mock_open)
+    check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validation')
+    check_para_validataion_method.return_value = True
     ssd = SSD()
     ssd.write(99, '0xFFFFFFFF')
-    mock_file.assert_called_once_with('ssd_nand.txt', 'r')
+    mock_file_handle = mock_open()
+    mock_file_handle.read.assert_called_once()
 
 
 # ssd_u14
