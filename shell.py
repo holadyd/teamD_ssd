@@ -178,7 +178,7 @@ class Shell:
         elif error_type == self.ErrorPrintEnum.INVALID_LBA_RANGE:
             print("[Error] INVALID_DATA")
 
-    def read_compare(self):
+    def read_compare(self, comapre_list):
         ...
 
     def run_script_1(self):
