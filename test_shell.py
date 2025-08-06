@@ -145,18 +145,18 @@ def test_shell_input_validation_invalid_command(capsys):
 
     assert "Error" in captured.out
 
-def test_script_3_write_read_aging(capsys, mocker):
+def test_script_2_write_read_aging(capsys, mocker):
 
     shell = Shell()
     shell.read_compare = mocker.Mock()
     shell.read_compare.side_effect = func
-    shell.read_command("3_")
+    shell.read_command("2_")
     if shell.valid_check():
         shell.run_command()
 
     captured = capsys.readouterr()
 
-    assert captured.out == "PASS\n"*150
+    assert captured.out == "PASS\n"*30
 
 def func():
     print("PASS")

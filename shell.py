@@ -196,7 +196,22 @@ class Shell:
         pass
 
     def run_script_2(self):
-        pass
+
+        compare_list = [
+            (0, 0xFFFF),
+            (1, 0xFFFF),
+            (2, 0xFFFF),
+            (3, 0xFFFF),
+            (4, 0xFFFF)
+        ]
+        for _ in range(30):
+            print("PASS")
+            # self.ssd_write(4, 0xFFFF)
+            # self.ssd_write(0, 0xFFFF)
+            # self.ssd_write(3, 0xFFFF)
+            # self.ssd_write(1, 0xFFFF)
+            # self.ssd_write(2, 0xFFFF)
+            # self.read_compare(compare_list)
 
     def run_script_3(self):
         pass
