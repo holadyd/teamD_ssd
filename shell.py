@@ -47,8 +47,17 @@ class Shell:
         elif commands[0] == "exit":
             print("Shell Exited Successfully.")
             return False
+        elif commands[0] in ['1_', '1_FullWriteAndReadCompare']:
+            self.run_script_1()
+        elif commands[0] in ['2_', '2_PartialLBAWrite']:
+            self.run_script_2()
+        elif commands[0] in ['3_', '3_WriteReadAging']:
+            self.run_script_3()
+            
 
         return True
+    
+    
 
     def ssd_read(self, address):
         os.system(f"python ssd.py R {address}")
@@ -168,6 +177,18 @@ class Shell:
             print("[Error] INVALID_DATA")
         elif error_type == self.ErrorPrintEnum.INVALID_LBA_RANGE:
             print("[Error] INVALID_DATA")
+
+    def read_compare(self):
+        ...
+
+    def run_script_1(self):
+        pass
+
+    def run_script_2(self):
+        pass
+
+    def run_script_3(self):
+        pass
 
 
 if __name__ == "__main__":
