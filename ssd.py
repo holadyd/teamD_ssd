@@ -10,7 +10,7 @@ class SSD:
 
     def _check_parameter_validation(self, lba, value=None) -> bool:
         # value  invalid Check
-        if lba == "W":
+        if value is not None:
             try:
                 int(value, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
             except ValueError:
