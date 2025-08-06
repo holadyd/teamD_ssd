@@ -107,13 +107,12 @@ class Shell:
         return False
 
     def is_valid_format(self, command_args):
-
         if self.is_invalid_command(command_args):
             self.print_valid_error(self.ErrorPrintEnum.INVALID_COMMAND)
             return False
         if self.is_invalid_para_length(command_args):
             self.print_valid_error(self.ErrorPrintEnum.INVALID_PARAMETER_LENGTH)
-
+            return False
         if command_args[0] in self.two_arg_lst:
             if not self.is_valid_number(command_args[1]):
                 self.print_valid_error(self.ErrorPrintEnum.INVALID_DATA)

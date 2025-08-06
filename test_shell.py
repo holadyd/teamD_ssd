@@ -229,10 +229,12 @@ def test_write_decimal_test(capsys):
     if shell.valid_check():
         shell.run_command()
     shell.read_command("read 3")
+    if shell.valid_check():
+        shell.run_command()
 
     captured = capsys.readouterr()
 
-    assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003"
+    assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003\n"
 
 def test_write_hex_test(capsys):
     shell = Shell()
@@ -240,10 +242,12 @@ def test_write_hex_test(capsys):
     if shell.valid_check():
         shell.run_command()
     shell.read_command("read 3")
+    if shell.valid_check():
+        shell.run_command()
 
     captured = capsys.readouterr()
 
-    assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003"
+    assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003\n"
 
 def test_ssd_read_write_in_shell_1():
     sh = Shell()
