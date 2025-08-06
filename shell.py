@@ -69,7 +69,7 @@ class Shell:
             print(f"[Read] LBA {address} : {result}")
 
     def ssd_write(self, address, content):
-        os.system(f"python ssd.py W, {address}, {content}")
+        os.system(f"python ssd.py W {address} {content}")
         print("[Write] Done")
 
     def read_command(self, command=None):
