@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 from pathlib import Path
 import pytest
 from ssd import SSD
@@ -456,6 +457,7 @@ def test_value_valid_when_write(lba, value, mocker: MockerFixture):
     assert ret is True
 
 
+# ssd_u25
 @pytest.mark.parametrize(
     "lba, value, expected_value",
     [
@@ -488,3 +490,22 @@ def test_ssd_write_value_conversion(mocker: MockFixture, lba: int, value: str, e
     ssd = SSD()
     ssd.write(lba, value)
     assert ssd.read(lba) == expected_value
+
+# ssd_u26
+def test_read_with_extra_argument_should_write_error():
+    # 결과 파일이 존재하는지 확인
+    assert os.path.exists("ssd_output.txt"), "ssd_output.txt가 존재하지 않음"
+
+    # 실행: value 인자를 잘못 포함한 R 명령 실행
+    result = subprocess.run(
+        ["python", "ssd.py", "R", "0", "1234"],
+        capture_output=True,
+        text=True
+    )
+
+    # 결과 파일 내용 확인
+    with open("ssd_output.txt", "r") as f:
+        data = json.load(f)
+
+    # value가 반드시 "ERROR"여야 함
+    assert data["0"] == "ERROR", "ssd_output.txt의 value가 ERROR가 아님"
