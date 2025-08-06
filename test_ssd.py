@@ -340,9 +340,9 @@ def test_lba_invalid(lba):
 ])
 def test_value_invalid_when_write(lba, value, mocker: MockerFixture):
     # arrange
-    # ssd = SSD()
-    ssd = mocker.Mock(spec=SSD)
-    ssd._check_parameter_validation.return_value = True
+    ssd = SSD()
+    #ssd = mocker.Mock(spec=SSD)
+    #ssd._check_parameter_validation.return_value = True
 
     # act
     ret = ssd._check_parameter_validation(lba, value)
