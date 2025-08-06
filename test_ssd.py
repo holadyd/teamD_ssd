@@ -113,21 +113,30 @@ def test_read_value_store_only_one_data():
 
 
 # ssd_u8
-def test_write_3_args():
-    ## Arrange
-    command_line1 = "W 10 0x00000001 abc"
-    command_line2 = "W 11 "
-
-    command_split1 = command_line1.split()
-    command_split2 = command_line2.split()
-
-    ## act
-    ret1 = len(command_split1)
-    ret2 = len(command_split2)
-
-    ## assert
-    assert ret1 == 3
-    assert ret2 == 3
+# W 명령어시 매개변수를 3개 받아야한다.
+@pytest.mark.parametrize("args", [
+    ['W', '68', '0x51D0C3A9'],
+    ['W', '9', '0xC6F89B2E'],
+    ['W', '22', '0x03A4E5F6'],
+    ['W', '77', '0xF9B1C2A3'],
+    ['W', '41', '0x7D8E9A0B'],
+    ['W', '50', '0x2B3C4D5E'],
+    ['W', '88', '0xE1F2A3B4'],
+    ['W', '1', '0x9C8D7E6F'],
+    ['W', '95', '0x3F4A5B6C'],
+    ['W', '3', '0xA1B2C3D4']
+])
+def test_write_3_args(mocker: MockFixture, args):
+    '''
+    :param mocker: ssd mocker
+    :param args: test cases(w lba value)
+    :return: lba,value 2개의 arguments 롤 write 실행하는지 검증
+    '''
+    op, lba, value = args
+    mocker.patch.object(SSD, 'write')
+    ssd = SSD()
+    ssd.write(lba, value)
+    assert len(ssd.write.call_args.args) == 2
 
 
 # ssd_u9
