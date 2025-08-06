@@ -348,3 +348,29 @@ def test_init_ssd_nand_file():
 
     # 테스트 후 정리
     # nand_path.unlink()
+
+# ssd_u21
+def test_init_ssd_output_file():
+    # arrange
+    nand_path = Path("ssd_output.txt")
+    if nand_path.exists():
+        nand_path.unlink()
+
+    # act
+    ssd = SSD()
+
+    # assert: 파일이 생성되었는지 확인
+    assert nand_path.exists(), "ssd_output.txt 파일이 생성되지 않았습니다."
+
+    # assert: JSON 내용 확인
+    with open(nand_path, "r") as f:
+        data = json.load(f)
+
+    # assert: 1개의 LBA가 있는지 확인
+    assert len(data) == 1, "Output file의 data 수가 1개가 아닙니다."
+
+    # assert: 값이 "0x00000000"으로 초기화되었는지 확인
+    assert data["0"] == "0x00000000", f"Output file의 초기값이 올바르지 않습니다."
+
+    # 테스트 후 정리
+    # nand_path.unlink()
