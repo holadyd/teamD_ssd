@@ -34,14 +34,12 @@ class SSD:
             lba_int = int(lba)
         except ValueError:
             # LBA 값을 int화하지 못하는 경우 ssd_output.txt에 "ERROR" 저장
-            with open(self.output_file, "w") as f:
-                json.dump({"0": "ERROR"}, f, indent=2)
+            self._write_value_to_ssd_output("ERROR")
             return "ERROR"
 
         if lba_int < 0 or lba_int > 99:
             # invalid LBA일 경우 ssd_output.txt에 "ERROR" 저장
-            with open(self.output_file, "w") as f:
-                json.dump({"0": "ERROR"}, f, indent=2)
+            self._write_value_to_ssd_output("ERROR")
             return "ERROR"
 
         key = str(lba_int)  # JSON은 문자열 키 사용
@@ -53,10 +51,13 @@ class SSD:
         value = nand_data.get(key, self.initial_data)
 
         # ssd_output.txt에 읽은 값 저장
-        with open(self.output_file, "w") as f:
-            json.dump({"0": value}, f, indent=2)
+        self._write_value_to_ssd_output(value)
 
         return value
+
+    def _write_value_to_ssd_output(self, value: str):
+        with open(self.output_file, "w") as f:
+            json.dump({"0": value}, f, indent=2)
 
     def write(self, lba, value):
         pass
