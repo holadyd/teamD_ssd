@@ -1,8 +1,21 @@
+import json
 import os
+from pathlib import Path
 import pytest
 from ssd import SSD
 from pytest_mock import MockFixture, MockerFixture
 
+# 이 fixture는 각 테스트 함수 실행 후 항상 자동 실행됨
+@pytest.fixture(autouse=True)
+def cleanup_files():
+    # Test Setup
+
+    yield  # 테스트 실행
+
+    # Test Teardown
+    for file in ["ssd_nand.txt", "ssd_output.txt"]:
+        if os.path.exists(file):
+            os.remove(file)
 
 # ssd_u1
 def test_console_not_print(capsys):
@@ -101,15 +114,19 @@ def test_read_value_store_only_one_data():
     ssd = SSD()
 
     ## act
-    ret1 = ssd.read(0)
-    ret2 = ssd.read(99)
+    ssd.read(0)
 
-    list_ret1 = ret1.split("\n")
-    list_ret2 = ret2.split("\n")
+    with open("ssd_output.txt", "r") as f:
+        data1 = json.load(f)
 
-    ## assert
-    assert len(list_ret1) == 1
-    assert len(list_ret2) == 1
+    ssd.read(99)
+
+    with open("ssd_output.txt", "r") as f:
+        data2 = json.load(f)
+
+    ## assert: 각각의 결과는 {"0": value} 형식으로, 1개의 데이터만 있어야 함
+    assert len(data1) == 1
+    assert len(data2) == 1
 
 
 # ssd_u8
@@ -317,6 +334,74 @@ def test_write_create_ssd_nand_file(mocker: MockFixture):
     ssd.write(99, '0xFFFFFFFF')
     mock_file.assert_called_once_with('ssd_nand.txt', 'w')
 
+
+# ssd_u20
+def test_init_ssd_nand_file():
+    # arrange
+    nand_path = Path("ssd_nand.txt")
+    if nand_path.exists():
+        nand_path.unlink()
+
+    # act
+    ssd = SSD()
+
+    # assert: 파일이 생성되었는지 확인
+    assert nand_path.exists(), "ssd_nand.txt 파일이 생성되지 않았습니다."
+
+    # assert: JSON 내용 확인
+    with open(nand_path, "r") as f:
+        data = json.load(f)
+
+    # assert: 100개의 LBA가 있는지 확인
+    assert len(data) == 100, "LBA 수가 100개가 아닙니다."
+
+    # assert: 각 LBA 값이 "0x00000000"으로 초기화되었는지 확인
+    for i in range(100):
+        key = str(i)
+        assert data[key] == "0x00000000", f"LBA {key}의 초기값이 올바르지 않습니다."
+
+    # 테스트 후 정리
+    nand_path.unlink()
+
+# ssd_u21
+def test_init_ssd_output_file():
+    # arrange
+    nand_path = Path("ssd_output.txt")
+    if nand_path.exists():
+        nand_path.unlink()
+
+    # act
+    ssd = SSD()
+
+    # assert: 파일이 생성되었는지 확인
+    assert nand_path.exists(), "ssd_output.txt 파일이 생성되지 않았습니다."
+
+    # assert: JSON 내용 확인
+    with open(nand_path, "r") as f:
+        data = json.load(f)
+
+    # assert: 1개의 LBA가 있는지 확인
+    assert len(data) == 1, "Output file의 data 수가 1개가 아닙니다."
+
+    # assert: 값이 "0x00000000"으로 초기화되었는지 확인
+    assert data["0"] == "0x00000000", f"Output file의 초기값이 올바르지 않습니다."
+
+    # 테스트 후 정리
+    nand_path.unlink()
+
+# ssd_u24
+def test_read_store_ERROR_when_invalid_LBA():
+    ## arrange
+    ssd = SSD()
+
+    ## act
+    ssd.read(101)
+
+    with open("ssd_output.txt", "r") as f:
+        data2 = json.load(f)
+
+    # assert
+    assert data2["0"] == "ERROR"
 
 # ssd_u18
 @pytest.mark.parametrize("lba", [-1, -100, -9999, 9999, 100])
