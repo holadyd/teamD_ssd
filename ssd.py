@@ -32,18 +32,12 @@ class SSD:
                 json.dump(initial_data_dict, f, indent=2)
 
     def read(self, lba):
-        try:
-            lba_int = int(lba)
-        except ValueError:
-            # LBA 값을 int화하지 못하는 경우 ssd_output.txt에 "ERROR" 저장
+        is_valid = self._check_parameter_validation(lba=lba)
+        if not is_valid:
             self._write_value_to_ssd_output("ERROR")
             return "ERROR"
 
-        if lba_int < 0 or lba_int > 99:
-            # invalid LBA일 경우 ssd_output.txt에 "ERROR" 저장
-            self._write_value_to_ssd_output("ERROR")
-            return "ERROR"
-
+        lba_int = int(lba)
         key = str(lba_int)  # JSON은 문자열 키 사용
 
         # ssd_nand.txt 읽기
@@ -74,7 +68,7 @@ class SSD:
         # 파일 핸들러를 사용해 'w' 모드로 파일 열기
         with self._open_file(self.nand_file, 'w') as f:
             nand_data[str(lba)] = value
-            json.dump(nand_data, f)
+            json.dump(nand_data, f, indent=2)
 
     @contextmanager
     def _open_file(self, file_path, mode: Literal['r', 'w']):
@@ -112,22 +106,38 @@ class SSD:
         return False
 
 
-if __name__ == '__main__':
+def main():
     # argparse.ArgumentParser 객체 생성
     parser = argparse.ArgumentParser(description='SSD 스크립트 실행을 위한 매개변수')
 
     # 매개변수 추가
-    parser.add_argument('command', type=str, help='첫 번째 매개변수 (예: W)')
-    parser.add_argument('address', type=int, help='두 번째 매개변수 (정수)')
-    parser.add_argument('--value', type=str, nargs='?', help='세 번째 매개변수 (16진수 값)', default=None)
-
+    parser.add_argument('command', type=str, help='첫 번째 매개변수 CMD')
+    parser.add_argument('lba', type=str, help='두 번째 매개변수 SSD LBA주소')
+    parser.add_argument('value', type=str, nargs='?', help='세 번째 매개변수 SSD Write시 Value', default=None)
     args = parser.parse_args()
 
-    print(f"첫 번째 매개변수 (명령어 : W): {args.command}")
-    print(f"두 번째 매개변수 (주소 : LBA): {args.address}")
+    #print(f"첫 번째 매개변수 (명령어 : W): {args.command}")
+    #print(f"두 번째 매개변수 (주소 : LBA): {args.lba}")
+    #print(f"세 번째 매개변수 (값 : VALUE): {args.value}")
 
     # 'value'가 있는지 확인하고 처리
-    if args.value:
-        print(f"세 번째 매개변수 (값 : VALUE): {args.value}")
+    # 인자 개수 조건 검사 (예: command + address + optional value)
+    if args.command is None or args.lba is None:
+        raise Exception("필수 인자가 누락되었습니다.")
+
+    if args.command == "R":
+        if args.value is not None:
+            raise Exception("R 명령어에는 value 인자가 필요없습니다.")
+        ssd = SSD()
+        ssd.read(args.lba)
+    elif args.command == "W":
+        if args.value is None:
+            raise Exception("W 명령어에는 value 인자가 필요합니다.")
+        ssd = SSD()
+        ssd.write(lba=args.lba, value=args.value)
     else:
-        pass
+        raise Exception("CMD가 잘못 되었습니다.")
+
+
+if __name__ == '__main__':
+    main()
