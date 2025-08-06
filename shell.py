@@ -107,6 +107,8 @@ class Shell:
             if not self.is_data_in_range(command_args[2]):
                 print("Error")
                 return False
+        if not self.is_valid_address(command_args):
+            return False
 
         return True
 
@@ -121,6 +123,8 @@ class Shell:
             return False
 
     def is_valid_address(self, command_args):
+        if command_args[0] in ["exit", "help", "fullread", "fullwrite"]:
+            return True
         if command_args[0] not in ["write", "read"]:
             return False
 
@@ -139,8 +143,7 @@ class Shell:
         if not self.is_valid_format(command_args):
             return False
 
-        if not self.is_valid_address(command_args):
-            return False
+
 
         return True
 
