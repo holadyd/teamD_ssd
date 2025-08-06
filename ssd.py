@@ -29,9 +29,23 @@ class SSD:
             with open(self.output_file, "w") as f:    # file에 작성
                 json.dump(initial_data_dict, f, indent=2)
 
-
     def read(self, lba):
-        pass
+        try:
+            lba_int = int(lba)
+        except ValueError:  # lba 값을 int로 변환 실패하는 경우
+            return "ERROR"
+
+        # LBA 범위 체크: 0 ~ 99만 허용
+        if lba_int < 0 or lba_int > 99:
+            return "ERROR"
+
+        key = str(lba_int)  # JSON은 문자열 키 사용
+
+        # 데이터 로딩
+        with open(self.nand_file, "r") as f:
+            nand_data = json.load(f)
+
+        return nand_data.get(key, self.initial_data)
 
     def write(self, lba, value):
         pass
