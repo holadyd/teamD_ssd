@@ -7,7 +7,6 @@ class Shell:
         self.command = None
         self.ret = True
 
-
     def read_output(self):
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -20,8 +19,6 @@ class Shell:
 
             if self.valid_check():
                 self.ret = self.run_command()
-
-
 
     def run_command(self):
         commands = self.command.strip().split(" ")
