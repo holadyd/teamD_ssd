@@ -200,31 +200,31 @@ class Shell:
             compare_list = []
             for start_addr in range(5) :
                 unique_value = unique_values[addr_shift * 10 + start_addr]
-                self.ssd_write(start_addr + addr_shift, unique_value, for_script=True)
-                compare_list.append((start_addr, unique_value))
+                self.ssd_write(f'{start_addr + addr_shift}', f'0x{unique_value:08x}', for_script=True)
+                compare_list.append((f'{start_addr+ addr_shift}', f'0x{unique_value:08x}'))
             self.read_compare(compare_list)
 
     def run_script_2(self):
 
         compare_list = [
-            ("0", "0xFFFF"),
-            ("1", "0xFFFF"),
-            ("2", "0xFFFF"),
-            ("3", "0xFFFF"),
-            ("4", "0xFFFF")
+            ("0", "0x0000FFFF"),
+            ("1", "0x0000FFFF"),
+            ("2", "0x0000FFFF"),
+            ("3", "0x0000FFFF"),
+            ("4", "0x0000FFFF")
         ]
         for _ in range(30):
-            self.ssd_write("4", "0xFFFF", for_script=True)
-            self.ssd_write("0", "0xFFFF", for_script=True)
-            self.ssd_write("3", "0xFFFF", for_script=True)
-            self.ssd_write("1", "0xFFFF", for_script=True)
-            self.ssd_write("2", "0xFFFF", for_script=True)
+            self.ssd_write("4", "0x0000FFFF", for_script=True)
+            self.ssd_write("0", "0x0000FFFF", for_script=True)
+            self.ssd_write("3", "0x0000FFFF", for_script=True)
+            self.ssd_write("1", "0x0000FFFF", for_script=True)
+            self.ssd_write("2", "0x0000FFFF", for_script=True)
             self.read_compare(compare_list)
 
     def run_script_3(self):
         for _ in range(200):
-            value1 = f'{hex(randrange(0xFFFFFFFF + 1))}'
-            value2 = f'{hex(randrange(0xFFFFFFFF + 1))}'
+            value1 = f'0x{randrange(0xFFFFFFFF + 1):08x}'
+            value2 = f'0x{randrange(0xFFFFFFFF + 1):08x}'
             compare_list = [
                 ("0", value1),
                 ("99", value2)
