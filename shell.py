@@ -128,7 +128,6 @@ class Shell:
             return True
         if command_args[0] not in ["write", "read"]:
             return False
-
         address = command_args[1]
 
         if not 0 <= int(address) <= 99:
