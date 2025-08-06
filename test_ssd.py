@@ -347,7 +347,7 @@ def test_init_ssd_nand_file():
         assert data[key] == "0x00000000", f"LBA {key}의 초기값이 올바르지 않습니다."
 
     # 테스트 후 정리
-    # nand_path.unlink()
+    nand_path.unlink()
 
 # ssd_u21
 def test_init_ssd_output_file():
@@ -373,4 +373,4 @@ def test_init_ssd_output_file():
     assert data["0"] == "0x00000000", f"Output file의 초기값이 올바르지 않습니다."
 
     # 테스트 후 정리
-    # nand_path.unlink()
+    nand_path.unlink()
