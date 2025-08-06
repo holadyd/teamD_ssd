@@ -30,6 +30,7 @@ class Shell:
 
         if commands[0] == "help":
             self.print_help()
+            return
 
         if commands[0] == "write":
             address = commands[1]
