@@ -1,4 +1,7 @@
+import json
 import os
+from pathlib import Path
+
 import pytest
 from ssd import SSD
 from pytest_mock import MockFixture
@@ -316,3 +319,32 @@ def test_write_create_ssd_nand_file(mocker: MockFixture):
     ssd = SSD()
     ssd.write(99, '0xFFFFFFFF')
     mock_file.assert_called_once_with('ssd_nand.txt', 'w')
+
+
+# ssd_u20
+def test_init_ssd_nand_file():
+    # arrange
+    nand_path = Path("ssd_nand.txt")
+    if nand_path.exists():
+        nand_path.unlink()
+
+    # act
+    ssd = SSD()
+
+    # assert: 파일이 생성되었는지 확인
+    assert nand_path.exists(), "ssd_nand.txt 파일이 생성되지 않았습니다."
+
+    # assert: JSON 내용 확인
+    with open(nand_path, "r") as f:
+        data = json.load(f)
+
+    # assert: 100개의 LBA가 있는지 확인
+    assert len(data) == 100, "LBA 수가 100개가 아닙니다."
+
+    # assert: 각 LBA 값이 "0x00000000"으로 초기화되었는지 확인
+    for i in range(100):
+        key = str(i)
+        assert data[key] == "0x00000000", f"LBA {key}의 초기값이 올바르지 않습니다."
+
+    # 테스트 후 정리
+    # nand_path.unlink()
