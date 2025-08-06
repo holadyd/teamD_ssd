@@ -1,4 +1,5 @@
 import json
+from enum import Enum
 import os
 
 
@@ -6,6 +7,10 @@ class Shell:
 
     def __init__(self):
         self.command = None
+        self.ret = True
+        self.one_arg_lst = ["help", "exit", "fullread"]
+        self.two_arg_lst = ["read", "fullwrite"]
+        self.three_arg_lst = ["write"]
 
     def read_output(self):
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
@@ -13,24 +18,15 @@ class Shell:
         return data
 
     def run_shell(self):
-        while True:
+        while self.ret:
 
             self.read_command()
 
-            self.valid_check()
-
-            self.run_command()
-
-            if self.command == "exit":
-                print("Shell Exited Successfully.")
-                break
+            if self.valid_check():
+                self.ret = self.run_command()
 
     def run_command(self):
         commands = self.command.strip().split(" ")
-
-        if commands[0] == "help":
-            self.print_help()
-            return
 
         if commands[0] == "write":
             address = commands[1]
@@ -46,6 +42,13 @@ class Shell:
         elif commands[0] == "fullread":
             for address in range(100):
                 self.ssd_read(address)
+        elif commands[0] == "help":
+            self.print_help()
+        elif commands[0] == "exit":
+            print("Shell Exited Successfully.")
+            return False
+
+        return True
 
     def ssd_read(self, address):
         os.system(f"python ssd.py R {address}")
@@ -63,58 +66,58 @@ class Shell:
             self.command = command
 
     def print_help(self):
-        print("""***SSD Test Shell Help***
-      write         지정한 LBA에 Data를 기록한다.
-        Usage) write [LBA] [Data]
-      fullwrite     모든 LBA에 Data를 기록한다.
-        Usage) fullwrite [Data]
-      read          지정한 LBA의 Data를 출력한다.
-        Usage) read [LBA]
-      fullread      모든 LBA에 대해 Data를 출력한다.
-        Usage) fullread
-      exit          Test Shell을 종료한다.
-      help          도움말을 출력한다.
+        with open("help_docs.txt", "r", encoding="utf-8") as f:
+            docs = f.readlines()
+        print("".join(docs))
 
-    Made by Digital Ninjas
-    김현용, 김준휘, 모유찬, 민재원, 이성규, 이재윤""")
+    def is_invalid_command(self, command_args):
+        if command_args[0] not in self.one_arg_lst and \
+                command_args[0] not in self.two_arg_lst and \
+                command_args[0] not in self.three_arg_lst:
+            return True
+        return False
+
+    def is_invalid_para_length(self, command_args):
+        if command_args[0] in self.one_arg_lst:
+            if len(command_args) != 1:
+                return True
+        if command_args[0] in self.two_arg_lst:
+            if len(command_args) != 2:
+                return True
+        if command_args[0] in self.three_arg_lst:
+            if len(command_args) != 3:
+                return True
+        return False
 
     def is_valid_format(self, command_args):
-        one_arg_lst = ["help", "exit", "fullread"]
-        two_arg_lst = ["read", "fullwrite"]
-        three_arg_lst = ["write"]
 
-        if command_args[0] not in one_arg_lst and \
-                command_args[0] not in two_arg_lst and \
-                command_args[0] not in three_arg_lst:
-            print("Error")
+        if self.is_invalid_command(command_args):
+            self.print_valid_error(self.ErrorPrintEnum.INVALID_COMMAND)
             return False
-        if command_args[0] in one_arg_lst:
-            if len(command_args) != 1:
-                print("Error")
-                return False
-        if command_args[0] in two_arg_lst:
-            if len(command_args) != 2:
-                print("Error")
-                return False
+        if self.is_invalid_para_length(command_args):
+            self.print_valid_error(self.ErrorPrintEnum.INVALID_PARAMETER_LENGTH)
+
+        if command_args[0] in self.two_arg_lst:
             if not self.is_valid_number(command_args[1]):
-                print("Error")
+                self.print_valid_error(self.ErrorPrintEnum.INVALID_DATA)
                 return False
             if not self.is_data_in_range(command_args[1]):
-                print("Error")
+                self.print_valid_error(self.ErrorPrintEnum.INVALID_LBA_RANGE)
+                return False
+            if not self.is_valid_address(command_args):
                 return False
 
-        if command_args[0] in three_arg_lst:
-            if len(command_args) != 3:
-                print("Error")
-                return False
+        if command_args[0] in self.three_arg_lst:
             if not self.is_valid_number(command_args[1]):
-                print("Error")
+                self.print_valid_error(self.ErrorPrintEnum.INVALID_DATA)
                 return False
             if not self.is_valid_number(command_args[2]):
-                print("Error")
+                self.print_valid_error(self.ErrorPrintEnum.INVALID_DATA)
                 return False
             if not self.is_data_in_range(command_args[2]):
-                print("Error")
+                self.print_valid_error(self.ErrorPrintEnum.INVALID_LBA_RANGE)
+                return False
+            if not self.is_valid_address(command_args):
                 return False
         return True
 
@@ -129,13 +132,14 @@ class Shell:
             return False
 
     def is_valid_address(self, command_args):
+        if command_args[0] in ["exit", "help", "fullread", "fullwrite"]:
+            return True
         if command_args[0] not in ["write", "read"]:
             return False
-
         address = command_args[1]
 
         if not 0 <= int(address) <= 99:
-            print("invalid address")
+            self.print_valid_error(self.ErrorPrintEnum.INVALID_LBA_RANGE)
             return False
 
         return True
@@ -147,10 +151,23 @@ class Shell:
         if not self.is_valid_format(command_args):
             return False
 
-        if not self.is_valid_address(command_args):
-            return False
-
         return True
+
+    class ErrorPrintEnum(Enum):
+        INVALID_COMMAND = 0
+        INVALID_PARAMETER_LENGTH = 1
+        INVALID_DATA = 2
+        INVALID_LBA_RANGE = 3
+
+    def print_valid_error(self, error_type):
+        if error_type == self.ErrorPrintEnum.INVALID_COMMAND:
+            print("[Error] INVALID COMMAND")
+        elif error_type == self.ErrorPrintEnum.INVALID_PARAMETER_LENGTH:
+            print("[Error] INVALID PARAMETER LENGTH")
+        elif error_type == self.ErrorPrintEnum.INVALID_DATA:
+            print("[Error] INVALID_DATA")
+        elif error_type == self.ErrorPrintEnum.INVALID_LBA_RANGE:
+            print("[Error] INVALID_DATA")
 
 
 if __name__ == "__main__":

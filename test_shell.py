@@ -63,7 +63,7 @@ def test_shell_help(capsys):
 
 def test_shell_fullwrite(capsys):
     shell = Shell()
-    shell.read_command("fullwrite 0xAAAABBBB\n")
+    shell.read_command("fullwrite 0xAAAABBBB")
     shell.run_command()
     out, err = capsys.readouterr()
     write_count = out.count("[Write] Done\n")
@@ -72,7 +72,7 @@ def test_shell_fullwrite(capsys):
 
 def test_shell_fullread(capsys):
     shell = Shell()
-    shell.read_command("fullread\n")
+    shell.read_command("fullread")
     shell.run_command()
     out, err = capsys.readouterr()
 
@@ -119,7 +119,7 @@ def test_shell_input_validation_lba_range_fail(capsys):
 
     captured = capsys.readouterr()
 
-    assert captured.out == "invalid address\n"
+    assert captured.out == "[Error] INVALID_DATA\n"
 
 
 def test_shell_input_validation_data_range_fail(capsys):
