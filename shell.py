@@ -5,6 +5,8 @@ class Shell:
 
     def __init__(self):
         self.command = None
+        self.ret = True
+
 
     def read_output(self):
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
@@ -12,17 +14,14 @@ class Shell:
         return data
 
     def run_shell(self):
-        while True:
+        while self.ret:
 
             self.read_command()
 
-            self.valid_check()
+            if self.valid_check():
+                self.ret = self.run_command()
 
-            self.run_command()
 
-            if self.command == "exit":
-                print("Shell Exited Successfully.")
-                break
 
     def run_command(self):
         commands = self.command.strip().split(" ")
@@ -45,6 +44,11 @@ class Shell:
                 print(f"[Read] LBA {address} : {result}")
         elif commands[0] == "help":
             self.print_help()
+        elif self.command == "exit":
+            print("Shell Exited Successfully.")
+            return False
+
+        return True
 
     def read_command(self, command=None):
         if command == None:
