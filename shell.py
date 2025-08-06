@@ -207,30 +207,30 @@ class Shell:
     def run_script_2(self):
 
         compare_list = [
-            (0, 0xFFFF),
-            (1, 0xFFFF),
-            (2, 0xFFFF),
-            (3, 0xFFFF),
-            (4, 0xFFFF)
+            ("0", "0xFFFF"),
+            ("1", "0xFFFF"),
+            ("2", "0xFFFF"),
+            ("3", "0xFFFF"),
+            ("4", "0xFFFF")
         ]
         for _ in range(30):
-            self.ssd_write(4, 0xFFFF, for_script=True)
-            self.ssd_write(0, 0xFFFF, for_script=True)
-            self.ssd_write(3, 0xFFFF, for_script=True)
-            self.ssd_write(1, 0xFFFF, for_script=True)
-            self.ssd_write(2, 0xFFFF, for_script=True)
+            self.ssd_write("4", "0xFFFF", for_script=True)
+            self.ssd_write("0", "0xFFFF", for_script=True)
+            self.ssd_write("3", "0xFFFF", for_script=True)
+            self.ssd_write("1", "0xFFFF", for_script=True)
+            self.ssd_write("2", "0xFFFF", for_script=True)
             self.read_compare(compare_list)
 
     def run_script_3(self):
-        value1 = randrange(0xFFFFFFFF+1)
-        value2 = randrange(0xFFFFFFFF+1)
-        compare_list = [
-            (0, value1),
-            (1, value2)
-        ]
         for _ in range(200):
-            self.ssd_write(0, value1, for_script=True)
-            self.ssd_write(99, value2, for_script=True)
+            value1 = f'{hex(randrange(0xFFFFFFFF + 1))}'
+            value2 = f'{hex(randrange(0xFFFFFFFF + 1))}'
+            compare_list = [
+                ("0", value1),
+                ("99", value2)
+            ]
+            self.ssd_write("0", value1, for_script=True)
+            self.ssd_write("99", value2, for_script=True)
             self.read_compare(compare_list)
 
     def generate_unique_random(self, count):
