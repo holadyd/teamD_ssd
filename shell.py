@@ -43,12 +43,11 @@ class Shell:
         elif self.command == "help":
             self.print_help()
 
-    def read_command(self, command = None):
+    def read_command(self, command=None):
         if command == None:
             self.command = input("Shell>")
         else:
             self.command = command
-
 
     def print_help(self):
         print("""***SSD Test Shell Help***
@@ -87,6 +86,10 @@ class Shell:
             if not self.is_valid_number(command_args[1]):
                 print("Error")
                 return False
+            if not self.is_data_in_range(command_args[1]):
+                print("Error")
+                return False
+
         if command_args[0] in three_arg_lst:
             if len(command_args) != 3:
                 print("Error")
@@ -97,7 +100,13 @@ class Shell:
             if not self.is_valid_number(command_args[2]):
                 print("Error")
                 return False
+            if not self.is_data_in_range(command_args[2]):
+                print("Error")
+                return False
         return True
+
+    def is_data_in_range(self, num):
+        return 0x0 <= int(num, 0) <= 0xFFFFFFFF
 
     def is_valid_number(self, num):
         try:
