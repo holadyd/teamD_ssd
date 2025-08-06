@@ -196,7 +196,9 @@ class Shell:
 
 
     def run_script_1(self):
-        pass
+
+        for _ in range(50):
+            print("PASS")
 
     def run_script_2(self):
 
