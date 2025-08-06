@@ -236,13 +236,15 @@ def test_write_3nd_arg_is_valid(args, mocker: MockFixture):
     ['W', '41', '7D8E9A0B'],  # 0x없는 경우
     ['W', '50', '2B3C4D5E'],  # 0x없는 경우
 ])
-def test_write_3nd_arg_is_invalid(args):
+def test_write_3nd_arg_is_invalid(args, mocker: MockFixture):
     '''
 
     :param args: 'W','LBA','VALUE
     :return: 3번째 매개변수는 0x0000000 형태 가 아닌 경우 read value로 'ERROR'반환
     '''
     op, lba, value = args
+    check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validation')
+    check_para_validataion_method.return_value = False
     ssd = SSD()
     assert op == 'W'
     ssd.write(lba, value)
