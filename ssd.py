@@ -6,21 +6,60 @@ from typing import Literal
 
 
 class SSD:
-    nand_file_path = 'ssd_nand.txt'
-    output_file_path = ''
+    def __init__(self):
+        self.nand_file = "ssd_nand.txt"
+        self.output_file = "ssd_output.txt"
+        self.initial_data = "0x00000000"
+
+        # init ssd_nand.txt file
+        if not os.path.exists(self.nand_file):
+            initial_data_dict = {}
+
+            for i in range(100):
+                key = str(i)  # json key는 string
+                # 모든 lba value를 "0x00000000"로 초기화
+                initial_data_dict[key] = self.initial_data  # 딕셔너리에 추가
+
+            with open(self.nand_file, "w") as f:    # file에 작성
+                json.dump(initial_data_dict, f, indent=2)
+
+        # init ssd_output.txt file
+        if not os.path.exists(self.output_file):
+            initial_data_dict = {}
+            initial_data_dict["0"] = self.initial_data  # 딕셔너리에 추가
+
+            with open(self.output_file, "w") as f:    # file에 작성
+                json.dump(initial_data_dict, f, indent=2)
 
     def read(self, lba):
-        if not self._check_parameter_validation(lba, ''):
-            return 'ERROR'
-        with open(self.nand_file_path, 'r') as f:
-            nand_data: dict = json.load(f)
-            return nand_data.get(str(lba), 0)
+        try:
+            lba_int = int(lba)
+        except ValueError:
+            # LBA 값을 int화하지 못하는 경우 ssd_output.txt에 "ERROR" 저장
+            self._write_value_to_ssd_output("ERROR")
+            return "ERROR"
 
-    def _initialize_nand_if_not_exists(self):
-        if not os.path.exists(self.nand_file_path):
-            with self._open_file(self.nand_file_path, 'w') as f:
-                init_values = {str(v): 0 for v in range(100)}
-                json.dump(init_values, f)
+        if lba_int < 0 or lba_int > 99:
+            # invalid LBA일 경우 ssd_output.txt에 "ERROR" 저장
+            self._write_value_to_ssd_output("ERROR")
+            return "ERROR"
+
+        key = str(lba_int)  # JSON은 문자열 키 사용
+
+        # ssd_nand.txt 읽기
+        with open(self.nand_file, "r") as f:
+            nand_data = json.load(f)
+
+        value = nand_data.get(key, self.initial_data)
+
+        # ssd_output.txt에 읽은 값 저장
+        self._write_value_to_ssd_output(value)
+
+        return value
+
+    def _write_value_to_ssd_output(self, value: str):
+        with open(self.output_file, "w") as f:
+            json.dump({"0": value}, f, indent=2)
 
     def write(self, lba, value):
         if not self._check_parameter_validation(lba, value):
@@ -28,11 +67,11 @@ class SSD:
 
         nand_data = None
         # 파일 핸들러를 사용해 'r' 모드로 파일 열기
-        with self._open_file(self.nand_file_path, 'r') as f:
+        with self._open_file(self.nand_file, 'r') as f:
             nand_data = json.load(f)
 
         # 파일 핸들러를 사용해 'w' 모드로 파일 열기
-        with self._open_file(self.nand_file_path, 'w') as f:
+        with self._open_file(self.nand_file, 'w') as f:
             nand_data[str(lba)] = value
             json.dump(nand_data, f)
 
@@ -46,8 +85,30 @@ class SSD:
             if f:
                 f.close()
 
-    def _check_parameter_validation(self, lba, value):
-        pass
+    def _check_parameter_validation(self, lba, value=None) -> bool:
+        # value  invalid Check
+        if value is not None:
+            try:
+                int(value, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
+            except ValueError:
+                return False
+
+            if not str(value).startswith("0x"):
+                return  False
+            if not (0x0 <= int(value, 0) <= 0xFFFFFFFF):
+                return False
+
+        # lba invalid Check
+        # 1. int 인지 체크
+        try:
+            int(lba)
+        except (ValueError, TypeError):
+            return False
+
+        # 2. 0~ 99 인지 체크
+        if 0 <= int(lba) <= 99:
+            return True
+        return False
 
 
 if __name__ == '__main__':
