@@ -51,20 +51,9 @@ class Shell:
             self.command = command
 
     def print_help(self):
-        print("""***SSD Test Shell Help***
-      write         지정한 LBA에 Data를 기록한다.
-        Usage) write [LBA] [Data]
-      fullwrite     모든 LBA에 Data를 기록한다.
-        Usage) fullwrite [Data]
-      read          지정한 LBA의 Data를 출력한다.
-        Usage) read [LBA]
-      fullread      모든 LBA에 대해 Data를 출력한다.
-        Usage) fullread
-      exit          Test Shell을 종료한다.
-      help          도움말을 출력한다.
-
-    Made by Digital Ninjas
-    김현용, 김준휘, 모유찬, 민재원, 이성규, 이재윤""")
+        with open("help_docs.txt", "r", encoding="utf-8") as f:
+            docs = f.readlines()
+        print("".join(docs))
 
     def is_valid_format(self, command_args):
         one_arg_lst = ["help", "exit", "fullread"]
