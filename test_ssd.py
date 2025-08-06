@@ -325,7 +325,7 @@ def test_lba_invalid(lba):
     ssd = SSD()
 
     # act
-    ret = ssd._check_paramter_validation(lba)
+    ret = ssd._check_parameter_validation(lba)
 
     # assert
     assert ret is False
@@ -342,10 +342,10 @@ def test_value_invalid_when_write(lba, value, mocker: MockerFixture):
     # arrange
     # ssd = SSD()
     ssd = mocker.Mock(spec=SSD)
-    ssd._check_paramter_validation.return_value = True
+    ssd._check_parameter_validation.return_value = True
 
     # act
-    ret = ssd._check_paramter_validation(lba, value)
+    ret = ssd._check_parameter_validation(lba, value)
 
     # assert
     assert ret is False
@@ -357,10 +357,10 @@ def test_lba_valid(lba, mocker: MockerFixture):
     # arrange
     # ssd = SSD()
     ssd = mocker.Mock(spec=SSD)
-    ssd._check_paramter_validation.return_value = False
+    ssd._check_parameter_validation.return_value = False
 
     # act
-    ret = ssd._check_paramter_validation(lba)
+    ret = ssd._check_parameter_validation(lba)
 
     # assert
     assert ret is True
@@ -376,10 +376,10 @@ def test_value_valid_when_write(lba, value, mocker: MockerFixture):
     # arrange
     # ssd = SSD()
     ssd = mocker.Mock(spec=SSD)
-    ssd._check_paramter_validation.return_value = False
+    ssd._check_parameter_validation.return_value = False
 
     # act
-    ret = ssd._check_paramter_validation(lba, value)
+    ret = ssd._check_parameter_validation(lba, value)
 
     # assert
     assert ret is True

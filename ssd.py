@@ -8,19 +8,20 @@ class SSD:
     def write(self, lba, value):
         pass
 
-    def _check_paramter_validation(self, lba, value=None) -> bool:
-        # lba가 유효한지 체크한다.
-
+    def _check_parameter_validation(self, lba, value=None) -> bool:
+        # lba invalid Check
         # 1. int 인지 체크
         try:
             int(lba)
         except (ValueError, TypeError):
             return False
 
-        # 2. 0~ 99 인지 체크
+        # 2. 0~ 99 인지 체크 
         if 0 <= lba <= 99:
             return True
-        return False
+
+
+
 
 
 if __name__ == '__main__':
