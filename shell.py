@@ -2,6 +2,7 @@ import json
 from enum import Enum
 import os
 from hmac import compare_digest
+from random import randrange
 
 
 class Shell:
@@ -212,7 +213,16 @@ class Shell:
             self.read_compare(compare_list)
 
     def run_script_3(self):
-        pass
+        value1 = randrange(0xFFFFFFFF+1)
+        value2 = randrange(0xFFFFFFFF+1)
+        compare_list = [
+            (0, value1),
+            (1, value2)
+        ]
+        for _ in range(200):
+            self.ssd_write(0, value1, for_script=True)
+            self.ssd_write(99, value2, for_script=True)
+            self.read_compare(compare_list)
 
 
 if __name__ == "__main__":
