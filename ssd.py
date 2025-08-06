@@ -85,11 +85,10 @@ class SSD:
         if value is not None:
             try:
                 int(value, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
+
             except ValueError:
                 return False
 
-            if not str(value).startswith("0x"):
-                return False
             if not (0x0 <= int(value, 0) <= 0xFFFFFFFF):
                 return False
 
