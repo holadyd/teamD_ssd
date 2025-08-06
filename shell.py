@@ -196,7 +196,6 @@ class Shell:
 
 
     def run_script_1(self):
-
         for _ in range(50):
             print("PASS")
 
