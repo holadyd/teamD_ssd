@@ -1,6 +1,7 @@
 import json
 from enum import Enum
 import os
+from hmac import compare_digest
 
 
 class Shell:
@@ -59,10 +60,13 @@ class Shell:
     
     
 
-    def ssd_read(self, address):
+    def ssd_read(self, address, for_script=False):
         os.system(f"python ssd.py R {address}")
         result = self.read_output()[address]
-        print(f"[Read] LBA {address} : {result}")
+        if for_script:
+            return result
+        else:
+            print(f"[Read] LBA {address} : {result}")
 
     def ssd_write(self, address, content):
         os.system(f"python ssd.py W, {address}, {content}")
@@ -178,8 +182,14 @@ class Shell:
         elif error_type == self.ErrorPrintEnum.INVALID_LBA_RANGE:
             print("[Error] INVALID_DATA")
 
-    def read_compare(self, comapre_list):
-        ...
+    def read_compare(self, compare_list):
+        for (address, value) in compare_list:
+            ret = self.ssd_read(address, for_script=True)
+            if ret != value:
+                print("FAIL")
+                return
+        print("PASS")
+
 
     def run_script_1(self):
         pass
