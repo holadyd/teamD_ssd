@@ -9,7 +9,8 @@ class Shell:
     def __init__(self):
         self.command = None
         self.ret = True
-        self.one_arg_lst = ["help", "exit", "fullread"]
+        self.one_arg_lst = ["help", "exit", "fullread", '1_', '1_FullWriteAndReadCompare',
+                            '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging']
         self.two_arg_lst = ["read", "fullwrite"]
         self.three_arg_lst = ["write"]
 
