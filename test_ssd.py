@@ -368,10 +368,10 @@ def test_lba_valid(lba, mocker: MockerFixture):
 
 # ssd_23
 @pytest.mark.parametrize("lba, value", [
-    ("W", "0x00000000"),
-    ("W", "0xFFFFFFFF"),
-    ("W", "0xAA"),
-    ("W", "0xFF")
+    ("0", "0x00000000"),
+    ("99", "0xFFFFFFFF"),
+    ("6", "0xAA"),
+    ("18", "0xFF")
 ])
 def test_value_valid_when_write(lba, value, mocker: MockerFixture):
     # arrange
