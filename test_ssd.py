@@ -114,15 +114,19 @@ def test_read_value_store_only_one_data():
     ssd = SSD()
 
     ## act
-    ret1 = ssd.read(0)
-    ret2 = ssd.read(99)
+    ssd.read(0)
 
-    list_ret1 = ret1.split("\n")
-    list_ret2 = ret2.split("\n")
+    with open("ssd_output.txt", "r") as f:
+        data1 = json.load(f)
 
-    ## assert
-    assert len(list_ret1) == 1
-    assert len(list_ret2) == 1
+    ssd.read(99)
+
+    with open("ssd_output.txt", "r") as f:
+        data2 = json.load(f)
+
+    ## assert: 각각의 결과는 {"0": value} 형식으로, 1개의 데이터만 있어야 함
+    assert len(data1) == 1
+    assert len(data2) == 1
 
 
 # ssd_u8
