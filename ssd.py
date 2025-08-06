@@ -1,6 +1,8 @@
 import argparse
 import json
 import os
+from contextlib import contextmanager
+from typing import Literal
 
 
 class SSD:
@@ -11,16 +13,32 @@ class SSD:
             nand_data: dict = json.load(f)
             return nand_data.get(str(lba), 0)
 
-    def write(self, lba, value):
+    def _initialize_nand_if_not_exists(self):
         if not os.path.exists(self.nand_file_path):
-            with open(self.nand_file_path, 'w') as f:
+            with self._open_file(self.nand_file_path, 'w') as f:
                 init_values = {str(v): 0 for v in range(100)}
                 json.dump(init_values, f)
-        with open(self.nand_file_path, 'r') as f:
-            nand_data: dict = json.load(f)
-        with open(self.nand_file_path, 'w') as f:
+
+    def write(self, lba, value):
+        nand_data = None
+        # 파일 핸들러를 사용해 'r' 모드로 파일 열기
+        with self._open_file(self.nand_file_path, 'r') as f:
+            nand_data = json.load(f)
+
+        # 파일 핸들러를 사용해 'w' 모드로 파일 열기
+        with self._open_file(self.nand_file_path, 'w') as f:
             nand_data[str(lba)] = value
             json.dump(nand_data, f)
+
+    @contextmanager
+    def _open_file(self, file_path, mode: Literal['r', 'w']):
+        f = None
+        try:
+            f = open(file_path, mode)
+            yield f
+        finally:
+            if f:
+                f.close()
 
 
 if __name__ == '__main__':
