@@ -77,6 +77,11 @@ def test_read_2nd_invalid_args():
 
 # ssd_u6
 def test_read_when_not_written():
+    from shell import Shell
+    shell = Shell()
+    shell.read_command("fullwrite 0\n")
+    if shell.valid_check():
+        shell.run_command()
     ## Arrange
     command_line1 = "R 99"
     command_line2 = "R 33"
@@ -456,21 +461,21 @@ def test_value_valid_when_write(lba, value, mocker: MockerFixture):
     [
         # --- (1) lba 0-99 범위 테스트
         (0, '0x123', '0x00000123'),
-        (50, '0xabcdef', '0x00abcdef'),
-        (99, '0xdeadbeef', '0xdeadbeef'),
+        (50, '0xabcdef', '0x00ABCDEF'),
+        (99, '0xdeadbeef', '0xDEADBEEF'),
 
         # --- (2) value: 0x + 8자리 이하 숫자 (16진수)
         (10, '0x0', '0x00000000'),
         (20, '0x1', '0x00000001'),
-        (30, '0xabcd', '0x0000abcd'),
+        (30, '0xabcd', '0x0000ABCD'),
 
         # --- (3) value: 0x + 8자리 숫자 (16진수)
         (40, '0x12345678', '0x12345678'),
-        (60, '0xffffffff', '0xffffffff'),
+        (60, '0xffffffff', '0xFFFFFFFF'),
 
         # --- (4) value: 그냥 int 숫자 (10진수)
         (70, '100', '0x00000064'),  # 100 -> hex(100) -> 0x64
-        (80, '4294967295', '0xffffffff'),  # 4294967295 -> hex -> 0xffffffff
+        (80, '4294967295', '0xFFFFFFFF'),  # 4294967295 -> hex -> 0xffffffff
         (90, '0', '0x00000000'),  # 0 -> hex -> 0x0
     ]
 )

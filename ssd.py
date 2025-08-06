@@ -49,7 +49,7 @@ class SSD:
             str_value = str(value)
             if not str_value.startswith('0x'):
                 str_value = hex(int(str_value))
-            converted_value = str_value[:2] + f'0000000{str_value[2:]}'[-8:]
+            converted_value = str_value[:2] + f'0000000{str_value[2:]}'[-8:].upper()
             nand_data[str(lba)] = converted_value
             json.dump(nand_data, f, indent=2)
 
