@@ -39,20 +39,23 @@ class SSD:
             self._write_value_to_ssd_output("ERROR")
             return
 
-        nand_data = None
-        # 파일 핸들러를 사용해 'r' 모드로 파일 열기
-        with self._open_file(self.nand_file, 'r') as f:
-            nand_data = json.load(f)
+        try:
+            nand_data = None
+            # 파일 핸들러를 사용해 'r' 모드로 파일 열기
+            with self._open_file(self.nand_file, 'r') as f:
+                nand_data = json.load(f)
 
-        # 파일 핸들러를 사용해 'w' 모드로 파일 열기
-        with self._open_file(self.nand_file, 'w') as f:
             str_value = str(value)
             if not str_value.startswith('0x'):
-                str_value = hex(int(str_value))
+                str_value = hex(int(str_value, 0))
             converted_value = str_value[:2] + f'0000000{str_value[2:]}'[-8:].upper()
-            nand_data[str(lba)] = converted_value
-            json.dump(nand_data, f, indent=2)
 
+            # 파일 핸들러를 사용해 'w' 모드로 파일 열기
+            with self._open_file(self.nand_file, 'w') as f:
+                nand_data[str(lba)] = converted_value
+                json.dump(nand_data, f, indent=2)
+        except Exception as e:
+            raise e
 
     @contextmanager
     def _open_file(self, file_path, mode: Literal['r', 'w']):
