@@ -1,12 +1,26 @@
 import argparse
+import json
+import os
 
 
 class SSD:
+    nand_file_path = 'ssd_nand.txt'
+
     def read(self, lba):
-        pass
+        with open(self.nand_file_path, 'r') as f:
+            nand_data: dict = json.load(f)
+            return nand_data.get(str(lba), 0)
 
     def write(self, lba, value):
-        pass
+        if not os.path.exists(self.nand_file_path):
+            with open(self.nand_file_path, 'w') as f:
+                init_values = {str(v): 0 for v in range(100)}
+                json.dump(init_values, f)
+        with open(self.nand_file_path, 'r') as f:
+            nand_data: dict = json.load(f)
+        with open(self.nand_file_path, 'w') as f:
+            nand_data[str(lba)] = value
+            json.dump(nand_data, f)
 
 
 if __name__ == '__main__':

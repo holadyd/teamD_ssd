@@ -152,7 +152,7 @@ def test_write_3_args(mocker: MockFixture, args):
     ['W', '95', '0x3F4A5B6C'],
     ['W', '3', '0xA1B2C3D4']
 ])
-def test_write_basic_flow_with_value(args, mocker: MockFixture):
+def test_write_basic_flow_with_value(args):
     '''
     2번째 매개변수는 0-99 값이 들어오는 경우 값을 기록 후 Read하고 비교한다.
     :param args: ['W',lba,value]
@@ -161,8 +161,6 @@ def test_write_basic_flow_with_value(args, mocker: MockFixture):
     op, lba, value = args
     # ssd 클래스 생성
     assert op == 'W'
-    read_method = mocker.patch('ssd.SSD.read')
-    read_method.return_value = value
     ssd = SSD()
     ssd.write(lba, value)
     # 캡처된 출력에 예상 메시지가 포함되어 있는지 검증
