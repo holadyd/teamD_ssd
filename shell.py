@@ -70,7 +70,7 @@ class Shell:
             print(f"[Read] LBA {address} : {result}")
 
     def ssd_write(self, address, content, for_script=False):
-        os.system(f"python ssd.py W {address} {str(hex(int(content)))}")
+        os.system(f"python ssd.py W {address} {str(hex(int(content,0)))}")
         if for_script:
             return
 
