@@ -154,7 +154,9 @@ class Shell:
             return False
         address = command_args[1]
 
-        if not 0 <= int(address) <= 99:
+        address_numb = int(address, 0)
+
+        if not 0 <= address_numb <= 99:
             self.print_valid_error(self.ErrorPrintEnum.INVALID_LBA_RANGE)
             return False
 
