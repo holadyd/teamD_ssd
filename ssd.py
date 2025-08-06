@@ -32,20 +32,31 @@ class SSD:
     def read(self, lba):
         try:
             lba_int = int(lba)
-        except ValueError:  # lba 값을 int로 변환 실패하는 경우
+        except ValueError:
+            # LBA 값을 int화하지 못하는 경우 ssd_output.txt에 "ERROR" 저장
+            with open(self.output_file, "w") as f:
+                json.dump({"0": "ERROR"}, f, indent=2)
             return "ERROR"
 
-        # LBA 범위 체크: 0 ~ 99만 허용
         if lba_int < 0 or lba_int > 99:
+            # invalid LBA일 경우 ssd_output.txt에 "ERROR" 저장
+            with open(self.output_file, "w") as f:
+                json.dump({"0": "ERROR"}, f, indent=2)
             return "ERROR"
 
         key = str(lba_int)  # JSON은 문자열 키 사용
 
-        # 데이터 로딩
+        # ssd_nand.txt 읽기
         with open(self.nand_file, "r") as f:
             nand_data = json.load(f)
 
-        return nand_data.get(key, self.initial_data)
+        value = nand_data.get(key, self.initial_data)
+
+        # ssd_output.txt에 읽은 값 저장
+        with open(self.output_file, "w") as f:
+            json.dump({"0": value}, f, indent=2)
+
+        return value
 
     def write(self, lba, value):
         pass
