@@ -8,6 +8,9 @@ class SSD:
     def write(self, lba, value):
         pass
 
+    def _check_paramter_validation(self, lba, value=None) -> bool:
+        return True
+
 
 if __name__ == '__main__':
     # argparse.ArgumentParser 객체 생성
