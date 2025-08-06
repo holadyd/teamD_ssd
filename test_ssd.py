@@ -264,13 +264,15 @@ def test_write_3nd_arg_is_invalid(args, mocker: MockFixture):
     ['W', '95', '0x3F4A5B6C'],
     ['W', '3', '0xA1B2C3D4']
 ])
-def test_write_valid_does_not_append_output(args):
+def test_write_valid_does_not_append_output(args, mocker: MockFixture):
     '''
     ssd.write 를 valid한 값으로 수행시 ssd_output.txt에 하나의 데이터만 저장됨을 유지해야 한다.
     :param args : 'W','LBA','VALUE
     :return: 개행이 포함되지 않은 값을 return (1개의 값만이 ssd_output.txt에 저장됨)
     '''
     op, lba, value = args
+    check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validation')
+    check_para_validataion_method.return_value = True
     ssd = SSD()
     ssd.write(lba, value)
     assert '\n' not in ssd.read(lba)
