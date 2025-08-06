@@ -180,7 +180,7 @@ def test_write_basic_flow_with_value(args):
     ['W', '-95', '0x3F4A5B6C'],
     ['W', '243', '0xA1B2C3D4']
 ])
-def test_write_invalid_lba(args):
+def test_write_invalid_lba(args, mocker: MockFixture):
     '''
     2번째 매개변수(lab)는 0-99 외의 값이 들어오는 경우 값을 기록 후 ERROR 반환.
     :param args: ['W',lba,value]
@@ -189,6 +189,8 @@ def test_write_invalid_lba(args):
     op, lba, value = args
     # ssd 클래스 생성
     assert op == 'W'
+    check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validataion')
+    check_para_validataion_method.return_value = False
     ssd = SSD()
     ssd.write(lba, value)
     # 캡처된 출력에 예상 메시지가 포함되어 있는지 검증
