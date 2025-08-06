@@ -23,7 +23,7 @@ class SSD:
         with open(self.nand_file, "r") as f:
             nand_data = json.load(f)
 
-        value = nand_data.get(key, self.initial_data)
+        value = nand_data.get(key)
 
         # ssd_output.txt에 읽은 값 저장
         self._write_value_to_ssd_output(value)
