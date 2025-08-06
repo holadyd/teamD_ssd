@@ -5,6 +5,7 @@ import pytest
 from ssd import SSD
 from pytest_mock import MockFixture, MockerFixture
 
+
 # ssd_u1
 def test_console_not_print(capsys):
     ssd = SSD()
@@ -22,7 +23,6 @@ def test_read_1_args():
     result = ssd.read(42)
 
     assert result.startswith("0x") and len(result) == 10
-
 
 
 # ssd_u3
@@ -478,8 +478,8 @@ def test_ssd_write_value_conversion(mocker: MockFixture, lba: int, value: str, e
     """
     SSD write 메서드에서 value가 올바르게 변환되는지 검증합니다.
     """
-    check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validation')
-    check_para_validataion_method.return_value = True
+    # check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validation')
+    # check_para_validataion_method.return_value = True
     ssd = SSD()
     ssd.write(lba, value)
     assert ssd.read(lba) == expected_value
