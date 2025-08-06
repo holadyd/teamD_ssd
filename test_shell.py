@@ -184,6 +184,25 @@ def test_read_compare_fail(mocker, capsys):
     captured = capsys.readouterr()
     assert "FAIL" in captured.out
 
+def test_script_1_fullwrite_read_compare(capsys, mocker):
+
+    shell = Shell()
+    shell.read_compare = mocker.Mock()
+    shell.read_compare.side_effect = func
+    shell.read_command("1_")
+    if shell.valid_check():
+        shell.run_command()
+    captured = capsys.readouterr()
+    assert captured.out == "PASS\n"*50
+
+    shell.read_compare.side_effect = func
+    shell.read_command("1_FullWriteAndReadCompare")
+    if shell.valid_check():
+        shell.run_command()
+    captured = capsys.readouterr()
+    assert captured.out == "PASS\n"*50
+
+
 def test_script_3_write_read_aging(capsys, mocker):
 
     shell = Shell()
