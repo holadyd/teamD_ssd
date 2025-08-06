@@ -81,6 +81,7 @@ def test_shell_fullread(capsys):
     matches = re.findall(pattern, out)
     assert len(matches) == 100
 
+
 def test_shell_input_validation_format_write_fail(capsys):
     shell = Shell()
     shell.read_command("write abc abc\n")
@@ -88,6 +89,7 @@ def test_shell_input_validation_format_write_fail(capsys):
         shell.run_command()
     out, err = capsys.readouterr()
     assert "Error" in out
+
 
 def test_shell_input_validation_format_read_fail(capsys):
     shell = Shell()
@@ -98,6 +100,7 @@ def test_shell_input_validation_format_read_fail(capsys):
 
     assert "Error" in out
 
+
 def test_shell_input_validation_format_fullwrite_fail(capsys):
     shell = Shell()
     shell.read_command("fullwrite abc\n")
@@ -107,8 +110,8 @@ def test_shell_input_validation_format_fullwrite_fail(capsys):
 
     assert "Error" in out
 
-def test_shell_input_validation_lba_range_fail(capsys):
 
+def test_shell_input_validation_lba_range_fail(capsys):
     shell = Shell()
     shell.read_command("read 300")
     if shell.valid_check():
@@ -117,3 +120,25 @@ def test_shell_input_validation_lba_range_fail(capsys):
     captured = capsys.readouterr()
 
     assert captured.out == "invalid address\n"
+
+
+def test_shell_input_validation_data_range_fail(capsys):
+    shell = Shell()
+    shell.read_command("write 99 0x123456789")
+    if shell.valid_check():
+        shell.run_command()
+
+    captured = capsys.readouterr()
+
+    assert "Error" in captured.out
+
+
+def test_shell_input_validation_invalid_command(capsys):
+    shell = Shell()
+    shell.read_command("reee 30")
+    if shell.valid_check():
+        shell.run_command()
+
+    captured = capsys.readouterr()
+
+    assert "Error" in captured.out
