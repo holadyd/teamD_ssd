@@ -244,3 +244,18 @@ def test_write_hex_test(capsys):
     captured = capsys.readouterr()
 
     assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003"
+
+def test_ssd_read_write_in_shell_1():
+    sh = Shell()
+    sh.ssd_write("30", "0xAAAAAAAA")
+    ret = sh.ssd_read("30", for_script=True)
+
+    assert ret == "0xAAAAAAAA"
+
+def test_ssd_read_write_in_shell_2():
+    sh = Shell()
+    value = "0x12345678"
+    sh.ssd_write("30", value)
+    ret = sh.ssd_read("30", for_script=True)
+
+    assert ret == value
