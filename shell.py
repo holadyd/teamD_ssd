@@ -107,7 +107,6 @@ class Shell:
         return False
 
     def is_valid_format(self, command_args):
-
         if self.is_invalid_command(command_args):
             self.print_valid_error(self.ErrorPrintEnum.INVALID_COMMAND)
             return False
