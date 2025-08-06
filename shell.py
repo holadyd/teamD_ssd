@@ -28,10 +28,6 @@ class Shell:
     def run_command(self):
         commands = self.command.strip().split(" ")
 
-        if commands[0] == "help":
-            self.print_help()
-            return
-
         if commands[0] == "write":
             address = commands[1]
             content = commands[2]
@@ -46,6 +42,13 @@ class Shell:
         elif commands[0] == "fullread":
             for address in range(100):
                 self.ssd_read(address)
+        elif commands[0] == "help":
+            self.print_help()
+        elif commands[0] == "exit":
+            print("Shell Exited Successfully.")
+            return False
+
+        return True
 
     def ssd_read(self, address):
         os.system(f"python ssd.py R {address}")
@@ -165,6 +168,7 @@ class Shell:
             print("[Error] INVALID_DATA")
         elif error_type == self.ErrorPrintEnum.INVALID_LBA_RANGE:
             print("[Error] INVALID_DATA")
+
 
 if __name__ == "__main__":
     shell = Shell()
