@@ -1,6 +1,8 @@
 import argparse
 import json
 import os
+from contextlib import contextmanager
+from typing import Literal
 
 
 class SSD:
@@ -18,7 +20,7 @@ class SSD:
                 # 모든 lba value를 "0x00000000"로 초기화
                 initial_data_dict[key] = self.initial_data  # 딕셔너리에 추가
 
-            with open(self.nand_file, "w") as f:    # file에 작성
+            with open(self.nand_file, "w") as f:  # file에 작성
                 json.dump(initial_data_dict, f, indent=2)
 
         # init ssd_output.txt file
@@ -26,7 +28,7 @@ class SSD:
             initial_data_dict = {}
             initial_data_dict["0"] = self.initial_data  # 딕셔너리에 추가
 
-            with open(self.output_file, "w") as f:    # file에 작성
+            with open(self.output_file, "w") as f:  # file에 작성
                 json.dump(initial_data_dict, f, indent=2)
 
     def read(self, lba):
@@ -60,7 +62,29 @@ class SSD:
             json.dump({"0": value}, f, indent=2)
 
     def write(self, lba, value):
-        pass
+        if not self._check_parameter_validation(lba, value):
+            self._write_value_to_ssd_output("ERROR")
+            return
+
+        nand_data = None
+        # 파일 핸들러를 사용해 'r' 모드로 파일 열기
+        with self._open_file(self.nand_file, 'r') as f:
+            nand_data = json.load(f)
+
+        # 파일 핸들러를 사용해 'w' 모드로 파일 열기
+        with self._open_file(self.nand_file, 'w') as f:
+            nand_data[str(lba)] = value
+            json.dump(nand_data, f)
+
+    @contextmanager
+    def _open_file(self, file_path, mode: Literal['r', 'w']):
+        f = None
+        try:
+            f = open(file_path, mode)
+            yield f
+        finally:
+            if f:
+                f.close()
 
     def _check_parameter_validation(self, lba, value=None) -> bool:
         # value  invalid Check
@@ -71,7 +95,7 @@ class SSD:
                 return False
 
             if not str(value).startswith("0x"):
-                return  False
+                return False
             if not (0x0 <= int(value, 0) <= 0xFFFFFFFF):
                 return False
 
@@ -82,7 +106,7 @@ class SSD:
         except (ValueError, TypeError):
             return False
 
-        # 2. 0~ 99 인지 체크 
+        # 2. 0~ 99 인지 체크
         if 0 <= int(lba) <= 99:
             return True
         return False
