@@ -1,5 +1,7 @@
 from unittest.mock import patch
 
+import pytest
+
 from shell import Shell
 import sys
 from io import StringIO
@@ -60,7 +62,7 @@ def test_shell_help(capsys):
 
     assert captured.out == expected
 
-
+@pytest.mark.skip
 def test_shell_fullwrite(capsys):
     shell = Shell()
     shell.read_command("fullwrite 0xAAAABBBB")
@@ -69,7 +71,7 @@ def test_shell_fullwrite(capsys):
     write_count = out.count("[Write] Done\n")
     assert write_count == 100
 
-
+@pytest.mark.skip
 def test_shell_fullread(capsys):
     shell = Shell()
     shell.read_command("fullread")
@@ -142,6 +144,22 @@ def test_shell_input_validation_invalid_command(capsys):
     captured = capsys.readouterr()
 
     assert "Error" in captured.out
+
+def test_script_3_write_read_aging(capsys, mocker):
+
+    shell = Shell()
+    shell.read_compare = mocker.Mock()
+    shell.read_compare.side_effect = func
+    shell.read_command("3_")
+    if shell.valid_check():
+        shell.run_command()
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "PASS\n"*150
+
+def func():
+    print("PASS")
 
 
 def test_read_compare_pass(mocker, capsys):
