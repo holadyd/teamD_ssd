@@ -39,7 +39,8 @@ def test_run_command_read():
 
 def test_shell_help(capsys):
     shell = Shell()
-    shell.run_command("help")
+    shell.read_command("help")
+    shell.run_command()
 
     captured = capsys.readouterr()
     expected = ('***SSD Test Shell Help***\n'
@@ -62,7 +63,8 @@ def test_shell_help(capsys):
 
 def test_shell_fullwrite(capsys):
     shell = Shell()
-    shell.run_command("fullwrite 0xAAAABBBB\n")
+    shell.read_command("fullwrite 0xAAAABBBB\n")
+    shell.run_command()
     out, err = capsys.readouterr()
     write_count = out.count("[Write] Done\n")
     assert write_count == 100
@@ -70,7 +72,8 @@ def test_shell_fullwrite(capsys):
 
 def test_shell_fullread(capsys):
     shell = Shell()
-    shell.run_command("fullread\n")
+    shell.read_command("fullread\n")
+    shell.run_command()
     out, err = capsys.readouterr()
 
     # 정규표현식: [Read] LBA XX : 0xAAAAAAAA
@@ -80,22 +83,37 @@ def test_shell_fullread(capsys):
 
 def test_shell_input_validation_format_write_fail(capsys):
     shell = Shell()
-    shell.run_command("write abc abc\n")
+    shell.read_command("write abc abc\n")
+    if shell.valid_check():
+        shell.run_command()
     out, err = capsys.readouterr()
     assert "Error" in out
 
 def test_shell_input_validation_format_read_fail(capsys):
     shell = Shell()
-    shell.run_command("read abc\n")
+    shell.read_command("read gbc\n")
+    if shell.valid_check():
+        shell.run_command()
     out, err = capsys.readouterr()
 
     assert "Error" in out
 
 def test_shell_input_validation_format_fullwrite_fail(capsys):
     shell = Shell()
-    shell.run_command("fullwrite abc\n")
+    shell.read_command("fullwrite abc\n")
+    if shell.valid_check():
+        shell.run_command()
     out, err = capsys.readouterr()
 
     assert "Error" in out
 
+def test_shell_input_validation_lba_range_fail(capsys):
 
+    shell = Shell()
+    shell.read_command("read 300")
+    if shell.valid_check():
+        shell.run_command()
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "invalid address\n"
