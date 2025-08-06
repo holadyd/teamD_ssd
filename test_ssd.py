@@ -5,6 +5,7 @@ import pytest
 from ssd import SSD
 from pytest_mock import MockFixture, MockerFixture
 
+
 # ssd_u1
 def test_console_not_print(capsys):
     ssd = SSD()
@@ -22,7 +23,6 @@ def test_read_1_args():
     result = ssd.read(42)
 
     assert result.startswith("0x") and len(result) == 10
-
 
 
 # ssd_u3
@@ -449,3 +449,37 @@ def test_value_valid_when_write(lba, value, mocker: MockerFixture):
 
     # assert
     assert ret is True
+
+
+@pytest.mark.parametrize(
+    "lba, value, expected_value",
+    [
+        # --- (1) lba 0-99 범위 테스트
+        (0, '0x123', '0x00000123'),
+        (50, '0xabcdef', '0x00abcdef'),
+        (99, '0xdeadbeef', '0xdeadbeef'),
+
+        # --- (2) value: 0x + 8자리 이하 숫자 (16진수)
+        (10, '0x0', '0x00000000'),
+        (20, '0x1', '0x00000001'),
+        (30, '0xabcd', '0x0000abcd'),
+
+        # --- (3) value: 0x + 8자리 숫자 (16진수)
+        (40, '0x12345678', '0x12345678'),
+        (60, '0xffffffff', '0xffffffff'),
+
+        # --- (4) value: 그냥 int 숫자 (10진수)
+        (70, '100', '0x00000064'),  # 100 -> hex(100) -> 0x64
+        (80, '4294967295', '0xffffffff'),  # 4294967295 -> hex -> 0xffffffff
+        (90, '0', '0x00000000'),  # 0 -> hex -> 0x0
+    ]
+)
+def test_ssd_write_value_conversion(mocker: MockFixture, lba: int, value: str, expected_value: str):
+    """
+    SSD write 메서드에서 value가 올바르게 변환되는지 검증합니다.
+    """
+    # check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validation')
+    # check_para_validataion_method.return_value = True
+    ssd = SSD()
+    ssd.write(lba, value)
+    assert ssd.read(lba) == expected_value
