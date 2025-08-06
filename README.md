@@ -1,3 +1,6 @@
+## Unit Test Specification Link for "SSD" module:
+https://docs.google.com/spreadsheets/d/1pivpHUavfY_BKSAiOs6C8QNKokpPM2BYMxlEpfTssiA/edit?pli=1&gid=0#gid=0
+
 <img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/50815c8a-b73c-45f3-a699-b2009bba93b4" />
 
 
@@ -30,4 +33,7 @@ Digital Ninjas 팀이 진행하는 **teamD SSD 프로젝트**는 SSD(Solid State
   * **언어**:  Python 
   * **Test Framework**: pytest
   * **버전 관리**: Git & GitHub
+
+
+
 
