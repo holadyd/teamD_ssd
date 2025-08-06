@@ -7,8 +7,11 @@ from typing import Literal
 
 class SSD:
     nand_file_path = 'ssd_nand.txt'
+    output_file_path = ''
 
     def read(self, lba):
+        if not self._check_parameter_validation(lba, ''):
+            return 'ERROR'
         with open(self.nand_file_path, 'r') as f:
             nand_data: dict = json.load(f)
             return nand_data.get(str(lba), 0)
@@ -20,6 +23,9 @@ class SSD:
                 json.dump(init_values, f)
 
     def write(self, lba, value):
+        if not self._check_parameter_validation(lba, value):
+            pass
+
         nand_data = None
         # 파일 핸들러를 사용해 'r' 모드로 파일 열기
         with self._open_file(self.nand_file_path, 'r') as f:
@@ -39,6 +45,9 @@ class SSD:
         finally:
             if f:
                 f.close()
+
+    def _check_parameter_validation(self, lba, value):
+        pass
 
 
 if __name__ == '__main__':

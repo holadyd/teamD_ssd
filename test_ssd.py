@@ -189,7 +189,7 @@ def test_write_invalid_lba(args, mocker: MockFixture):
     op, lba, value = args
     # ssd 클래스 생성
     assert op == 'W'
-    check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validataion')
+    check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validation')
     check_para_validataion_method.return_value = False
     ssd = SSD()
     ssd.write(lba, value)
