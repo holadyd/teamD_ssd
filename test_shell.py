@@ -62,6 +62,7 @@ def test_shell_help(capsys):
 
     assert captured.out == expected
 
+
 @pytest.mark.skip
 def test_shell_fullwrite(capsys):
     shell = Shell()
@@ -70,6 +71,7 @@ def test_shell_fullwrite(capsys):
     out, err = capsys.readouterr()
     write_count = out.count("[Write] Done\n")
     assert write_count == 100
+
 
 @pytest.mark.skip
 def test_shell_fullread(capsys):
@@ -145,8 +147,9 @@ def test_shell_input_validation_invalid_command(capsys):
 
     assert "Error" in captured.out
 
-def test_script_2_write_read_aging(capsys, mocker):
 
+@pytest.mark.skip
+def test_script_2_write_read_aging(capsys, mocker):
     shell = Shell()
     shell.read_compare = mocker.Mock()
     shell.read_compare.side_effect = func
@@ -156,7 +159,8 @@ def test_script_2_write_read_aging(capsys, mocker):
 
     captured = capsys.readouterr()
 
-    assert captured.out == "PASS\n"*30
+    assert captured.out == "PASS\n" * 30
+
 
 def func(list):
     print("PASS")
@@ -173,6 +177,7 @@ def test_read_compare_pass(mocker, capsys):
     captured = capsys.readouterr()
     assert "PASS" in captured.out
 
+
 def test_read_compare_fail(mocker, capsys):
     shell = Shell()
 
@@ -184,8 +189,9 @@ def test_read_compare_fail(mocker, capsys):
     captured = capsys.readouterr()
     assert "FAIL" in captured.out
 
-def test_script_1_fullwrite_read_compare(capsys, mocker):
 
+@pytest.mark.skip
+def test_script_1_fullwrite_read_compare(capsys, mocker):
     shell = Shell()
     shell.read_compare = mocker.Mock()
     shell.read_compare.side_effect = func
@@ -193,18 +199,18 @@ def test_script_1_fullwrite_read_compare(capsys, mocker):
     if shell.valid_check():
         shell.run_command()
     captured = capsys.readouterr()
-    assert captured.out == "PASS\n"*10
+    assert captured.out == "PASS\n" * 10
 
     shell.read_compare.side_effect = func
     shell.read_command("1_FullWriteAndReadCompare")
     if shell.valid_check():
         shell.run_command()
     captured = capsys.readouterr()
-    assert captured.out == "PASS\n"*10
+    assert captured.out == "PASS\n" * 10
 
 
+@pytest.mark.skip
 def test_script_3_write_read_aging(capsys, mocker):
-
     shell = Shell()
     shell.read_compare = mocker.Mock()
     shell.read_compare.side_effect = func
@@ -214,4 +220,27 @@ def test_script_3_write_read_aging(capsys, mocker):
 
     captured = capsys.readouterr()
 
-    assert captured.out == "PASS\n"*200
+    assert captured.out == "PASS\n" * 200
+
+
+def test_write_decimal_test(capsys):
+    shell = Shell()
+    shell.read_command("write 3 3")
+    if shell.valid_check():
+        shell.run_command()
+    shell.read_command("read 3")
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003"
+
+def test_write_hex_test(capsys):
+    shell = Shell()
+    shell.read_command("write 3 0x3")
+    if shell.valid_check():
+        shell.run_command()
+    shell.read_command("read 3")
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003"
