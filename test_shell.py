@@ -201,6 +201,3 @@ def test_script_1_fullwrite_read_compare(capsys, mocker):
         shell.run_command()
     captured = capsys.readouterr()
     assert captured.out == "PASS\n"*50
-
-def func():
-    print("PASS")
