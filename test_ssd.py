@@ -333,10 +333,10 @@ def test_lba_invalid(lba):
 
 # ssd_u19
 @pytest.mark.parametrize("lba, value", [
-    ("W", "0x0000000H"),
-    ("W", "0xFFFFFZZZ"),
-    ("W", "ABCD"),
-    ("W", "000000000")
+    ("10", "0x0000000H"),
+    ("11", "0xFFFFFZZZ"),
+    ("55", "ABCD"),
+    ("99", "000000000")
 ])
 def test_value_invalid_when_write(lba, value, mocker: MockerFixture):
     # arrange
@@ -370,13 +370,14 @@ def test_lba_valid(lba, mocker: MockerFixture):
 @pytest.mark.parametrize("lba, value", [
     ("W", "0x00000000"),
     ("W", "0xFFFFFFFF"),
-    ("W", "0xAA")
+    ("W", "0xAA"),
+    ("W", "0xFF")
 ])
 def test_value_valid_when_write(lba, value, mocker: MockerFixture):
     # arrange
-    # ssd = SSD()
-    ssd = mocker.Mock(spec=SSD)
-    ssd._check_parameter_validation.return_value = False
+    ssd = SSD()
+    #ssd = mocker.Mock(spec=SSD)
+    #ssd._check_parameter_validation.return_value = False
 
     # act
     ret = ssd._check_parameter_validation(lba, value)

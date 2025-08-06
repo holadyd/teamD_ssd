@@ -16,6 +16,8 @@ class SSD:
             except ValueError:
                 return False
 
+            if not str(value).startswith("0x"):
+                return  False
             if not (0x0 <= int(value, 0) <= 0xFFFFFFFF):
                 return False
 
