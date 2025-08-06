@@ -397,7 +397,8 @@ def test_lba_invalid(lba):
     ("10", "0x0000000H"),
     ("11", "0xFFFFFZZZ"),
     ("55", "ABCD"),
-    ("99", "000000000")
+    ("99", "-1"),
+    ("99", "4294967296")
 ])
 def test_value_invalid_when_write(lba, value, mocker: MockerFixture):
     # arrange
@@ -432,7 +433,10 @@ def test_lba_valid(lba, mocker: MockerFixture):
     ("0", "0x00000000"),
     ("99", "0xFFFFFFFF"),
     ("6", "0xAA"),
-    ("18", "0xFF")
+    ("18", "0xFF"),
+    ("17", "1234"),
+    ("98", "4294967295"),
+    ("97", "00")
 ])
 def test_value_valid_when_write(lba, value, mocker: MockerFixture):
     # arrange
