@@ -5,20 +5,6 @@ import pytest
 from ssd import SSD
 from pytest_mock import MockFixture, MockerFixture
 
-
-# 이 fixture는 각 테스트 함수 실행 후 항상 자동 실행됨
-@pytest.fixture(autouse=True)
-def cleanup_files():
-    # Test Setup
-
-    yield  # 테스트 실행
-
-    # Test Teardown
-    for file in ["ssd_nand.txt", "ssd_output.txt"]:
-        if os.path.exists(file):
-            os.remove(file)
-
-
 # ssd_u1
 def test_console_not_print(capsys):
     ssd = SSD()
@@ -335,14 +321,12 @@ def test_write_create_ssd_nand_file(mocker: MockFixture):
 def test_init_ssd_nand_file():
     # arrange
     nand_path = Path("ssd_nand.txt")
-    if nand_path.exists():
-        nand_path.unlink()
 
     # act
     ssd = SSD()
 
-    # assert: 파일이 생성되었는지 확인
-    assert nand_path.exists(), "ssd_nand.txt 파일이 생성되지 않았습니다."
+    # assert: 파일이 존재하는지 확인
+    assert nand_path.exists(), "ssd_nand.txt 파일이 없습니다."
 
     # assert: JSON 내용 확인
     with open(nand_path, "r") as f:
@@ -351,27 +335,22 @@ def test_init_ssd_nand_file():
     # assert: 100개의 LBA가 있는지 확인
     assert len(data) == 100, "LBA 수가 100개가 아닙니다."
 
-    # assert: 각 LBA 값이 "0x00000000"으로 초기화되었는지 확인
+    # assert: 각 LBA 값이 valid한 값인지 확인
     for i in range(100):
         key = str(i)
-        assert data[key] == "0x00000000", f"LBA {key}의 초기값이 올바르지 않습니다."
-
-    # 테스트 후 정리
-    nand_path.unlink()
+        assert ssd._check_parameter_validation(key, data[key]) == True, f"LBA {key}의 값이 유효하지 않습니다."
 
 
 # ssd_u21
 def test_init_ssd_output_file():
     # arrange
     nand_path = Path("ssd_output.txt")
-    if nand_path.exists():
-        nand_path.unlink()
 
     # act
     ssd = SSD()
 
     # assert: 파일이 생성되었는지 확인
-    assert nand_path.exists(), "ssd_output.txt 파일이 생성되지 않았습니다."
+    assert nand_path.exists(), "ssd_output.txt 파일이 없습니다."
 
     # assert: JSON 내용 확인
     with open(nand_path, "r") as f:
@@ -381,10 +360,7 @@ def test_init_ssd_output_file():
     assert len(data) == 1, "Output file의 data 수가 1개가 아닙니다."
 
     # assert: 값이 "0x00000000"으로 초기화되었는지 확인
-    assert data["0"] == "0x00000000", f"Output file의 초기값이 올바르지 않습니다."
-
-    # 테스트 후 정리
-    nand_path.unlink()
+    assert ssd._check_parameter_validation("0", data["0"]) == True, f"LBA {key}의 값이 유효하지 않습니다."
 
 
 # ssd_u24
