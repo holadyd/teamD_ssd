@@ -49,6 +49,7 @@ class SSD:
             nand_data[str(lba)] = value
             json.dump(nand_data, f, indent=2)
 
+
     @contextmanager
     def _open_file(self, file_path, mode: Literal['r', 'w']):
         f = None

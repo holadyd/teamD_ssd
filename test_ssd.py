@@ -24,6 +24,7 @@ def test_read_1_args():
     assert result.startswith("0x") and len(result) == 10
 
 
+
 # ssd_u3
 @pytest.mark.parametrize("args", [
     (),  # 인자 0개
