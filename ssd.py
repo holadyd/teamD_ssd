@@ -18,18 +18,23 @@ class SSD:
         if not cmd.validate():
             self._write_value_to_ssd_output("ERROR")
             return
-        if isinstance(cmd, WriteCommand):
-            if int(cmd.data) == 0:
-                cmd = CommandFactory.create("E", cmd.lba, "1")
+
         if isinstance(cmd, ReadCommand):  # Fast Read판단
             read_cmd = self.buffer.fast_read(cmd.make_string())
             if read_cmd is None:
                 self.execute_cmd(cmd)
+            return
+
         if isinstance(cmd, FlushCommand):
             self.flush()
-        else:
-            cmd_list = self.buffer.write_buffer(cmd.make_string())
-            self.excute_flushed_command_list(cmd_list)
+            return
+
+        if isinstance(cmd, WriteCommand):
+            if int(cmd.data, 0) == 0:
+                cmd = CommandFactory.create("E", cmd.lba, "1")
+
+        cmd_list = self.buffer.write_buffer(cmd.make_string())
+        self.excute_flushed_command_list(cmd_list)
 
     def excute_flushed_command_list(self, cmd_list):
         if not cmd_list is None:
@@ -70,7 +75,7 @@ class SSD:
     def flush(self):
         try:
             cmd_list = self.buffer.flsuh_buffer()
-            
+
             self.excute_flushed_command_list(cmd_list)
         except Exception as e:
             raise e
