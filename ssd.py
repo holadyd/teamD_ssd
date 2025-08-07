@@ -18,6 +18,10 @@ class SSD:
         if not cmd.validate():
             self._write_value_to_ssd_output("ERROR")
             return
+        if isinstance(cmd, WriteCommand):
+            if int(cmd.data) == 0:
+                CommandFactory.create("E", cmd.lba, "1")
+
         if isinstance(cmd, ReadCommand): #Fast Read판단
             read_cmd = self.buffer.fast_read(cmd.make_string())
             if read_cmd is None:
