@@ -16,8 +16,27 @@ class WriteCommand(SSDCommand):
         self.lba = lba
         self.data = data
 
-    def validate(self):
-        pass
+    def validate(self) -> bool:
+        # value  invalid Check
+        try:
+            int(self.data, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
+
+        except ValueError:
+            return False
+
+        if not (0x0 <= int(self.data, 0) <= 0xFFFFFFFF):
+            return False
+        # lba invalid Check
+        # 1. int 인지 체크
+        try:
+            int(self.lba)
+        except (ValueError, TypeError):
+            return False
+
+        # 2. 0~ 99 인지 체크
+        if 0 <= int(self.lba) <= 99:
+            return True
+        return False
 
     def make_string(self):
         pass
