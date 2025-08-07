@@ -6,6 +6,7 @@ class Script:
         self.shell = shell
 
     def script_1(self):
+        self.shell._is_test_pass = True
         self.shell.logger_print(f'script1 executed')
         unique_values = self.shell.generate_unique_random(100)
         for addr_shift in range(10):
@@ -18,6 +19,7 @@ class Script:
             self.shell.read_compare(compare_list)
 
     def script_2(self):
+        self.shell._is_test_pass = True
         self.shell.logger_print(f'script2 executed')
         compare_list = [
             ("0", "0x0000FFFF"),
@@ -35,6 +37,7 @@ class Script:
             self.shell.read_compare(compare_list)
 
     def script_3(self):
+        self.shell._is_test_pass = True
         self.shell.logger_print(f'script3 executed')
         for _ in range(200):
             value1 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
