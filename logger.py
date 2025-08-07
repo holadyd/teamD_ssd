@@ -4,9 +4,9 @@ from datetime import datetime
 
 
 class Logger:
-    def __init__(self, log_file='latest.log', log_dir='logs', max_bytes=10 * 1024):
-        self.log_file = log_file
+    def __init__(self, log_dir='logs', log_file='latest.log', max_bytes=10 * 1024):
         self.log_dir = log_dir
+        self.log_file = self.log_dir + "/" + log_file
         self.max_bytes = max_bytes
         os.makedirs(self.log_dir, exist_ok=True)
 
