@@ -22,8 +22,15 @@ class SSD:
             for each_cmd in cmd_list:
                 self.execute_cmd(each_cmd)
 
-    def execute_cmd(self, command):
-        pass
+    def execute_cmd(self, cmd: SSDCommand):
+        if isinstance(cmd, WriteCommand):
+            self.write(cmd.lba, cmd.data)
+        elif isinstance(cmd, ReadCommand):
+            self.read(cmd.lba)
+        elif isinstance(cmd, EraseCommand):
+            self.erase(cmd.lba, cmd.data_size)
+        else:
+            pass
 
     def read(self, lba):
         is_valid = self._check_parameter_validation(lba=lba)
@@ -50,9 +57,9 @@ class SSD:
             json.dump({"0": value}, f, indent=2)
 
     def write(self, lba, value):
-        if not self._check_parameter_validation(lba, value):
-            self._write_value_to_ssd_output("ERROR")
-            return
+        # if not self._check_parameter_validation(lba, value):
+        #     self._write_value_to_ssd_output("ERROR")
+        #     return
 
         try:
             nand_data = None
@@ -126,6 +133,7 @@ def main():
 
     # 'value'가 있는지 확인하고 처리
     # 인자 개수 조건 검사 (예: command + address + optional value)
+
     if args.command is None or args.lba is None:
         ssd = SSD()
         ssd._write_value_to_ssd_output("ERROR")
