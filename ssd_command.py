@@ -11,6 +11,15 @@ class SSDCommand(ABC):
         pass
 
 
+class InvalidCommand(SSDCommand):
+
+    def validate(self):
+        return False
+
+    def make_string(self):
+        return 'ERROR'
+
+
 class WriteCommand(SSDCommand):
     def __init__(self, lba, data):
         self.lba = lba
@@ -43,8 +52,7 @@ class WriteCommand(SSDCommand):
 
 
 class ReadCommand(SSDCommand):
-    def __init__(self, ssd, lba):
-        self.ssd = ssd
+    def __init__(self, lba):
         self.lba = lba
 
     def validate(self):
@@ -80,3 +88,17 @@ class EraseCommand(SSDCommand):
 
     def make_string(self):
         return f'E {self.lba} {self.data_size}'
+
+
+class CommandFactory:
+    @staticmethod
+    def create(args) -> SSDCommand:
+        command, lba, value = args.command, args.lba, args.value
+        if command == "R":
+            return ReadCommand(lba)
+        elif command == "W":
+            return WriteCommand(lba, value)
+        elif command == 'E':
+            return EraseCommand(lba,value)
+        else:
+            return InvalidCommand()
