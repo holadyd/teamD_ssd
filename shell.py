@@ -237,8 +237,13 @@ class Shell:
     def run_script_3(self):
         self.script.script_3()
 
-    def script_parser(self):
-        print("script_parser")
+    def script_parser(self, script_txt):
+        try:
+            with open(script_txt, 'r') as file:
+                command_list = file.readlines()
+        except:
+            exit()
+        print(command_list)
         pass
 
     def generate_unique_random(self, count):
@@ -263,7 +268,8 @@ def main():
 
     if args.scripts:
         shell = Shell()
-        shell.script_parser()
+        shell._is_runner_mode = True
+        shell.script_parser(args.scripts)
     else:
         shell = Shell()
         shell.run_shell()

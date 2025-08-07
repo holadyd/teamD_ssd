@@ -1,2 +1,2 @@
 @echo off
-python.exe shell.py
+python.exe shell.py %*
