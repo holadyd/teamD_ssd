@@ -15,9 +15,7 @@ class Logger:
 
     def _get_backup_filename(self):
         # until_20250807_17h_12m_11s.log
-        timestamp_format = datetime.now().strftime('%Y%m%d_%Hh_%Mm_%Ss')
-        log_timestamp_format = f"until_{timestamp_format}"
-
+        log_timestamp_format = f"until_{datetime.now().strftime('%Y%m%d_%Hh_%Mm_%Ss')}"
         return os.path.join(self.log_dir, f"{log_timestamp_format}.log")
 
     def _rotate_if_needed(self):
@@ -31,20 +29,18 @@ class Logger:
         for filename in os.listdir(self.log_dir):
             if filename.startswith('until') and filename.endswith('.log'):
                 log_files.append(os.path.join(self.log_dir, filename))
-
         log_files.sort()
+
         if len(log_files) > 1:
-            for i in range(len(log_files) - 1):
-                old_path = log_files[i]
-                base, ext = os.path.splitext(old_path)
-                new_path = base + '.zip'
-                os.rename(old_path, new_path)
+            return
+
+        for i in range(len(log_files) - 1):
+            old_path = log_files[i]
+            base, ext = os.path.splitext(old_path)
+            new_path = base + '.zip'
+            os.rename(old_path, new_path)
 
     def print(self, header, body):
-        timestamp = self._get_timestamp()
-        log_entry = f"[{timestamp}] {header:<30} : {body}"
-
-        # 로그 파일 기록
         self._rotate_if_needed()
         with open(self.log_file, 'a', encoding='utf-8') as f:
-            f.write(log_entry + '\n')
+            f.write(f"[{self._get_timestamp()}] {header:<30} : {body}" + '\n')
