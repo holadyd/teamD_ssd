@@ -2,11 +2,17 @@ from unittest.mock import patch
 
 import pytest
 
+from logger import Logger
 from shell import Shell
 import sys
 from io import StringIO
 import re
+import time
 
+def input_command(shell, command):
+    shell.read_command(command)
+    if shell.valid_check():
+        shell.run_command()
 
 def test_shell_exit(capsys):
     sys.stdin = StringIO("exit\n")
@@ -263,3 +269,6 @@ def test_ssd_read_write_in_shell_2():
     ret = sh.ssd_read("30", for_script=True)
 
     assert ret == value
+
+
+

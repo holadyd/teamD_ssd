@@ -1,10 +1,12 @@
+import argparse
 import json
 from enum import Enum
 import os
 from hmac import compare_digest
 import random
-from random import randrange
-# from logger import Logger
+from logger import Logger
+import sys
+from script import Script
 
 
 class Shell:
@@ -14,21 +16,33 @@ class Shell:
         self.ret = True
         self.one_arg_lst = ["help", "exit", "fullread", '1_', '1_FullWriteAndReadCompare',
                             '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging']
+
         self.two_arg_lst = ["read", "fullwrite"]
         self.three_arg_lst = ["write"]
+        self.arguments = self.one_arg_lst + self.two_arg_lst + self.three_arg_lst
         self.prev_written_values = []
         self._is_runner_mode = False
+        self.logger = Logger()
+        self.script = Script(self)
 
     def read_output(self):
+        self.logger_print(f"function executed")
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
             data = json.load(f)
+
+        self.logger_print(data)
         return data
+
+    def logger_print(self, message):
+        method_name = f'{self.__class__.__name__}.{sys._getframe(1).f_code.co_name}()'
+        self.logger.print(method_name, message)
 
     def console_print(self, message):
         if not self._is_runner_mode:
             print(message)
 
     def run_shell(self):
+        self.logger_print("Shell Application Run")
         while self.ret:
 
             self.read_command()
@@ -37,6 +51,7 @@ class Shell:
                 self.ret = self.run_command()
 
     def run_command(self):
+        self.logger_print(f'run command with {self.command}')
         commands = self.command.strip().split(" ")
 
         if commands[0] == "write":
@@ -57,6 +72,7 @@ class Shell:
             self.print_help()
         elif commands[0] == "exit":
             self.console_print("Shell Exited Successfully.")
+            self.logger_print(f'shell exited with exit command')
             return False
         elif commands[0] in ['1_', '1_FullWriteAndReadCompare']:
             self.run_script_1()
@@ -68,39 +84,49 @@ class Shell:
         return True
 
     def ssd_read(self, address, for_script=False):
+        self.logger_print(f'read {address}, for_script is {for_script}')
         os.system(f"python ssd.py R {address}")
         result = self.read_output()["0"]
+        self.logger_print(f"[Read] LBA {address} : {result}")
+
         if for_script:
             return result
-        else:
-            self.console_print(f"[Read] LBA {address} : {result}")
+
+        self.console_print(f"[Read] LBA {address} : {result}")
 
     def ssd_write(self, address, content, for_script=False):
-        os.system(f"python ssd.py W {address} {str(hex(int(content,0)))}")
+        self.logger_print(f'read {address}, content {content}, for_script is {for_script}')
+        os.system(f"python ssd.py W {address} {str(hex(int(content, 0)))}")
+        self.logger_print(f'[Write] Done - {address}, {content}')
         if for_script:
             return
 
         self.console_print("[Write] Done")
 
     def read_command(self, command=None):
+        self.logger_print(f'wait command, preset command: {command}')
         if command == None:
             self.command = input("Shell>")
         else:
             self.command = command
+        self.logger_print(f'input command: {self.command}')
 
     def print_help(self):
+        self.logger_print(f'print help docs')
         with open("help_docs.txt", "r", encoding="utf-8") as f:
             docs = f.readlines()
         self.console_print("".join(docs))
 
     def is_invalid_command(self, command_args):
-        if command_args[0] not in self.one_arg_lst and \
-                command_args[0] not in self.two_arg_lst and \
-                command_args[0] not in self.three_arg_lst:
+        self.logger_print(f'command_args: {command_args}')
+        if command_args[0] not in self.arguments:
+            self.logger_print(f'return True')
             return True
+        self.logger_print(f'return False')
         return False
 
     def is_invalid_para_length(self, command_args):
+        self.logger_print(f'command_args: {command_args}')
         if command_args[0] in self.one_arg_lst:
             if len(command_args) != 1:
                 return True
@@ -113,6 +139,7 @@ class Shell:
         return False
 
     def is_valid_format(self, command_args):
+        self.logger_print(f'command_args: {command_args}')
         if self.is_invalid_command(command_args):
             self.print_valid_error(self.ErrorPrintEnum.INVALID_COMMAND)
             return False
@@ -169,8 +196,8 @@ class Shell:
         return True
 
     def valid_check(self):
-
         command_args = self.command.strip().split(" ")
+        self.logger_print(f'command_args: {command_args}')
 
         if not self.is_valid_format(command_args):
             return False
@@ -202,44 +229,22 @@ class Shell:
         self.console_print("PASS")
 
     def run_script_1(self):
-        unique_values = self.generate_unique_random(100)
-        for addr_shift in range(10):
-            compare_list = []
-            for start_addr in range(5) :
-                unique_value = unique_values[addr_shift * 10 + start_addr]
-                self.ssd_write(f'{start_addr + addr_shift}', f'0x{unique_value:08X}', for_script=True)
-                compare_list.append((f'{start_addr+ addr_shift}', f'0x{unique_value:08X}'))
-
-            self.read_compare(compare_list)
+        self.script.script_1()
 
     def run_script_2(self):
-
-        compare_list = [
-            ("0", "0x0000FFFF"),
-            ("1", "0x0000FFFF"),
-            ("2", "0x0000FFFF"),
-            ("3", "0x0000FFFF"),
-            ("4", "0x0000FFFF")
-        ]
-        for _ in range(30):
-            self.ssd_write("4", "0x0000FFFF", for_script=True)
-            self.ssd_write("0", "0x0000FFFF", for_script=True)
-            self.ssd_write("3", "0x0000FFFF", for_script=True)
-            self.ssd_write("1", "0x0000FFFF", for_script=True)
-            self.ssd_write("2", "0x0000FFFF", for_script=True)
-            self.read_compare(compare_list)
+        self.script.script_2()
 
     def run_script_3(self):
-        for _ in range(200):
-            value1 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
-            value2 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
-            compare_list = [
-                ("0", value1),
-                ("99", value2)
-            ]
-            self.ssd_write("0", value1, for_script=True)
-            self.ssd_write("99", value2, for_script=True)
-            self.read_compare(compare_list)
+        self.script.script_3()
+
+    def script_parser(self, script_txt):
+        try:
+            with open(script_txt, 'r') as file:
+                command_list = file.readlines()
+        except:
+            exit()
+        print(command_list)
+        pass
 
     def generate_unique_random(self, count):
         min_val, max_val = (0, 0xFFFFFFFF)
@@ -253,6 +258,22 @@ class Shell:
         return list(unique_values)
 
 
+def main():
+    # argparse.ArgumentParser 객체 생성
+    parser = argparse.ArgumentParser(description='Shell 스크립트 실행을 위한 매개변수')
+
+    # 매개변수 추가
+    parser.add_argument('scripts', type=str, nargs='?', help='첫 번째 매개변수 : scripts txt 파일명')
+    args = parser.parse_args()
+
+    if args.scripts:
+        shell = Shell()
+        shell._is_runner_mode = True
+        shell.script_parser(args.scripts)
+    else:
+        shell = Shell()
+        shell.run_shell()
+
+
 if __name__ == "__main__":
-    shell = Shell()
-    shell.run_shell()
+    main()
