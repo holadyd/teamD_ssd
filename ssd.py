@@ -23,6 +23,8 @@ class SSD:
             read_cmd = self.buffer.fast_read(cmd.make_string())
             if read_cmd is None:
                 self.execute_cmd(cmd)
+            else:
+                self._write_value_to_ssd_output(read_cmd)
             return
 
         if isinstance(cmd, FlushCommand):
