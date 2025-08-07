@@ -1,5 +1,5 @@
 import os
-from Buffer import Buffer
+from buffer import Buffer
 
 def test_update_buffer_1():
     buf = Buffer()
