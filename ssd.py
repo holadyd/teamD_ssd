@@ -22,8 +22,15 @@ class SSD:
             for each_cmd in cmd_list:
                 self.execute_cmd(each_cmd)
 
-    def execute_cmd(self, command):
-        pass
+    def execute_cmd(self, cmd: SSDCommand):
+        if isinstance(cmd, WriteCommand):
+            self.write(cmd.lba, cmd.data)
+        elif isinstance(cmd, ReadCommand):
+            self.read(cmd.lba)
+        elif isinstance(cmd, EraseCommand):
+            self.erase(cmd.lba, cmd.data_size)
+        else:
+            pass
 
     def read(self, lba):
         is_valid = self._check_parameter_validation(lba=lba)
