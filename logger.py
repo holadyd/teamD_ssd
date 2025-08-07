@@ -2,6 +2,7 @@ import os
 import time
 from datetime import datetime
 
+
 class Logger:
     def __init__(self, log_file='latest.log', log_dir='logs', max_bytes=10 * 1024):
         self.log_file = log_file
@@ -23,6 +24,21 @@ class Logger:
         if os.path.exists(self.log_file) and os.path.getsize(self.log_file) >= self.max_bytes:
             backup_file = self._get_backup_filename()
             os.rename(self.log_file, backup_file)
+            self._zip_if_needed()
+
+    def _zip_if_needed(self):
+        log_files = []
+        for filename in os.listdir(self.log_dir):
+            if filename.startswith('until') and filename.endswith('.log'):
+                log_files.append(os.path.join(self.log_dir, filename))
+
+        log_files.sort()
+        if len(log_files) > 1:
+            for i in range(len(log_files) - 1):
+                old_path = log_files[i]
+                base, ext = os.path.splitext(old_path)
+                new_path = base + '.zip'
+                os.rename(old_path, new_path)
 
     def print(self, header, body):
         timestamp = self._get_timestamp()
