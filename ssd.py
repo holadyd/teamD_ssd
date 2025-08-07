@@ -20,7 +20,7 @@ class SSD:
             return
 
         if isinstance(cmd, ReadCommand):  # Fast Read판단
-            read_cmd = self.buffer.fast_read(cmd.make_string())
+            read_cmd = self.buffer.fast_read(str(cmd.lba))
             if read_cmd is None:
                 self.execute_cmd(cmd)
             else:
