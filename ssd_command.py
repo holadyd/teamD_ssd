@@ -39,7 +39,7 @@ class WriteCommand(SSDCommand):
         return False
 
     def make_string(self):
-        pass
+        return f'W {self.lba} {self.data}'
 
 
 class ReadCommand(SSDCommand):
@@ -51,7 +51,7 @@ class ReadCommand(SSDCommand):
         pass
 
     def make_string(self):
-        pass
+        return f'R {self.lba}'
 
 
 class EraseCommand(SSDCommand):
@@ -79,4 +79,4 @@ class EraseCommand(SSDCommand):
             return False
 
     def make_string(self):
-        pass
+        return f'E {self.lba} {self.data_size}'
