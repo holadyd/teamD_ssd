@@ -22,7 +22,7 @@ class SSD:
             if int(cmd.data) == 0:
                 cmd = CommandFactory.create("E", cmd.lba, "1")
 
-        if isinstance(cmd, ReadCommand): #Fast Read판단
+        if isinstance(cmd, ReadCommand):  # Fast Read판단
             read_cmd = self.buffer.fast_read(cmd.make_string())
             if read_cmd is None:
                 self.execute_cmd(cmd)
@@ -30,8 +30,8 @@ class SSD:
             cmd_list = self.buffer.write_buffer(cmd.make_string())
             if not cmd_list is None:
                 for each_cmd in cmd_list:
-                    _, command,lba,data = each_cmd.split('_')
-                    flushed_cmd = CommandFactory.create(command,lba,data)
+                    _, command, lba, data = each_cmd.split('_')
+                    flushed_cmd = CommandFactory.create(command, lba, data)
                     self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
@@ -113,6 +113,7 @@ class SSD:
             if f:
                 f.close()
 
+
 def main():
     # argparse.ArgumentParser 객체 생성
     parser = argparse.ArgumentParser(description='SSD 스크립트 실행을 위한 매개변수')
@@ -125,7 +126,7 @@ def main():
 
     buffer = Buffer()
     ssd = SSD(buffer)
-    command = CommandFactory.create(args.command,args.lba,args.value)
+    command = CommandFactory.create(args.command, args.lba, args.value)
     ssd.process_cmd(command)
 
 

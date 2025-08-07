@@ -72,7 +72,6 @@ class ReadCommand(SSDCommand):
         return f'R {self.lba}'
 
 
-
 class EraseCommand(SSDCommand):
     lba_upper_limit = 99
     lba_lower_limit = 0
@@ -103,12 +102,12 @@ class EraseCommand(SSDCommand):
 
 class CommandFactory:
     @staticmethod
-    def create(command: str, lba:str, value:str = None) -> SSDCommand:
+    def create(command: str, lba: str, value: str = None) -> SSDCommand:
         if command == "R":
             return ReadCommand(lba)
         elif command == "W":
             return WriteCommand(lba, value)
         elif command == 'E':
-            return EraseCommand(lba,value)
+            return EraseCommand(lba, value)
         else:
             return InvalidCommand()
