@@ -19,7 +19,6 @@ class SSD:
             self._write_value_to_ssd_output("ERROR")
             return
         if isinstance(cmd, ReadCommand): #Fast Read판단
-
             read_cmd = self.buffer.fast_read(cmd.make_string())
             if read_cmd is None:
                 self.execute_cmd(cmd)
