@@ -4,6 +4,7 @@ import os
 from hmac import compare_digest
 import random
 from random import randrange
+# from logger import Logger
 
 
 class Shell:
@@ -16,11 +17,16 @@ class Shell:
         self.two_arg_lst = ["read", "fullwrite"]
         self.three_arg_lst = ["write"]
         self.prev_written_values = []
+        self._is_runner_mode = False
 
     def read_output(self):
         with open("ssd_output.txt", "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
+
+    def console_print(self, message):
+        if self._is_runner_mode:
+            print(message)
 
     def run_shell(self):
         while self.ret:
@@ -50,7 +56,7 @@ class Shell:
         elif commands[0] == "help":
             self.print_help()
         elif commands[0] == "exit":
-            print("Shell Exited Successfully.")
+            self.console_print("Shell Exited Successfully.")
             return False
         elif commands[0] in ['1_', '1_FullWriteAndReadCompare']:
             self.run_script_1()
@@ -67,14 +73,14 @@ class Shell:
         if for_script:
             return result
         else:
-            print(f"[Read] LBA {address} : {result}")
+            self.console_print(f"[Read] LBA {address} : {result}")
 
     def ssd_write(self, address, content, for_script=False):
         os.system(f"python ssd.py W {address} {str(hex(int(content,0)))}")
         if for_script:
             return
 
-        print("[Write] Done")
+        self.console_print("[Write] Done")
 
     def read_command(self, command=None):
         if command == None:
@@ -85,7 +91,7 @@ class Shell:
     def print_help(self):
         with open("help_docs.txt", "r", encoding="utf-8") as f:
             docs = f.readlines()
-        print("".join(docs))
+        self.console_print("".join(docs))
 
     def is_invalid_command(self, command_args):
         if command_args[0] not in self.one_arg_lst and \
@@ -179,21 +185,21 @@ class Shell:
 
     def print_valid_error(self, error_type):
         if error_type == self.ErrorPrintEnum.INVALID_COMMAND:
-            print("[Error] INVALID COMMAND")
+            self.console_print("[Error] INVALID COMMAND")
         elif error_type == self.ErrorPrintEnum.INVALID_PARAMETER_LENGTH:
-            print("[Error] INVALID PARAMETER LENGTH")
+            self.console_print("[Error] INVALID PARAMETER LENGTH")
         elif error_type == self.ErrorPrintEnum.INVALID_DATA:
-            print("[Error] INVALID_DATA")
+            self.console_print("[Error] INVALID_DATA")
         elif error_type == self.ErrorPrintEnum.INVALID_LBA_RANGE:
-            print("[Error] INVALID_DATA")
+            self.console_print("[Error] INVALID_DATA")
 
     def read_compare(self, compare_list):
         for (address, value) in compare_list:
             ret = self.ssd_read(address, for_script=True)
             if ret != value:
-                print("FAIL")
+                self.console_print("FAIL")
                 return
-        print("PASS")
+        self.console_print("PASS")
 
     def run_script_1(self):
         unique_values = self.generate_unique_random(100)
