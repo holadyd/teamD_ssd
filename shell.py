@@ -1,3 +1,4 @@
+import argparse
 import json
 from enum import Enum
 import os
@@ -15,6 +16,7 @@ class Shell:
         self.ret = True
         self.one_arg_lst = ["help", "exit", "fullread", '1_', '1_FullWriteAndReadCompare',
                             '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging']
+
         self.two_arg_lst = ["read", "fullwrite"]
         self.three_arg_lst = ["write"]
         self.arguments = self.one_arg_lst + self.two_arg_lst + self.three_arg_lst
@@ -235,6 +237,10 @@ class Shell:
     def run_script_3(self):
         self.script.script_3()
 
+    def script_parser(self):
+        print("script_parser")
+        pass
+
     def generate_unique_random(self, count):
         min_val, max_val = (0, 0xFFFFFFFF)
         unique_values = set()
@@ -247,6 +253,21 @@ class Shell:
         return list(unique_values)
 
 
+def main():
+    # argparse.ArgumentParser 객체 생성
+    parser = argparse.ArgumentParser(description='Shell 스크립트 실행을 위한 매개변수')
+
+    # 매개변수 추가
+    parser.add_argument('scripts', type=str, nargs='?', help='첫 번째 매개변수 : scripts txt 파일명')
+    args = parser.parse_args()
+
+    if args.scripts:
+        shell = Shell()
+        shell.script_parser()
+    else:
+        shell = Shell()
+        shell.run_shell()
+
+
 if __name__ == "__main__":
-    shell = Shell()
-    shell.run_shell()
+    main()
