@@ -31,7 +31,7 @@ class Logger:
                 log_files.append(os.path.join(self.log_dir, filename))
         log_files.sort()
 
-        if len(log_files) > 1:
+        if len(log_files) < 2:
             return
 
         for i in range(len(log_files) - 1):
