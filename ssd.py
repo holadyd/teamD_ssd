@@ -21,18 +21,24 @@ class SSD:
         if isinstance(cmd, WriteCommand):
             if int(cmd.data) == 0:
                 cmd = CommandFactory.create("E", cmd.lba, "1")
-
         if isinstance(cmd, ReadCommand):  # Fast Read판단
             read_cmd = self.buffer.fast_read(cmd.make_string())
             if read_cmd is None:
                 self.execute_cmd(cmd)
+        if isinstance(cmd, FlushCommand):
+            self.flush()
         else:
             cmd_list = self.buffer.write_buffer(cmd.make_string())
-            if not cmd_list is None:
-                for each_cmd in cmd_list:
-                    _, command, lba, data = each_cmd.split('_')
-                    flushed_cmd = CommandFactory.create(command, lba, data)
-                    self.execute_cmd(flushed_cmd)
+            self.excute_flushed_command_list(cmd_list)
+
+    def excute_flushed_command_list(self, cmd_list):
+        if not cmd_list is None:
+            for each_cmd in cmd_list:
+                if 'empty' in each_cmd:
+                    continue
+                _, command, lba, data = each_cmd.split('_')
+                flushed_cmd = CommandFactory.create(command, lba, data)
+                self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
         if isinstance(cmd, WriteCommand):
@@ -60,6 +66,14 @@ class SSD:
     def _write_value_to_ssd_output(self, value: str):
         with open(self.output_file, "w") as f:
             json.dump({"0": value}, f, indent=2)
+
+    def flush(self):
+        try:
+            cmd_list = self.buffer.flsuh_buffer()
+            
+            self.excute_flushed_command_list(cmd_list)
+        except Exception as e:
+            raise e
 
     def write(self, lba, value):
         # if not self._check_parameter_validation(lba, value):
@@ -120,7 +134,7 @@ def main():
 
     # 매개변수 추가
     parser.add_argument('command', type=str, help='첫 번째 매개변수 CMD')
-    parser.add_argument('lba', type=str, help='두 번째 매개변수 SSD LBA주소')
+    parser.add_argument('lba', type=str, nargs='?', help='두 번째 매개변수 SSD LBA주소')
     parser.add_argument('value', type=str, nargs='?', help='세 번째 매개변수 SSD Write시 Value', default=None)
     args = parser.parse_args()
 

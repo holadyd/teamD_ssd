@@ -100,14 +100,25 @@ class EraseCommand(SSDCommand):
         return f'E {self.lba} {self.data_size}'
 
 
+class FlushCommand(SSDCommand):
+
+    def validate(self):
+        return True
+
+    def make_string(self):
+        return 'flush'
+
+
 class CommandFactory:
     @staticmethod
     def create(command: str, lba: str, value: str = None) -> SSDCommand:
         if command == "R":
             return ReadCommand(lba)
-        elif command == "W":
+        if command == "W":
             return WriteCommand(lba, value)
-        elif command == 'E':
+        if command == 'E':
             return EraseCommand(lba, value)
+        if command == 'F':
+            return FlushCommand()
         else:
             return InvalidCommand()
