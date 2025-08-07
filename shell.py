@@ -122,44 +122,6 @@ class Shell:
             docs = f.readlines()
         self.console_print("".join(docs))
 
-    def is_valid_format(self, command_args):
-        self.logger_print(f'command_args: {command_args}')
-
-        if self._is_invalid_command(command_args):
-            self.print_valid_error(self.ErrorPrintEnum.INVALID_COMMAND)
-            return False
-
-        if self._is_invalid_para_length(command_args):
-            self.print_valid_error(self.ErrorPrintEnum.INVALID_PARAMETER_LENGTH)
-            return False
-
-        if command_args[0] in self.arg_addr:
-            if not self._is_valid_address(command_args[1]):
-                return False
-
-        elif command_args[0] in self.arg_data:
-            if not self._is_valid_data(command_args[1]):
-                return False
-
-        elif command_args[0] in self.arg_addr_data:
-            if not self._is_valid_address(command_args[1]):
-                return False
-            if not self._is_valid_data(command_args[2]):
-                return False
-
-        elif command_args[0] in self.arg_addr_size:
-            if not self._is_valid_address(command_args[1]):
-                return False
-            if not self._is_valid_size(command_args[2]):
-                return False
-
-        elif command_args[0] in self.arg_addr_addr:
-            if not self._is_valid_address(command_args[1]):
-                return False
-            if not self._is_valid_address(command_args[2]):
-                return False
-        return True
-
     def _is_invalid_command(self, command_args):
         self.logger_print(f'command_args: {command_args}')
         if command_args[0] not in self.arguments:
@@ -220,9 +182,39 @@ class Shell:
         command_args = self.command.strip().split(" ")
         self.logger_print(f'command_args: {command_args}')
 
-        if not self.is_valid_format(command_args):
+        if self._is_invalid_command(command_args):
+            self.print_valid_error(self.ErrorPrintEnum.INVALID_COMMAND)
             return False
 
+        if self._is_invalid_para_length(command_args):
+            self.print_valid_error(self.ErrorPrintEnum.INVALID_PARAMETER_LENGTH)
+            return False
+
+        if command_args[0] in self.arg_addr:
+            if not self._is_valid_address(command_args[1]):
+                return False
+
+        elif command_args[0] in self.arg_data:
+            if not self._is_valid_data(command_args[1]):
+                return False
+
+        elif command_args[0] in self.arg_addr_data:
+            if not self._is_valid_address(command_args[1]):
+                return False
+            if not self._is_valid_data(command_args[2]):
+                return False
+
+        elif command_args[0] in self.arg_addr_size:
+            if not self._is_valid_address(command_args[1]):
+                return False
+            if not self._is_valid_size(command_args[2]):
+                return False
+
+        elif command_args[0] in self.arg_addr_addr:
+            if not self._is_valid_address(command_args[1]):
+                return False
+            if not self._is_valid_address(command_args[2]):
+                return False
         return True
 
     class ErrorPrintEnum(Enum):
