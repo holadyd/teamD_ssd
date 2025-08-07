@@ -22,6 +22,7 @@ class Shell:
         self.arguments = self.one_arg_lst + self.two_arg_lst + self.three_arg_lst
         self.prev_written_values = []
         self._is_runner_mode = False
+        self._is_test_pass = True
         self.logger = Logger()
         self.script = Script(self)
 
@@ -225,6 +226,7 @@ class Shell:
             ret = self.ssd_read(address, for_script=True)
             if ret != value:
                 self.console_print("FAIL")
+                self._is_test_pass = False
                 return
         self.console_print("PASS")
 
@@ -251,7 +253,12 @@ class Shell:
             self.read_command(cmd[:-1])
             if self.valid_check():
                 self.run_command()
-            print("Pass")
+
+            if self._is_test_pass:
+                print("PASS")
+            else:
+                print("FAIL")
+
 
     def generate_unique_random(self, count):
         min_val, max_val = (0, 0xFFFFFFFF)
