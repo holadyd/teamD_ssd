@@ -284,7 +284,7 @@ def test_runner_mode(capsys):
 
     sh.script_parser("shell_scripts.txt")
 
-    expected = ('1_FullWriteAndReadCompare\t___\tRun...PASS\n'
-                '1_FullWriteAndReadCompare\t___\tRun...PASS\n')
+    expected = ('1_FullWriteAndReadCompare\t___\tRun...Pass\n'
+                '1_FullWriteAndReadCompare\t___\tRun...Pass\n')
     captured = capsys.readouterr()
     assert captured.out == expected

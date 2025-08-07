@@ -255,9 +255,10 @@ class Shell:
                 self.run_command()
 
             if self._is_test_pass:
-                print("PASS")
+                print("Pass")
             else:
-                print("FAIL")
+                print("FAIL!")
+                break
 
 
     def generate_unique_random(self, count):
