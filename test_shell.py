@@ -1,11 +1,20 @@
+import os
 from unittest.mock import patch
 
 import pytest
 
+from logger import Logger
 from shell import Shell
 import sys
 from io import StringIO
 import re
+import time
+
+
+def input_command(shell, command):
+    shell.read_command(command)
+    if shell.valid_check():
+        shell.run_command()
 
 
 def test_shell_exit(capsys):
@@ -236,6 +245,7 @@ def test_write_decimal_test(capsys):
 
     assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003\n"
 
+
 def test_write_hex_test(capsys):
     shell = Shell()
     shell.read_command("write 3 0x3")
@@ -249,12 +259,14 @@ def test_write_hex_test(capsys):
 
     assert captured.out == "[Write] Done\n[Read] LBA 3 : 0x00000003\n"
 
+
 def test_ssd_read_write_in_shell_1():
     sh = Shell()
     sh.ssd_write("30", "0xAAAAAAAA")
     ret = sh.ssd_read("30", for_script=True)
 
     assert ret == "0xAAAAAAAA"
+
 
 def test_ssd_read_write_in_shell_2():
     sh = Shell()
@@ -263,3 +275,16 @@ def test_ssd_read_write_in_shell_2():
     ret = sh.ssd_read("30", for_script=True)
 
     assert ret == value
+
+
+def test_runner_mode(capsys):
+    # os.system(f"shell shell_scripts.txt")
+    sh = Shell()
+    sh._is_runner_mode = True
+
+    sh.script_parser("shell_scripts.txt")
+
+    expected = ('1_FullWriteAndReadCompare\t___\tRun...Pass\n'
+                '1_FullWriteAndReadCompare\t___\tRun...Pass\n')
+    captured = capsys.readouterr()
+    assert captured.out == expected
