@@ -28,11 +28,14 @@ class SSD:
                 self.execute_cmd(cmd)
         else:
             cmd_list = self.buffer.write_buffer(cmd.make_string())
-            if not cmd_list is None:
-                for each_cmd in cmd_list:
-                    _, command, lba, data = each_cmd.split('_')
-                    flushed_cmd = CommandFactory.create(command, lba, data)
-                    self.execute_cmd(flushed_cmd)
+            self.excute_flushed_command_list(cmd_list)
+
+    def excute_flushed_command_list(self, cmd_list):
+        if not cmd_list is None:
+            for each_cmd in cmd_list:
+                _, command, lba, data = each_cmd.split('_')
+                flushed_cmd = CommandFactory.create(command, lba, data)
+                self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
         if isinstance(cmd, WriteCommand):
