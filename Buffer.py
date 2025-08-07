@@ -25,6 +25,9 @@ class Buffer:
 
     def write_buffer(self, command):
         self.read_buffer()
+
+        # update
+
         buf_idx = self._find_empty()
 
         flush = []
@@ -32,7 +35,7 @@ class Buffer:
             flush = self.flsuh_buffer()
             buf_idx = 0
 
-        # update
+
 
         command = command.replace(" ", "_")
         self._buffer[buf_idx] = f"{buf_idx + 1}_{command}"
