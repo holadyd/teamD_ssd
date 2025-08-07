@@ -4,7 +4,7 @@ import os
 from contextlib import contextmanager
 from typing import Literal
 
-from Buffer import Buffer
+from buffer import Buffer
 from ssd_command import *
 
 

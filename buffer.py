@@ -112,6 +112,7 @@ class Buffer:
 
 
     def flush_buffer(self):
+        self.read_buffer()
         buffer = self._buffer
         self._reset_buffer()
         return buffer
