@@ -73,10 +73,7 @@ class SSD:
             with self._open_file(self.nand_file, 'r') as f:
                 nand_data = json.load(f)
 
-            str_value = str(value)
-            if not str_value.startswith('0x'):
-                str_value = hex(int(str_value, 0))
-            converted_value = str_value[:2] + f'0000000{str_value[2:]}'[-8:].upper()
+            converted_value = self.convert_value_to_hex(value)
 
             # 파일 핸들러를 사용해 'w' 모드로 파일 열기
             with self._open_file(self.nand_file, 'w') as f:
@@ -85,8 +82,25 @@ class SSD:
         except Exception as e:
             raise e
 
+    def convert_value_to_hex(self, value):
+        str_value = str(value)
+        if not str_value.startswith('0x'):
+            str_value = hex(int(str_value, 0))
+        converted_value = str_value[:2] + f'0000000{str_value[2:]}'[-8:].upper()
+        return converted_value
+
     def erase(self, lba, size):
-        ...
+        try:
+            nand_data = None
+            with self._open_file(self.nand_file, 'r') as f:
+                nand_data = json.load(f)
+            for i in range(lba, lba + size):
+                nand_data[str(i)] = self.convert_value_to_hex(0)
+            with self._open_file(self.nand_file, 'w') as f:
+                json.dump(nand_data, f, indent=2)
+
+        except Exception as e:
+            raise e
 
     @contextmanager
     def _open_file(self, file_path, mode: Literal['r', 'w']):
