@@ -51,14 +51,27 @@ class Script:
             self.shell.read_compare(compare_list)
 
     def script_4(self):
-        self.shell.logger_print(f'script3 executed')
-        for _ in range(200):
-            value1 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
-            value2 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
-            compare_list = [
-                ("0", value1),
-                ("99", value2)
-            ]
-            self.shell.ssd_write("0", value1, for_script=True)
-            self.shell.ssd_write("99", value2, for_script=True)
-            self.shell.read_compare(compare_list)
+        self.shell._is_test_pass = True
+        self.shell.logger_print(f'script4 executed')
+        self.shell.ssd_erase("0", for_script=True)
+        self.shell.ssd_erase("1", for_script=True)
+        self.shell.ssd_erase("2", for_script=True)
+
+        for _ in range(30):
+            for i in range(48):
+                value1 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
+                value2 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
+                compare_list = [
+                    (f'{2*i+2}', '0x00000000'),
+                    (f'{2*i+3}', '0x00000000'),
+                    (f'{2*i+4}', '0x00000000'),
+                ]
+                self.shell.ssd_write(f'{2*i+2}', value1, for_script=True)
+                self.shell.ssd_write(f'{2*i+2}', value2, for_script=True)
+
+                self.shell.ssd_erase(f'{2*i+2}', for_script=True)
+                self.shell.ssd_erase(f'{2*i+3}', for_script=True)
+                self.shell.ssd_erase(f'{2*i+4}', for_script=True)
+
+                self.shell.read_compare(compare_list)
+            break
