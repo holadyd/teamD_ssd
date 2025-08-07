@@ -26,8 +26,12 @@ class SSD:
             cmd_list = self.buffer.write_buffer(cmd.make_string())
             if not cmd_list is None:
                 for each_cmd in cmd_list:
-                    _, args = each_cmd.split('_')
-                    flushed_cmd = CommandFactory.create(*args)
+                    _, command,lba,data = each_cmd.split('_')
+
+                    flushed_cmd = CommandFactory.create(command,lba,data)
+                    print("flush 발생", end="")
+                    print(command,lba,data)
+
                     self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
@@ -69,6 +73,7 @@ class SSD:
         #     self._write_value_to_ssd_output("ERROR")
         #     return
 
+        print("write실행중")
         try:
             nand_data = None
             # 파일 핸들러를 사용해 'r' 모드로 파일 열기
@@ -92,6 +97,8 @@ class SSD:
         return converted_value
 
     def erase(self, lba, size):
+        lba = int(lba)
+        size = int(size)
         try:
             nand_data = None
             with self._open_file(self.nand_file, 'r') as f:
@@ -157,7 +164,7 @@ def main():
     # 인자 개수 조건 검사 (예: command + address + optional value)
     buffer = Buffer()
     ssd = SSD(buffer)
-    command = CommandFactory.create(args)
+    command = CommandFactory.create(args.command,args.lba,args.value)
     ssd.process_cmd(command)
 
     # if args.command is None or args.lba is None:

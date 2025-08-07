@@ -103,8 +103,7 @@ class EraseCommand(SSDCommand):
 
 class CommandFactory:
     @staticmethod
-    def create(args) -> SSDCommand:
-        command, lba, value = args.command, args.lba, args.value
+    def create(command: str, lba:str, value:str = None) -> SSDCommand:
         if command == "R":
             return ReadCommand(lba)
         elif command == "W":
