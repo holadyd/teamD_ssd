@@ -49,3 +49,16 @@ class Script:
             self.shell.ssd_write("0", value1, for_script=True)
             self.shell.ssd_write("99", value2, for_script=True)
             self.shell.read_compare(compare_list)
+
+    def script_4(self):
+        self.shell.logger_print(f'script3 executed')
+        for _ in range(200):
+            value1 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
+            value2 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
+            compare_list = [
+                ("0", value1),
+                ("99", value2)
+            ]
+            self.shell.ssd_write("0", value1, for_script=True)
+            self.shell.ssd_write("99", value2, for_script=True)
+            self.shell.read_compare(compare_list)
