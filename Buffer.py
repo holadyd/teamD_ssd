@@ -78,10 +78,36 @@ class Buffer:
         if os.path.exists(self._dir_path):
             shutil.rmtree(self._dir_path)
 
-    def fast_read(self, command):
+    def fast_read(self, lba):
+        self.read_buffer()
+
+        buf_dict = dict()
+
+        for buf in self._buffer:
+            if "empty" not in buf:
+                cmd = buf.replace("_", " ").split(" ")
+                if cmd[1] == "W":
+                    cmd_lba = cmd[2]
+                    cmd_value = cmd[3]
+                    buf_dict[cmd_lba] = cmd_value
+                elif cmd[1] == "E":
+                    cur_lba = int(cmd[2])
+                    range_siz = int(cmd[3])
+                    for idx in range(abs(int(range_siz))):
+                        buf_dict[str(cur_lba)] = "0x00000000"
+                        cur_lba += 1 if range_siz > 0 else -1
+
+        print(buf_dict)
+
+        try:
+            return buf_dict[lba]
+        except:
+            return None
+
+
         pass
 
 
 buf = Buffer()
-print(buf.write_buffer("E 20 2"))
-print(buf._buffer)
+print(buf.fast_read("30"))
+# print(buf._buffer)
