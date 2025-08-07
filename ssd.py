@@ -42,11 +42,6 @@ class SSD:
             pass
 
     def read(self, lba):
-        # is_valid = self._check_parameter_validation(lba=lba)
-        # if not is_valid:
-        #     self._write_value_to_ssd_output("ERROR")
-        #     return "ERROR"
-
         lba_int = int(lba)
         key = str(lba_int)  # JSON은 문자열 키 사용
         # ssd_nand.txt 읽기
@@ -115,31 +110,6 @@ class SSD:
             if f:
                 f.close()
 
-    def _check_parameter_validation(self, lba, value=None) -> bool:
-        # value  invalid Check
-        if value is not None:
-            try:
-                int(value, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
-
-            except ValueError:
-                return False
-
-            if not (0x0 <= int(value, 0) <= 0xFFFFFFFF):
-                return False
-
-        # lba invalid Check
-        # 1. int 인지 체크
-        try:
-            int(lba)
-        except (ValueError, TypeError):
-            return False
-
-        # 2. 0~ 99 인지 체크
-        if 0 <= int(lba) <= 99:
-            return True
-        return False
-
-
 def main():
     # argparse.ArgumentParser 객체 생성
     parser = argparse.ArgumentParser(description='SSD 스크립트 실행을 위한 매개변수')
@@ -150,44 +120,10 @@ def main():
     parser.add_argument('value', type=str, nargs='?', help='세 번째 매개변수 SSD Write시 Value', default=None)
     args = parser.parse_args()
 
-    # print(f"첫 번째 매개변수 (명령어 : W): {args.command}")
-    # print(f"두 번째 매개변수 (주소 : LBA): {args.lba}")
-    # print(f"세 번째 매개변수 (값 : VALUE): {args.value}")
-
-    # 'value'가 있는지 확인하고 처리
-    # 인자 개수 조건 검사 (예: command + address + optional value)
     buffer = Buffer()
     ssd = SSD(buffer)
     command = CommandFactory.create(args.command,args.lba,args.value)
     ssd.process_cmd(command)
-
-    # if args.command is None or args.lba is None:
-    #     ssd = SSD()
-    #     ssd._write_value_to_ssd_output("ERROR")
-    #     raise Exception("필수 인자가 누락되었습니다.")
-    #
-    # if args.command == "R":
-    #     ssd = SSD()
-    #     if args.value is not None:
-    #         ssd._write_value_to_ssd_output("ERROR")
-    #         raise Exception("R 명령어에는 value 인자가 필요없습니다.")
-    #     ssd.read(args.lba)
-    # elif args.command == "W":
-    #     ssd = SSD()
-    #     if args.value is None:
-    #         ssd._write_value_to_ssd_output("ERROR")
-    #         raise Exception("W 명령어에는 value 인자가 필요합니다.")
-    #     ssd.write(lba=args.lba, value=args.value)
-    # elif args.command == 'E':
-    #     ssd = SSD()
-    #     if args.value is None:
-    #         ssd._write_value_to_ssd_output("ERROR")
-    #         raise Exception('E 명령어에는 value(size) 인자가 필요합니다.')
-    #     ssd.erase(lba=args.lba, size=args.value)
-    # else:
-    #     ssd = SSD()
-    #     ssd._write_value_to_ssd_output("ERROR")
-    #     raise Exception("CMD가 잘못 되었습니다.")
 
 
 if __name__ == '__main__':
