@@ -91,7 +91,7 @@ class EraseCommand(SSDCommand):
             value: int = int(self.data_size)  # size value 검증(숫자 여부)
             if value < 0 or value > self.erase_size_range:
                 raise ValueError
-            if lba + value > self.lba_upper_limit:
+            if lba + value > self.lba_upper_limit + 1:
                 raise ValueError
             return True
         except (ValueError, TypeError):

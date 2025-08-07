@@ -24,14 +24,11 @@ class SSD:
                 self.execute_cmd(cmd)
         else:
             cmd_list = self.buffer.write_buffer(cmd.make_string())
+            print(cmd.make_string())
             if not cmd_list is None:
                 for each_cmd in cmd_list:
                     _, command,lba,data = each_cmd.split('_')
-
                     flushed_cmd = CommandFactory.create(command,lba,data)
-                    print("flush 발생", end="")
-                    print(command,lba,data)
-
                     self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
@@ -52,11 +49,9 @@ class SSD:
 
         lba_int = int(lba)
         key = str(lba_int)  # JSON은 문자열 키 사용
-
         # ssd_nand.txt 읽기
         with open(self.nand_file, "r") as f:
             nand_data = json.load(f)
-
         value = nand_data.get(key)
 
         # ssd_output.txt에 읽은 값 저장
@@ -72,8 +67,6 @@ class SSD:
         # if not self._check_parameter_validation(lba, value):
         #     self._write_value_to_ssd_output("ERROR")
         #     return
-
-        print("write실행중")
         try:
             nand_data = None
             # 파일 핸들러를 사용해 'r' 모드로 파일 열기
@@ -97,6 +90,7 @@ class SSD:
         return converted_value
 
     def erase(self, lba, size):
+
         lba = int(lba)
         size = int(size)
         try:

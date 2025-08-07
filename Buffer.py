@@ -81,7 +81,3 @@ class Buffer:
     def fast_read(self, command):
         pass
 
-
-buf = Buffer()
-print(buf.write_buffer("E 20 2"))
-print(buf._buffer)
