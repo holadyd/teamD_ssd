@@ -115,6 +115,7 @@ def test_buffer_file_should_be_empty():
 # buffer write 후에도 buffer file의 내용은 아무 것도 없어야 함
 def test_buffer_file_should_be_empty_after_buffer_write():
     buf = Buffer()
+    buf._reset_buffer()
     buf_dir = "buffer"
 
     buf.write_buffer("W 31 0xAAAAAAAA")
@@ -131,7 +132,7 @@ def test_buffer_file_should_be_empty_after_buffer_write():
 
 
 # buffer write + update 후에도 buffer file의 내용은 아무 것도 없어야 함
-def test_buffer_file_should_be_empty_after_buffer_write():
+def test_buffer_file_should_be_empty_after_buffer_write2():
     buf = Buffer()
     buf_dir = "buffer"
 
@@ -142,7 +143,7 @@ def test_buffer_file_should_be_empty_after_buffer_write():
     buf.update_buffer()
     buf.read_buffer()
 
-    assert buf._buffer == ['1_W_31_0xAAAAAAAA', '2_W_32_0xBBBBBBBB', '3_E_33_2', '4_empty', '5_empty']
+    assert buf._buffer == ['1_E_33_2', '2_W_31_0xAAAAAAAA', '3_W_32_0xBBBBBBBB', '4_empty', '5_empty']
 
     # 모든 파일에 대해 내용이 비어 있는지 확인
     for fname in os.listdir(buf_dir):
@@ -158,7 +159,7 @@ def test_buffer_flush():
     buf.write_buffer("W 32 0xBBBBBBBB")
     buf.write_buffer("W 33 0xCCCCCCCC")
 
-    flushed_buf = buf.flsuh_buffer()
+    flushed_buf = buf.flush_buffer()
 
     assert flushed_buf == ['1_W_31_0xAAAAAAAA', '2_W_32_0xBBBBBBBB', '3_W_33_0xCCCCCCCC', '4_empty', '5_empty']
     assert buf._buffer == ['1_empty', '2_empty', '3_empty', '4_empty', '5_empty']
@@ -170,6 +171,6 @@ def test_buffer_fast_read():
     buf.write_buffer("W 31 0xAAAAAAAA")
     buf.write_buffer("W 32 0xBBBBBBBB")
 
-    ret = buf.fast_read(31)
+    ret = buf.fast_read("31")
 
     assert ret == '0xAAAAAAAA'

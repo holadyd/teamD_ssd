@@ -32,7 +32,7 @@ class Buffer:
 
         flush = []
         if buf_idx == 5:
-            flush = self.flsuh_buffer()
+            flush = self.flush_buffer()
             buf_idx = 0
 
 
@@ -93,9 +93,9 @@ class Buffer:
                     tmp += 1
                 elif tmp == 10:
                     cmds.append(f"E {i - tmp} {tmp}")
-                    tmp == -1
+                    tmp = 1
         cmds.sort()
-        print(cmds)
+        # print(cmds)
 
         self._erase_files()
         os.makedirs(self._dir_path, exist_ok=True)
@@ -111,14 +111,14 @@ class Buffer:
                 pass
 
 
-    def flsuh_buffer(self):
+    def flush_buffer(self):
         buffer = self._buffer
         self._reset_buffer()
         return buffer
-    #
-    # def __del__(self):
-    #     if os.path.exists(self._dir_path):
-    #         shutil.rmtree(self._dir_path)
+
+    def __del__(self):
+        if os.path.exists(self._dir_path):
+            shutil.rmtree(self._dir_path)
 
     def _find_empty(self):
         for idx in range(len(self._buffer)):
@@ -161,8 +161,3 @@ class Buffer:
         except:
             return None
 
-
-#
-# buf = Buffer()
-# buf.update_buffer()
-# # print(buf._buffer)
