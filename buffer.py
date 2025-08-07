@@ -54,7 +54,7 @@ class Buffer:
         buf_list = [None] * 100
         for buf in self._buffer:
             if "empty" not in buf:
-                cmd = buf.replace("_", " ").split(" ")
+                cmd = buf.split("_")
                 if cmd[1] == "W":
                     lba = int(cmd[2])
                     value = cmd[3]
@@ -144,7 +144,7 @@ class Buffer:
 
         for buf in self._buffer:
             if "empty" not in buf:
-                cmd = buf.replace("_", " ").split(" ")
+                cmd = buf.split("_")
                 if cmd[1] == "W":
                     cmd_lba = cmd[2]
                     cmd_value = cmd[3]
