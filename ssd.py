@@ -26,7 +26,9 @@ class SSD:
             cmd_list = self.buffer.write_buffer(cmd.make_string())
             if not cmd_list is None:
                 for each_cmd in cmd_list:
-                    self.execute_cmd(each_cmd)
+                    _, args = each_cmd.split('_')
+                    flushed_cmd = CommandFactory.create(*args)
+                    self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
         if isinstance(cmd, WriteCommand):
@@ -156,7 +158,6 @@ def main():
     buffer = Buffer()
     ssd = SSD(buffer)
     command = CommandFactory.create(args)
-    print(command.make_string())
     ssd.process_cmd(command)
 
     # if args.command is None or args.lba is None:
