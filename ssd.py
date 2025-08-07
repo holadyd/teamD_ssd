@@ -126,6 +126,7 @@ def main():
 
     # 'value'가 있는지 확인하고 처리
     # 인자 개수 조건 검사 (예: command + address + optional value)
+
     if args.command is None or args.lba is None:
         ssd = SSD()
         ssd._write_value_to_ssd_output("ERROR")
