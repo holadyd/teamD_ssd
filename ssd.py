@@ -3,13 +3,15 @@ import json
 import os
 from contextlib import contextmanager
 from typing import Literal
+
+from Buffer import Buffer
 from ssd_command import *
 
 class SSD:
-    def __init__(self, buffer):
+    def __init__(self, buffer:Buffer=None):
         self.nand_file = "ssd_nand.txt"
         self.output_file = "ssd_output.txt"
-        self.buffer = buffer
+        self.buffer:Buffer = buffer
 
     def process_cmd(self, cmd: SSDCommand):
         if not cmd.validate():
@@ -69,6 +71,9 @@ class SSD:
                 json.dump(nand_data, f, indent=2)
         except Exception as e:
             raise e
+
+    def erase(self, lba, size):
+        ...
 
     @contextmanager
     def _open_file(self, file_path, mode: Literal['r', 'w']):
@@ -138,6 +143,12 @@ def main():
             ssd._write_value_to_ssd_output("ERROR")
             raise Exception("W 명령어에는 value 인자가 필요합니다.")
         ssd.write(lba=args.lba, value=args.value)
+    elif args.command == 'E':
+        ssd = SSD()
+        if args.value is None:
+            ssd._write_value_to_ssd_output("ERROR")
+            raise Exception('E 명령어에는 value(size) 인자가 필요합니다.')
+        ssd.erase(lba=args.lba, size=args.value)
     else:
         ssd = SSD()
         ssd._write_value_to_ssd_output("ERROR")
