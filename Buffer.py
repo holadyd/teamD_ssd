@@ -50,7 +50,66 @@ class Buffer:
         return flush
 
     def update_buffer(self):
-        pass
+        self.read_buffer()
+        buf_list = [None] * 100
+        for buf in self._buffer:
+            if "empty" not in buf:
+                cmd = buf.replace("_", " ").split(" ")
+                if cmd[1] == "W":
+                    lba = int(cmd[2])
+                    value = cmd[3]
+                    buf_list[lba] = value
+                elif cmd[1] == "E":
+                    cur_lba = int(cmd[2])
+                    range_siz = int(cmd[3])
+                    for idx in range(abs(int(range_siz))):
+                        buf_list[cur_lba] = "0x00000000"
+                        cur_lba += 1 if range_siz > 0 else -1
+
+        # print(buf_list)
+
+        tmp = -1
+        cmds = []
+        for i in range(100):
+            if buf_list[i] == None :
+                if tmp == -1:
+                    continue
+                else:
+                    cmds.append(f"E {i - tmp} {tmp}")
+                    tmp = -1
+            elif buf_list[i] != "0x00000000":
+                if tmp == 10:
+                    cmds.append(f"E {i - tmp} {tmp}")
+                    tmp = -1
+                elif 0<tmp<10:
+                    tmp += 1
+                elif tmp != -1:
+                    tmp += 1
+                cmds.append(f"W {i} {buf_list[i]}")
+            elif buf_list[i] == "0x00000000":
+                if tmp == -1:
+                    tmp = 1
+                elif tmp < 10:
+                    tmp += 1
+                elif tmp == 10:
+                    cmds.append(f"E {i - tmp} {tmp}")
+                    tmp == -1
+        cmds.sort()
+        print(cmds)
+
+        self._erase_files()
+        os.makedirs(self._dir_path, exist_ok=True)
+        for cmd_idx in range(len(cmds)):
+            with open(os.path.join(self._dir_path, f"{cmd_idx + 1}_{cmds[cmd_idx].replace(" ","_")}"), "w", encoding="utf-8") as f:
+                pass
+
+        files = len(os.listdir(self._dir_path))
+
+        while files != 5:
+            files += 1
+            with open(os.path.join(self._dir_path, f"{files}_empty"), "w", encoding="utf-8") as f:
+                pass
+
 
     def flsuh_buffer(self):
         buffer = self._buffer
@@ -97,17 +156,13 @@ class Buffer:
                         buf_dict[str(cur_lba)] = "0x00000000"
                         cur_lba += 1 if range_siz > 0 else -1
 
-        print(buf_dict)
-
         try:
             return buf_dict[lba]
         except:
             return None
 
 
-        pass
-
-
-buf = Buffer()
-print(buf.fast_read("30"))
-# print(buf._buffer)
+#
+# buf = Buffer()
+# buf.update_buffer()
+# # print(buf._buffer)

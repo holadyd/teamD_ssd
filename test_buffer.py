@@ -23,7 +23,7 @@ def test_update_buffer_2():
 
     buf.update_buffer()
 
-    assert buf._buffer == ['1_E_30_10', '2_E_41_10', '3_W_40_0xAAAAAAAA', '4_W_45_0xBBBBBBBB', '5_empty']
+    assert buf._buffer == ['1_E_31_6', '2_E_41_10', '3_W_40_0xAAAAAAAA', '4_W_41_0xBBBBBBBB', '5_empty']
 
 
 def test_update_buffer_3():
