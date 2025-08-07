@@ -57,9 +57,9 @@ class SSD:
             json.dump({"0": value}, f, indent=2)
 
     def write(self, lba, value):
-        if not self._check_parameter_validation(lba, value):
-            self._write_value_to_ssd_output("ERROR")
-            return
+        # if not self._check_parameter_validation(lba, value):
+        #     self._write_value_to_ssd_output("ERROR")
+        #     return
 
         try:
             nand_data = None
