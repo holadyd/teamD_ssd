@@ -3,9 +3,9 @@ from enum import Enum
 import os
 from hmac import compare_digest
 import random
-from random import randrange
 from logger import Logger
 import sys
+from script import Script
 
 
 class Shell:
@@ -17,9 +17,11 @@ class Shell:
                             '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging']
         self.two_arg_lst = ["read", "fullwrite"]
         self.three_arg_lst = ["write"]
+        self.arguments = self.one_arg_lst + self.two_arg_lst + self.three_arg_lst
         self.prev_written_values = []
         self._is_runner_mode = False
         self.logger = Logger()
+        self.script = Script(self)
 
     def read_output(self):
         self.logger_print(f"function executed")
@@ -93,6 +95,7 @@ class Shell:
     def ssd_write(self, address, content, for_script=False):
         self.logger_print(f'read {address}, content {content}, for_script is {for_script}')
         os.system(f"python ssd.py W {address} {str(hex(int(content, 0)))}")
+        self.logger_print(f'[Write] Done - {address}, {content}')
         if for_script:
             return
 
@@ -114,9 +117,7 @@ class Shell:
 
     def is_invalid_command(self, command_args):
         self.logger_print(f'command_args: {command_args}')
-        if command_args[0] not in self.one_arg_lst and \
-                command_args[0] not in self.two_arg_lst and \
-                command_args[0] not in self.three_arg_lst:
+        if command_args[0] not in self.arguments:
             self.logger_print(f'return True')
             return True
         self.logger_print(f'return False')
@@ -226,46 +227,13 @@ class Shell:
         self.console_print("PASS")
 
     def run_script_1(self):
-        self.logger_print(f'script1 executed')
-        unique_values = self.generate_unique_random(100)
-        for addr_shift in range(10):
-            compare_list = []
-            for start_addr in range(5):
-                unique_value = unique_values[addr_shift * 10 + start_addr]
-                self.ssd_write(f'{start_addr + addr_shift}', f'0x{unique_value:08X}', for_script=True)
-                compare_list.append((f'{start_addr + addr_shift}', f'0x{unique_value:08X}'))
-
-            self.read_compare(compare_list)
+        self.script.script_1()
 
     def run_script_2(self):
-        self.logger_print(f'script2 executed')
-        compare_list = [
-            ("0", "0x0000FFFF"),
-            ("1", "0x0000FFFF"),
-            ("2", "0x0000FFFF"),
-            ("3", "0x0000FFFF"),
-            ("4", "0x0000FFFF")
-        ]
-        for _ in range(30):
-            self.ssd_write("4", "0x0000FFFF", for_script=True)
-            self.ssd_write("0", "0x0000FFFF", for_script=True)
-            self.ssd_write("3", "0x0000FFFF", for_script=True)
-            self.ssd_write("1", "0x0000FFFF", for_script=True)
-            self.ssd_write("2", "0x0000FFFF", for_script=True)
-            self.read_compare(compare_list)
+        self.script.script_2()
 
     def run_script_3(self):
-        self.logger_print(f'script3 executed')
-        for _ in range(200):
-            value1 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
-            value2 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
-            compare_list = [
-                ("0", value1),
-                ("99", value2)
-            ]
-            self.ssd_write("0", value1, for_script=True)
-            self.ssd_write("99", value2, for_script=True)
-            self.read_compare(compare_list)
+        self.script.script_3()
 
     def generate_unique_random(self, count):
         min_val, max_val = (0, 0xFFFFFFFF)
