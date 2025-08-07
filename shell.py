@@ -25,7 +25,7 @@ class Shell:
         return data
 
     def console_print(self, message):
-        if self._is_runner_mode:
+        if not self._is_runner_mode:
             print(message)
 
     def run_shell(self):
