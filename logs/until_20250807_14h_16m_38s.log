@@ -1,0 +1,121 @@
+[2025-08-07 14:16:17] Shell.ssd_write()              : [Write] Done - 8, 0x592C179D
+[2025-08-07 14:16:17] Shell.ssd_write()              : read 9, content 0x80B75FA2, for_script is True
+[2025-08-07 14:16:17] Shell.ssd_write()              : [Write] Done - 9, 0x80B75FA2
+[2025-08-07 14:16:17] Shell.ssd_write()              : read 10, content 0x99B3B9A7, for_script is True
+[2025-08-07 14:16:17] Shell.ssd_write()              : [Write] Done - 10, 0x99B3B9A7
+[2025-08-07 14:16:17] Shell.ssd_write()              : read 11, content 0x097B25A8, for_script is True
+[2025-08-07 14:16:17] Shell.ssd_write()              : [Write] Done - 11, 0x097B25A8
+[2025-08-07 14:16:17] Shell.ssd_write()              : read 12, content 0x30B5FBAF, for_script is True
+[2025-08-07 14:16:18] Shell.ssd_write()              : [Write] Done - 12, 0x30B5FBAF
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 8, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0x592C179D'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 8 : 0x592C179D
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 9, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0x80B75FA2'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 9 : 0x80B75FA2
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 10, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0x99B3B9A7'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 10 : 0x99B3B9A7
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 11, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0x097B25A8'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 11 : 0x097B25A8
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 12, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0x30B5FBAF'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 12 : 0x30B5FBAF
+[2025-08-07 14:16:18] Shell.ssd_write()              : read 9, content 0xBFE9B7C7, for_script is True
+[2025-08-07 14:16:18] Shell.ssd_write()              : [Write] Done - 9, 0xBFE9B7C7
+[2025-08-07 14:16:18] Shell.ssd_write()              : read 10, content 0x843FAFC7, for_script is True
+[2025-08-07 14:16:18] Shell.ssd_write()              : [Write] Done - 10, 0x843FAFC7
+[2025-08-07 14:16:18] Shell.ssd_write()              : read 11, content 0xC71449DF, for_script is True
+[2025-08-07 14:16:18] Shell.ssd_write()              : [Write] Done - 11, 0xC71449DF
+[2025-08-07 14:16:18] Shell.ssd_write()              : read 12, content 0x1D88D9E5, for_script is True
+[2025-08-07 14:16:18] Shell.ssd_write()              : [Write] Done - 12, 0x1D88D9E5
+[2025-08-07 14:16:18] Shell.ssd_write()              : read 13, content 0x05BE1FEB, for_script is True
+[2025-08-07 14:16:18] Shell.ssd_write()              : [Write] Done - 13, 0x05BE1FEB
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 9, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0xBFE9B7C7'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 9 : 0xBFE9B7C7
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 10, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0x843FAFC7'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 10 : 0x843FAFC7
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 11, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0xC71449DF'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 11 : 0xC71449DF
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 12, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0x1D88D9E5'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 12 : 0x1D88D9E5
+[2025-08-07 14:16:18] Shell.ssd_read()               : read 13, for_script is True
+[2025-08-07 14:16:18] Shell.read_output()            : function executed
+[2025-08-07 14:16:18] Shell.read_output()            : {'0': '0x05BE1FEB'}
+[2025-08-07 14:16:18] Shell.ssd_read()               : [Read] LBA 13 : 0x05BE1FEB
+[2025-08-07 14:16:37] Shell.read_command()           : wait command, preset command: 1_FullWriteAndReadCompare
+[2025-08-07 14:16:37] Shell.read_command()           : input command: 1_FullWriteAndReadCompare
+[2025-08-07 14:16:37] Shell.valid_check()            : command_args: ['1_FullWriteAndReadCompare']
+[2025-08-07 14:16:37] Shell.is_valid_format()        : command_args: ['1_FullWriteAndReadCompare']
+[2025-08-07 14:16:37] Shell.is_invalid_command()     : command_args: ['1_FullWriteAndReadCompare']
+[2025-08-07 14:16:37] Shell.is_invalid_command()     : return False
+[2025-08-07 14:16:37] Shell.is_invalid_para_length() : command_args: ['1_FullWriteAndReadCompare']
+[2025-08-07 14:16:37] Shell.run_command()            : run command with 1_FullWriteAndReadCompare
+[2025-08-07 14:16:37] Shell.script_1()               : script1 executed
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 0, content 0x37D33002, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 0, 0x37D33002
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 1, content 0xC768220A, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 1, 0xC768220A
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 2, content 0x7B82360E, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 2, 0x7B82360E
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 3, content 0xB3182E12, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 3, 0xB3182E12
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 4, content 0x0EEA7614, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 4, 0x0EEA7614
+[2025-08-07 14:16:37] Shell.ssd_read()               : read 0, for_script is True
+[2025-08-07 14:16:37] Shell.read_output()            : function executed
+[2025-08-07 14:16:37] Shell.read_output()            : {'0': '0x37D33002'}
+[2025-08-07 14:16:37] Shell.ssd_read()               : [Read] LBA 0 : 0x37D33002
+[2025-08-07 14:16:37] Shell.ssd_read()               : read 1, for_script is True
+[2025-08-07 14:16:37] Shell.read_output()            : function executed
+[2025-08-07 14:16:37] Shell.read_output()            : {'0': '0xC768220A'}
+[2025-08-07 14:16:37] Shell.ssd_read()               : [Read] LBA 1 : 0xC768220A
+[2025-08-07 14:16:37] Shell.ssd_read()               : read 2, for_script is True
+[2025-08-07 14:16:37] Shell.read_output()            : function executed
+[2025-08-07 14:16:37] Shell.read_output()            : {'0': '0x7B82360E'}
+[2025-08-07 14:16:37] Shell.ssd_read()               : [Read] LBA 2 : 0x7B82360E
+[2025-08-07 14:16:37] Shell.ssd_read()               : read 3, for_script is True
+[2025-08-07 14:16:37] Shell.read_output()            : function executed
+[2025-08-07 14:16:37] Shell.read_output()            : {'0': '0xB3182E12'}
+[2025-08-07 14:16:37] Shell.ssd_read()               : [Read] LBA 3 : 0xB3182E12
+[2025-08-07 14:16:37] Shell.ssd_read()               : read 4, for_script is True
+[2025-08-07 14:16:37] Shell.read_output()            : function executed
+[2025-08-07 14:16:37] Shell.read_output()            : {'0': '0x0EEA7614'}
+[2025-08-07 14:16:37] Shell.ssd_read()               : [Read] LBA 4 : 0x0EEA7614
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 1, content 0xE0AE5433, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 1, 0xE0AE5433
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 2, content 0xCBB4E434, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 2, 0xCBB4E434
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 3, content 0x1470C44B, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 3, 0x1470C44B
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 4, content 0xC2102A58, for_script is True
+[2025-08-07 14:16:37] Shell.ssd_write()              : [Write] Done - 4, 0xC2102A58
+[2025-08-07 14:16:37] Shell.ssd_write()              : read 5, content 0x5222265B, for_script is True
+[2025-08-07 14:16:38] Shell.ssd_write()              : [Write] Done - 5, 0x5222265B
+[2025-08-07 14:16:38] Shell.ssd_read()               : read 1, for_script is True
+[2025-08-07 14:16:38] Shell.read_output()            : function executed
+[2025-08-07 14:16:38] Shell.read_output()            : {'0': '0xE0AE5433'}
+[2025-08-07 14:16:38] Shell.ssd_read()               : [Read] LBA 1 : 0xE0AE5433
+[2025-08-07 14:16:38] Shell.ssd_read()               : read 2, for_script is True
+[2025-08-07 14:16:38] Shell.read_output()            : function executed
+[2025-08-07 14:16:38] Shell.read_output()            : {'0': '0xCBB4E434'}
+[2025-08-07 14:16:38] Shell.ssd_read()               : [Read] LBA 2 : 0xCBB4E434
+[2025-08-07 14:16:38] Shell.ssd_read()               : read 3, for_script is True
+[2025-08-07 14:16:38] Shell.read_output()            : function executed
+[2025-08-07 14:16:38] Shell.read_output()            : {'0': '0x1470C44B'}
+[2025-08-07 14:16:38] Shell.ssd_read()               : [Read] LBA 3 : 0x1470C44B
+[2025-08-07 14:16:38] Shell.ssd_read()               : read 4, for_script is True
