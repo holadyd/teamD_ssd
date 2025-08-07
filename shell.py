@@ -6,7 +6,6 @@ import random
 from random import randrange
 # from logger import Logger
 
-
 class Shell:
 
     def __init__(self):
