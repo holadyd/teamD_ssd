@@ -8,7 +8,6 @@ from logger import Logger
 import sys
 from script import Script
 
-
 class Shell:
 
     def __init__(self):

@@ -491,6 +491,7 @@ def test_ssd_write_value_conversion(mocker: MockFixture, lba: int, value: str, e
     ssd.write(lba, value)
     assert ssd.read(lba) == expected_value
 
+
 # ssd_u26
 def test_read_with_extra_argument_should_write_error():
     # 결과 파일이 존재하는지 확인
@@ -509,3 +510,28 @@ def test_read_with_extra_argument_should_write_error():
 
     # value가 반드시 "ERROR"여야 함
     assert data["0"] == "ERROR", "ssd_output.txt의 value가 ERROR가 아님"
+
+
+def test_erase_test_range():
+    ssd = SSD()
+
+    samples = [(0, '0x123', '0x00000000'),
+               (1, '0xabcdef', '0x00000000'),
+               (2, '0xdeadbeef', '0x00000000'),
+               (3, '0x123', '0x00000000'),
+               (4, '0xabcdef', '0x00000000'),
+               (5, '0xdeadbeef', '0x00000000'),
+               (6, '0x123', '0x00000000'),
+               (7, '0xabcdef', '0x00000000'),
+               (8, '0xdeadbeef', '0xDEADBEEF'),
+               (9, '0x123', '0x00000123'),
+               (10, '0xabcdef', '0x00ABCDEF'),
+               (11, '0xdeadbeef', '0xDEADBEEF'), ]
+
+    for lba, value, _ in samples:
+        ssd.write(lba, value)
+    ssd.erase(0, 8)
+    assert ssd.read(8) == '0xDEADBEEF'
+    assert ssd.read(0) == '0x00000000'
+    assert ssd.read(7) == '0x00000000'
+    assert ssd.read(7) == '0x00000000'
