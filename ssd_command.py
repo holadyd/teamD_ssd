@@ -56,10 +56,21 @@ class ReadCommand(SSDCommand):
         self.lba = lba
 
     def validate(self):
-        pass
+        # lba invalid Check
+        # 1. int 인지 체크
+        try:
+            int(self.lba)
+        except (ValueError, TypeError):
+            return False
+
+        # 2. 0~ 99 인지 체크
+        if 0 <= int(self.lba) <= 99:
+            return True
+        return False
 
     def make_string(self):
         return f'R {self.lba}'
+
 
 
 class EraseCommand(SSDCommand):

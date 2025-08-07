@@ -18,10 +18,16 @@ class SSD:
         if not cmd.validate():
             self._write_value_to_ssd_output("ERROR")
             return
-        cmd_list = self.buffer.write_buffer(cmd)
-        if not cmd_list is None:
-            for each_cmd in cmd_list:
-                self.execute_cmd(each_cmd)
+        if isinstance(cmd, ReadCommand): #Fast Read판단
+
+            read_cmd = self.buffer.fast_read(cmd.make_string())
+            if read_cmd is None:
+                self.execute_cmd(cmd)
+        else:
+            cmd_list = self.buffer.write_buffer(cmd.make_string())
+            if not cmd_list is None:
+                for each_cmd in cmd_list:
+                    self.execute_cmd(each_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
         if isinstance(cmd, WriteCommand):
@@ -34,10 +40,10 @@ class SSD:
             pass
 
     def read(self, lba):
-        is_valid = self._check_parameter_validation(lba=lba)
-        if not is_valid:
-            self._write_value_to_ssd_output("ERROR")
-            return "ERROR"
+        # is_valid = self._check_parameter_validation(lba=lba)
+        # if not is_valid:
+        #     self._write_value_to_ssd_output("ERROR")
+        #     return "ERROR"
 
         lba_int = int(lba)
         key = str(lba_int)  # JSON은 문자열 키 사용
@@ -137,6 +143,7 @@ def main():
     buffer = Buffer()
     ssd = SSD(buffer)
     command = CommandFactory.create(args)
+    print(command.make_string())
     ssd.process_cmd(command)
 
     # if args.command is None or args.lba is None:
