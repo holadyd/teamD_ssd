@@ -20,7 +20,7 @@ class SSD:
             return
         if isinstance(cmd, WriteCommand):
             if int(cmd.data) == 0:
-                CommandFactory.create("E", cmd.lba, "1")
+                cmd = CommandFactory.create("E", cmd.lba, "1")
 
         if isinstance(cmd, ReadCommand): #Fast Read판단
             read_cmd = self.buffer.fast_read(cmd.make_string())
@@ -28,7 +28,6 @@ class SSD:
                 self.execute_cmd(cmd)
         else:
             cmd_list = self.buffer.write_buffer(cmd.make_string())
-            print(cmd.make_string())
             if not cmd_list is None:
                 for each_cmd in cmd_list:
                     _, command,lba,data = each_cmd.split('_')
