@@ -5,7 +5,6 @@ from hmac import compare_digest
 import random
 from random import randrange
 
-
 class Shell:
 
     def __init__(self):
