@@ -3,12 +3,25 @@ import json
 import os
 from contextlib import contextmanager
 from typing import Literal
-
+from ssd_command import *
 
 class SSD:
-    def __init__(self):
+    def __init__(self, buffer):
         self.nand_file = "ssd_nand.txt"
         self.output_file = "ssd_output.txt"
+        self.buffer = buffer
+
+    def process_cmd(self, cmd: SSDCommand):
+        if not cmd.validate():
+            self._write_value_to_ssd_output("ERROR")
+            return
+        cmd_list = self.buffer.write_buffer(cmd)
+        if not cmd_list is None:
+            for each_cmd in cmd_list:
+                self.execute_cmd(each_cmd)
+
+    def execute_cmd(self, command):
+        pass
 
     def read(self, lba):
         is_valid = self._check_parameter_validation(lba=lba)
