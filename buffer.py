@@ -26,7 +26,7 @@ class Buffer:
     def write_buffer(self, command):
         self.read_buffer()
 
-        # update
+        self.update_buffer()
 
         buf_idx = self._find_empty()
 
