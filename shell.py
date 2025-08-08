@@ -93,20 +93,25 @@ class Shell:
         os.system(f"python ssd.py R {address}")
         result = self.read_output()["0"]
         self.logger_print(f"[Read] LBA {address} : {result}")
-
         if for_script:
             return result
-
         self.console_print(f"[Read] LBA {address} : {result}")
 
     def ssd_write(self, address, content, for_script=False):
-        self.logger_print(f'read {address}, content {content}, for_script is {for_script}')
+        self.logger_print(f'write {address}, content {content}, for_script is {for_script}')
         os.system(f"python ssd.py W {address} {str(hex(int(content, 0)))}")
         self.logger_print(f'[Write] Done - {address}, {content}')
         if for_script:
             return
-
         self.console_print("[Write] Done")
+
+    def ssd_erase(self, address, size, for_script=False):
+        self.logger_print(f'erase {address}, content {size}, for_script is {for_script}')
+        os.system(f"python ssd.py E {address} {str(hex(int(size, 0)))}")
+        self.logger_print(f'[Erase] Done - {address}, {size}')
+        if for_script:
+            return
+        self.console_print("[Erase] Done")
 
     def read_command(self, command=None):
         self.logger_print(f'wait command, preset command: {command}')

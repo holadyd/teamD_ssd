@@ -288,3 +288,20 @@ def test_runner_mode(capsys):
                 '1_FullWriteAndReadCompare\t___\tRun...Pass\n')
     captured = capsys.readouterr()
     assert captured.out == expected
+
+def test_erase(capsys):
+    shell = Shell()
+    shell.read_command("write 3 0x3")
+    if shell.valid_check():
+        shell.run_command()
+    shell.read_command("erase 3 1")
+    if shell.valid_check():
+        shell.run_command()
+    shell.read_command("read 3")
+    if shell.valid_check():
+        shell.run_command()
+
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "[Erase] Done\n[Write] Done\n[Read] LBA 3 : 0x00000000\n"
