@@ -3,9 +3,10 @@ import os
 import subprocess
 from pathlib import Path
 import pytest
-from ssd import SSD
+from ssd.ssd import SSD
 from pytest_mock import MockFixture, MockerFixture
 
+from settings import ROOT_DIR
 
 # ssd_u1
 def test_console_not_print(capsys):
@@ -43,14 +44,14 @@ def test_read_not_1_args(args):
 def test_output_file_exist():
     ssd = SSD()
 
-    assert os.path.exists('ssd_output.txt'), 'ssd_output.txt 파일이 존재하지 않습니다.'
+    assert os.path.exists(f'{ROOT_DIR}\\ssd_output.txt'), 'ssd_output.txt 파일이 존재하지 않습니다.'
 
 
 # ssd_u15
 def test_nand_file_exit():
     ssd = SSD()
 
-    assert os.path.exists('ssd_nand.txt'), 'ssd_nand.txt 파일이 존재하지 않습니다.'
+    assert os.path.exists(f'{ROOT_DIR}\\ssd_nand.txt'), 'ssd_nand.txt 파일이 존재하지 않습니다.'
 
 
 @pytest.mark.skip
@@ -114,12 +115,12 @@ def test_read_value_store_only_one_data():
     ## act
     ssd.read(0)
 
-    with open("ssd_output.txt", "r") as f:
+    with open(f"{ROOT_DIR}\\ssd_output.txt", "r") as f:
         data1 = json.load(f)
 
     ssd.read(99)
 
-    with open("ssd_output.txt", "r") as f:
+    with open(f"{ROOT_DIR}\\ssd_output.txt", "r") as f:
         data2 = json.load(f)
 
     ## assert: 각각의 결과는 {"0": value} 형식으로, 1개의 데이터만 있어야 함
@@ -254,7 +255,7 @@ def test_write_3nd_arg_is_invalid(args):
     ssd = SSD()
     assert op == 'W'
     ssd.write(lba, value)
-    with open("ssd_output.txt", "r") as f:
+    with open(f"{ROOT_DIR}\\ssd_output.txt", "r") as f:
         data2 = json.load(f)
 
     # assert
@@ -326,14 +327,14 @@ def test_write_create_ssd_nand_file(mocker: MockFixture):
     ssd = SSD()
     lba, value = 99, '0xFFFFFFFF'
     ssd.write(lba, value)
-    mock_open.assert_any_call('ssd_nand.txt', 'w')
+    mock_open.assert_any_call(f'{ROOT_DIR}\\ssd_nand.txt', 'w')
 
 
 # ssd_u20
 @pytest.mark.skip
 def test_init_ssd_nand_file():
     # arrange
-    nand_path = Path("ssd_nand.txt")
+    nand_path = Path(f"{ROOT_DIR}\\ssd_nand.txt")
 
     # act
     ssd = SSD()
@@ -358,7 +359,7 @@ def test_init_ssd_nand_file():
 @pytest.mark.skip
 def test_init_ssd_output_file():
     # arrange
-    nand_path = Path("ssd_output.txt")
+    nand_path = Path(f"{ROOT_DIR}\\ssd_output.txt")
 
     # act
     ssd = SSD()
@@ -386,7 +387,7 @@ def test_read_store_ERROR_when_invalid_LBA():
     ## act
     ssd.read(101)
 
-    with open("ssd_output.txt", "r") as f:
+    with open(f"{ROOT_DIR}\\ssd_output.txt", "r") as f:
         data2 = json.load(f)
 
     # assert
@@ -508,7 +509,7 @@ def test_ssd_write_value_conversion(mocker: MockFixture, lba: int, value: str, e
 # ssd_u26
 def test_read_with_extra_argument_should_write_error():
     # 결과 파일이 존재하는지 확인
-    assert os.path.exists("ssd_output.txt"), "ssd_output.txt가 존재하지 않음"
+    assert os.path.exists(f"{ROOT_DIR}\\ssd_output.txt"), "ssd_output.txt가 존재하지 않음"
 
     # 실행: value 인자를 잘못 포함한 R 명령 실행
     result = subprocess.run(
@@ -518,7 +519,7 @@ def test_read_with_extra_argument_should_write_error():
     )
 
     # 결과 파일 내용 확인
-    with open("ssd_output.txt", "r") as f:
+    with open(f"{ROOT_DIR}\\ssd_output.txt", "r") as f:
         data = json.load(f)
 
     # value가 반드시 "ERROR"여야 함

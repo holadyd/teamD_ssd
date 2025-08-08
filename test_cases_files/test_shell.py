@@ -1,15 +1,12 @@
-import os
 from unittest.mock import patch
 
 import pytest
 
-from logger import Logger
 from shell import Shell
 import sys
 from io import StringIO
 import re
-import time
-from buffer import Buffer
+from ssd_buffer.buffer import Buffer
 
 
 def input_command(shell, command):

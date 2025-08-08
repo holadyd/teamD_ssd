@@ -2,11 +2,12 @@ import argparse
 import json
 from enum import Enum
 import os
-from hmac import compare_digest
 import random
-from logger import Logger
+from logger.logger import Logger
 import sys
 from script import Script
+
+from settings import ROOT_DIR
 
 
 class Shell:
@@ -32,7 +33,7 @@ class Shell:
 
     def read_output(self):
         self.logger_print(f"function executed")
-        with open("ssd_output.txt", "r", encoding="utf-8") as f:
+        with open(f"{ROOT_DIR}\\ssd_output.txt", "r", encoding="utf-8") as f:
             data = json.load(f)
 
         self.logger_print(data)
@@ -100,7 +101,7 @@ class Shell:
 
     def ssd_read(self, address, for_script=False):
         self.logger_print(f'read {address}, for_script is {for_script}')
-        os.system(f"python ssd.py R {address}")
+        os.system(f"cd {ROOT_DIR} && python -m ssd.ssd R {address}")
         result = self.read_output()["0"]
         self.logger_print(f"[Read] LBA {address} : {result}")
         if for_script:
@@ -109,7 +110,7 @@ class Shell:
 
     def ssd_write(self, address, content, for_script=False):
         self.logger_print(f'write {address}, content {content}, for_script is {for_script}')
-        os.system(f"python ssd.py W {address} {str(hex(int(content, 0)))}")
+        os.system(f"cd {ROOT_DIR} && python -m ssd.ssd W {address} {str(hex(int(content, 0)))}")
         self.logger_print(f'[Write] Done - {address}, {content}')
         if for_script:
             return
@@ -117,7 +118,7 @@ class Shell:
 
     def ssd_erase(self, address, size, for_script=False):
         self.logger_print(f'erase {address}, content {size}, for_script is {for_script}')
-        os.system(f"python ssd.py E {address} {size}")
+        os.system(f"cd {ROOT_DIR} && python -m ssd.ssd E {address} {size}")
         self.logger_print(f'[Erase] Done - {address}, {size}')
         if for_script:
             return
@@ -177,7 +178,7 @@ class Shell:
 
     def print_help(self):
         self.logger_print(f'print help docs')
-        with open("help_docs.txt", "r", encoding="utf-8") as f:
+        with open(f"{ROOT_DIR}\\help_docs.txt", "r", encoding="utf-8") as f:
             docs = f.readlines()
         self.console_print("".join(docs))
 
@@ -316,7 +317,7 @@ class Shell:
 
     def script_parser(self, script_txt):
         try:
-            with open(script_txt, 'r') as file:
+            with open(f"{ROOT_DIR}\\{script_txt}", 'r') as file:
                 command_list = file.readlines()
         except:
             print("Exception")
