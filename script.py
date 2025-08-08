@@ -53,9 +53,9 @@ class Script:
     def script_4(self):
         self.shell._is_test_pass = True
         self.shell.logger_print(f'script4 executed')
-        self.shell.ssd_erase("0", for_script=True)
-        self.shell.ssd_erase("1", for_script=True)
-        self.shell.ssd_erase("2", for_script=True)
+        self.shell.ssd_erase("0", "1", for_script=True)
+        self.shell.ssd_erase("1", "1", for_script=True)
+        self.shell.ssd_erase("2", "1", for_script=True)
 
         for _ in range(30):
             for i in range(48):
@@ -69,9 +69,9 @@ class Script:
                 self.shell.ssd_write(f'{2*i+2}', value1, for_script=True)
                 self.shell.ssd_write(f'{2*i+2}', value2, for_script=True)
 
-                self.shell.ssd_erase(f'{2*i+2}', for_script=True)
-                self.shell.ssd_erase(f'{2*i+3}', for_script=True)
-                self.shell.ssd_erase(f'{2*i+4}', for_script=True)
+                self.shell.ssd_erase(f'{2*i+2}', "1", for_script=True)
+                self.shell.ssd_erase(f'{2*i+3}', "1", for_script=True)
+                self.shell.ssd_erase(f'{2*i+4}', "1", for_script=True)
 
                 self.shell.read_compare(compare_list)
             break
