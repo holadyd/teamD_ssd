@@ -64,7 +64,7 @@ class Buffer:
         self._erase_files()
         os.makedirs(self._dir_path, exist_ok=True)
         for cmd_idx in range(len(merged_commands)):
-            with open(os.path.join(self._dir_path, f"{cmd_idx + 1}_{merged_commands[cmd_idx].replace(" ", "_")}"), "w",
+            with open(os.path.join(self._dir_path, f'{cmd_idx + 1}_{merged_commands[cmd_idx].replace(" ", "_")}'), "w",
                       encoding="utf-8") as f:
                 pass
         files = len(os.listdir(self._dir_path))
