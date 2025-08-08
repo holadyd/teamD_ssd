@@ -133,6 +133,10 @@ class Shell:
 
     def erase(self, lba, size):
         self.logger_print(f'Shell Erase {lba}, {size}')
+
+        lba = int(lba, 0)
+        size = int(size, 0)
+
         # lba + size 값 boundary 체크
         if size == 0:
             return
@@ -162,8 +166,6 @@ class Shell:
 
     def erase_range(self, addr_1, addr_2):
         self.logger_print(f'Shell Erase range {addr_1}, {addr_2}')
-        addr_1 = int(addr_1, 0)
-        addr_2 = int(addr_2, 0)
         start_lba = min(addr_1, addr_2)
         # right_boundary = max(addr_1, addr_2)
         size = abs(addr_1 - addr_2) + 1
