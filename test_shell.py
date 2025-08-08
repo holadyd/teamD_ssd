@@ -337,6 +337,7 @@ def test_runner_mode(capsys):
     captured = capsys.readouterr()
     assert captured.out == expected
 
+
 def test_erase(capsys):
     buf = Buffer()
     buf._reset_buffer()
@@ -351,6 +352,24 @@ def test_erase(capsys):
     if shell.valid_check():
         shell.run_command()
 
+    captured = capsys.readouterr()
+
+    assert captured.out == "[Write] Done\n[Erase] Done\n[Read] LBA 3 : 0x00000000\n"
+
+
+def test_erase_range(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
+    shell = Shell()
+    shell.read_command("write 3 0x3")
+    if shell.valid_check():
+        shell.run_command()
+    shell.read_command("erase_range 3 5")
+    if shell.valid_check():
+        shell.run_command()
+    shell.read_command("read 3")
+    if shell.valid_check():
+        shell.run_command()
 
     captured = capsys.readouterr()
 

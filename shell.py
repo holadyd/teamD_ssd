@@ -173,7 +173,7 @@ class Shell:
         start_lba = min(addr_1, addr_2)
         # right_boundary = max(addr_1, addr_2)
         size = abs(addr_1 - addr_2) + 1
-        self.erase(start_lba, size)
+        self.erase(f'{start_lba}', f'{size}')
 
     def print_help(self):
         self.logger_print(f'print help docs')
