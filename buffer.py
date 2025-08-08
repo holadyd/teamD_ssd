@@ -15,7 +15,7 @@ class Buffer:
 
     def _make_empty_file(self):
         os.makedirs(self._dir_path, exist_ok=True)
-        for i in range(1,6):
+        for i in range(1, 6):
             with open(os.path.join(self._dir_path, f"{i}_empty"), "w", encoding="utf-8") as f:
                 pass
 
@@ -35,8 +35,6 @@ class Buffer:
             flush = self.flush_buffer()
             buf_idx = 0
 
-
-
         command = command.replace(" ", "_")
         self._buffer[buf_idx] = f"{buf_idx + 1}_{command}"
 
@@ -45,7 +43,6 @@ class Buffer:
         for file_name in self._buffer:
             with open(os.path.join(self._dir_path, file_name), "w", encoding="utf-8") as f:
                 pass
-
 
         return flush
 
@@ -135,7 +132,7 @@ class Buffer:
         self._erase_files()
         self._make_empty_file()
         self._buffer = []
-        for idx in range(1,6):
+        for idx in range(1, 6):
             self._buffer.append(f"{idx}_empty")
 
     def _erase_files(self):
@@ -165,4 +162,3 @@ class Buffer:
             return buf_dict[lba]
         except:
             return None
-
