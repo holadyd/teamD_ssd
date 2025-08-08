@@ -23,7 +23,7 @@ class Buffer:
         self._buffer = os.listdir(self._dir_path)
         self._buffer.sort()
 
-    def write_buffer(self, command):
+    def write_buffer(self, command) -> list[str]:
         self.read_buffer()
 
         self.update_buffer()
@@ -112,7 +112,7 @@ class Buffer:
                         buf_list[cur_lba] = "0x00000000"
                         cur_lba += 1 if range_siz > 0 else -1
 
-    def flush_buffer(self):
+    def flush_buffer(self) -> list[str]:
         self.read_buffer()
         buffer = self._buffer
         self._reset_buffer()
