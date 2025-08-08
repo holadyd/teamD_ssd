@@ -4,7 +4,8 @@ from contextlib import contextmanager
 from typing import Literal
 
 from ssd_buffer.buffer import Buffer
-from ssd_command import *
+from ssd.ssd_command import *
+import os
 
 
 class SSD:
@@ -12,6 +13,28 @@ class SSD:
         self.nand_file = "../ssd_nand.txt"
         self.output_file = "../ssd_output.txt"
         self.buffer: Buffer = buffer
+        self._initiate_nand_output_file()
+
+    def _initiate_nand_output_file(self):
+        self.initial_data = "0x00000000"
+        # init ssd_nand.txt file
+        if not os.path.exists(self.nand_file):
+            initial_data_dict = {}
+
+            for i in range(100):
+                key = str(i)  # json key는 string
+                # 모든 lba value를 "0x00000000"로 초기화
+                initial_data_dict[key] = self.initial_data  # 딕셔너리에 추가
+
+            with open(self.nand_file, "w") as f:  # file에 작성
+                json.dump(initial_data_dict, f, indent=2)
+        # init ssd_output.txt file
+        if not os.path.exists(self.output_file):
+            initial_data_dict = {}
+            initial_data_dict["0"] = self.initial_data  # 딕셔너리에 추가
+
+            with open(self.output_file, "w") as f:  # file에 작성
+                json.dump(initial_data_dict, f, indent=2)
 
     def process_cmd(self, cmd: SSDCommand):
         if not cmd.validate():
