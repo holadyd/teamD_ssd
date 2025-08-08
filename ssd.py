@@ -46,6 +46,7 @@ class SSD:
         cmd.lba = cmd.convert_number_to_decimal(cmd.lba)
         if int(cmd.value, 0) == 0:
             cmd = CommandFactory.create("E", cmd.lba, "1")
+            cmd.validate()
             return cmd
         cmd_list = self.buffer.write_buffer(cmd.make_string())
         self.excute_flushed_command_list(cmd_list)
@@ -67,6 +68,7 @@ class SSD:
                     continue
                 _, *args = each_cmd.split('_')
                 flushed_cmd = CommandFactory.create(args)
+                flushed_cmd.validate()
                 self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
