@@ -119,9 +119,9 @@ class Buffer:
         self._reset_buffer()
         return buffer
 
-    def __del__(self):
-        if os.path.exists(self._dir_path):
-            shutil.rmtree(self._dir_path)
+    # def __del__(self):
+    #     if os.path.exists(self._dir_path):
+    #         shutil.rmtree(self._dir_path)
 
     def _find_empty(self):
         for idx in range(len(self._buffer)):
