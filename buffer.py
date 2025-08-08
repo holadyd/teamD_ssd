@@ -6,6 +6,7 @@ class Buffer:
 
     def __init__(self):
         self._dir_path = "buffer"
+        self._initial_data = "0x00000000"
         self._buffer = []
         os.makedirs(self._dir_path, exist_ok=True)
 
@@ -15,7 +16,7 @@ class Buffer:
 
     def _make_empty_file(self):
         os.makedirs(self._dir_path, exist_ok=True)
-        for i in range(1,6):
+        for i in range(1, 6):
             with open(os.path.join(self._dir_path, f"{i}_empty"), "w", encoding="utf-8") as f:
                 pass
 
@@ -23,10 +24,10 @@ class Buffer:
         self._buffer = os.listdir(self._dir_path)
         self._buffer.sort()
 
-    def write_buffer(self, command):
+    def write_buffer(self, command) -> list[str]:
         self.read_buffer()
 
-        # update
+        self.update_buffer()
 
         buf_idx = self._find_empty()
 
@@ -34,8 +35,6 @@ class Buffer:
         if buf_idx == 5:
             flush = self.flush_buffer()
             buf_idx = 0
-
-
 
         command = command.replace(" ", "_")
         self._buffer[buf_idx] = f"{buf_idx + 1}_{command}"
@@ -46,12 +45,60 @@ class Buffer:
             with open(os.path.join(self._dir_path, file_name), "w", encoding="utf-8") as f:
                 pass
 
-
         return flush
 
     def update_buffer(self):
         self.read_buffer()
         buf_list = [None] * 100
+        self.update_buf_list(buf_list)
+
+        merged_commands = []
+        self.merge_commands(buf_list, merged_commands)
+        merged_commands.sort()
+
+        self.update_buffer_memory(merged_commands)
+
+    def update_buffer_memory(self, merged_commands):
+        self._erase_files()
+        os.makedirs(self._dir_path, exist_ok=True)
+        for cmd_idx in range(len(merged_commands)):
+            with open(os.path.join(self._dir_path, f'{cmd_idx + 1}_{merged_commands[cmd_idx].replace(" ", "_")}'), "w",
+                      encoding="utf-8") as f:
+                pass
+        files = len(os.listdir(self._dir_path))
+        while files != 5:
+            files += 1
+            with open(os.path.join(self._dir_path, f"{files}_empty"), "w", encoding="utf-8") as f:
+                pass
+
+    def merge_commands(self, buf_list, merged_commands):
+        same_next = -1
+        for i in range(100):
+            if buf_list[i] == None:
+                if same_next == -1:
+                    continue
+                else:
+                    merged_commands.append(f"E {i - same_next} {same_next}")
+                    same_next = -1
+            elif buf_list[i] != self._initial_data:
+                if same_next == 10:
+                    merged_commands.append(f"E {i - same_next} {same_next}")
+                    same_next = -1
+                elif 0 < same_next < 10:
+                    same_next += 1
+                elif same_next != -1:
+                    same_next += 1
+                merged_commands.append(f"W {i} {buf_list[i]}")
+            elif buf_list[i] == self._initial_data:
+                if same_next == -1:
+                    same_next = 1
+                elif same_next < 10:
+                    same_next += 1
+                elif same_next == 10:
+                    merged_commands.append(f"E {i - same_next} {same_next}")
+                    same_next = 1
+
+    def update_buf_list(self, buf_list):
         for buf in self._buffer:
             if "empty" not in buf:
                 cmd = buf.split("_")
@@ -63,55 +110,10 @@ class Buffer:
                     cur_lba = int(cmd[2])
                     range_siz = int(cmd[3])
                     for idx in range(abs(int(range_siz))):
-                        buf_list[cur_lba] = "0x00000000"
+                        buf_list[cur_lba] = self._initial_data
                         cur_lba += 1 if range_siz > 0 else -1
 
-        # print(buf_list)
-
-        tmp = -1
-        cmds = []
-        for i in range(100):
-            if buf_list[i] == None :
-                if tmp == -1:
-                    continue
-                else:
-                    cmds.append(f"E {i - tmp} {tmp}")
-                    tmp = -1
-            elif buf_list[i] != "0x00000000":
-                if tmp == 10:
-                    cmds.append(f"E {i - tmp} {tmp}")
-                    tmp = -1
-                elif 0<tmp<10:
-                    tmp += 1
-                elif tmp != -1:
-                    tmp += 1
-                cmds.append(f"W {i} {buf_list[i]}")
-            elif buf_list[i] == "0x00000000":
-                if tmp == -1:
-                    tmp = 1
-                elif tmp < 10:
-                    tmp += 1
-                elif tmp == 10:
-                    cmds.append(f"E {i - tmp} {tmp}")
-                    tmp = 1
-        cmds.sort()
-        # print(cmds)
-
-        self._erase_files()
-        os.makedirs(self._dir_path, exist_ok=True)
-        for cmd_idx in range(len(cmds)):
-            with open(os.path.join(self._dir_path, f"{cmd_idx + 1}_{cmds[cmd_idx].replace(" ","_")}"), "w", encoding="utf-8") as f:
-                pass
-
-        files = len(os.listdir(self._dir_path))
-
-        while files != 5:
-            files += 1
-            with open(os.path.join(self._dir_path, f"{files}_empty"), "w", encoding="utf-8") as f:
-                pass
-
-
-    def flush_buffer(self):
+    def flush_buffer(self) -> list[str]:
         self.read_buffer()
         buffer = self._buffer
         self._reset_buffer()
@@ -131,14 +133,14 @@ class Buffer:
         self._erase_files()
         self._make_empty_file()
         self._buffer = []
-        for idx in range(1,6):
+        for idx in range(1, 6):
             self._buffer.append(f"{idx}_empty")
 
     def _erase_files(self):
         if os.path.exists(self._dir_path):
             shutil.rmtree(self._dir_path)
 
-    def fast_read(self, lba):
+    def fast_read(self, lba) -> list[str] | None:
         self.read_buffer()
 
         buf_dict = dict()
@@ -154,11 +156,10 @@ class Buffer:
                     cur_lba = int(cmd[2])
                     range_siz = int(cmd[3])
                     for idx in range(abs(int(range_siz))):
-                        buf_dict[str(cur_lba)] = "0x00000000"
+                        buf_dict[str(cur_lba)] = self._initial_data
                         cur_lba += 1 if range_siz > 0 else -1
 
         try:
             return buf_dict[lba]
         except:
             return None
-
