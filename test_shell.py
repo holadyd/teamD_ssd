@@ -9,6 +9,7 @@ import sys
 from io import StringIO
 import re
 import time
+from buffer import Buffer
 
 
 def input_command(shell, command):
@@ -18,6 +19,8 @@ def input_command(shell, command):
 
 
 def test_shell_exit(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     sys.stdin = StringIO("exit\n")
 
     shell = Shell()
@@ -29,6 +32,8 @@ def test_shell_exit(capsys):
 
 
 def test_run_command_write():
+    buf = Buffer()
+    buf._reset_buffer()
     with patch.object(Shell, 'run_command', return_value="[Write] Done") as mock_method:
         shell = Shell()
         result = shell.run_command("write 3 0x1289CDEF")
@@ -39,6 +44,8 @@ def test_run_command_write():
 
 
 def test_run_command_read():
+    buf = Buffer()
+    buf._reset_buffer()
     with patch.object(Shell, 'run_command', return_value="[Read] LBA : 0x00000000") as mock_method:
         shell = Shell()
         result = shell.run_command("read 30")
@@ -49,6 +56,8 @@ def test_run_command_read():
 
 
 def test_shell_help(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("help")
     shell.run_command()
@@ -74,6 +83,8 @@ def test_shell_help(capsys):
 
 @pytest.mark.skip
 def test_shell_fullwrite(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("fullwrite 0xAAAABBBB")
     shell.run_command()
@@ -84,6 +95,8 @@ def test_shell_fullwrite(capsys):
 
 @pytest.mark.skip
 def test_shell_fullread(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("fullread")
     shell.run_command()
@@ -96,6 +109,8 @@ def test_shell_fullread(capsys):
 
 
 def test_shell_input_validation_format_write_fail(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("write abc abc\n")
     if shell.valid_check():
@@ -105,6 +120,8 @@ def test_shell_input_validation_format_write_fail(capsys):
 
 
 def test_shell_input_validation_format_read_fail(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("read gbc\n")
     if shell.valid_check():
@@ -115,6 +132,8 @@ def test_shell_input_validation_format_read_fail(capsys):
 
 
 def test_shell_input_validation_format_fullwrite_fail(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("fullwrite abc\n")
     if shell.valid_check():
@@ -125,6 +144,8 @@ def test_shell_input_validation_format_fullwrite_fail(capsys):
 
 
 def test_shell_input_validation_lba_range_fail(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("read 300")
     if shell.valid_check():
@@ -136,6 +157,8 @@ def test_shell_input_validation_lba_range_fail(capsys):
 
 
 def test_shell_input_validation_data_range_fail(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("write 99 0x123456789")
     if shell.valid_check():
@@ -147,6 +170,8 @@ def test_shell_input_validation_data_range_fail(capsys):
 
 
 def test_shell_input_validation_invalid_command(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("reee 30")
     if shell.valid_check():
@@ -159,6 +184,8 @@ def test_shell_input_validation_invalid_command(capsys):
 
 @pytest.mark.skip
 def test_script_2_write_read_aging(capsys, mocker):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_compare = mocker.Mock()
     shell.read_compare.side_effect = func
@@ -176,6 +203,8 @@ def func(list):
 
 
 def test_read_compare_pass(mocker, capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
 
     mocker.patch.object(shell, 'ssd_read', side_effect=[100, 200])
@@ -188,6 +217,8 @@ def test_read_compare_pass(mocker, capsys):
 
 
 def test_read_compare_fail(mocker, capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
 
     mocker.patch.object(shell, 'ssd_read', side_effect=[101, 201])
@@ -201,6 +232,8 @@ def test_read_compare_fail(mocker, capsys):
 
 @pytest.mark.skip
 def test_script_1_fullwrite_read_compare(capsys, mocker):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_compare = mocker.Mock()
     shell.read_compare.side_effect = func
@@ -220,6 +253,8 @@ def test_script_1_fullwrite_read_compare(capsys, mocker):
 
 @pytest.mark.skip
 def test_script_3_write_read_aging(capsys, mocker):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_compare = mocker.Mock()
     shell.read_compare.side_effect = func
@@ -233,6 +268,8 @@ def test_script_3_write_read_aging(capsys, mocker):
 
 
 def test_write_decimal_test(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("write 3 3")
     if shell.valid_check():
@@ -247,6 +284,8 @@ def test_write_decimal_test(capsys):
 
 
 def test_write_hex_test(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("write 3 0x3")
     if shell.valid_check():
@@ -261,6 +300,8 @@ def test_write_hex_test(capsys):
 
 
 def test_ssd_read_write_in_shell_1():
+    buf = Buffer()
+    buf._reset_buffer()
     sh = Shell()
     sh.ssd_write("30", "0xAAAAAAAA")
     ret = sh.ssd_read("30", for_script=True)
@@ -269,6 +310,8 @@ def test_ssd_read_write_in_shell_1():
 
 
 def test_ssd_read_write_in_shell_2():
+    buf = Buffer()
+    buf._reset_buffer()
     sh = Shell()
     value = "0x12345678"
     sh.ssd_write("30", value)
@@ -278,6 +321,8 @@ def test_ssd_read_write_in_shell_2():
 
 
 def test_runner_mode(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     # os.system(f"shell shell_scripts.txt")
     sh = Shell()
     sh._is_runner_mode = True
@@ -290,6 +335,8 @@ def test_runner_mode(capsys):
     assert captured.out == expected
 
 def test_erase(capsys):
+    buf = Buffer()
+    buf._reset_buffer()
     shell = Shell()
     shell.read_command("write 3 0x3")
     if shell.valid_check():
@@ -304,4 +351,4 @@ def test_erase(capsys):
 
     captured = capsys.readouterr()
 
-    assert captured.out == "[Erase] Done\n[Write] Done\n[Read] LBA 3 : 0x00000000\n"
+    assert captured.out == "[Write] Done\n[Erase] Done\n[Read] LBA 3 : 0x00000000\n"

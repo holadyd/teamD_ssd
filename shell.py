@@ -293,6 +293,7 @@ class Shell:
             self.console_print("[Error] INVALID_DATA")
 
     def read_compare(self, compare_list):
+        self.logger_print(f'command_args: {compare_list}')
         for (address, value) in compare_list:
             ret = self.ssd_read(address, for_script=True)
             if ret != value:
