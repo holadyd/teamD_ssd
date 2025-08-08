@@ -1,13 +1,8 @@
-from unittest.mock import patch
-
-import pytest
-
-from logger import Logger
+from logger.logger import Logger
 from shell import Shell
-import sys
-from io import StringIO
-import re
 import time
+
+from settings import ROOT_DIR
 
 def input_command(shell, command):
     shell.read_command(command)
@@ -17,7 +12,7 @@ def input_command(shell, command):
 def test_log_print(mocker):
     shell = Shell()
     test_log = f'{time.time()}.log'
-    shell.logger = Logger(log_dir='test_logs', log_file= f'{test_log}',max_bytes=100*1024)
+    shell.logger = Logger(log_dir=f'{ROOT_DIR}\\test_logs', log_file=f'{test_log}', max_bytes=100 * 1024)
     shell.logger._get_timestamp = mocker.Mock()
     shell.logger._get_timestamp.return_value = '2025-08-07 11:53:47'
 
@@ -26,9 +21,9 @@ def test_log_print(mocker):
     input_command(shell, "help")
     input_command(shell, "exit")
 
-    with open(f'./test_logs/expected.log', 'r') as file:
+    with open(f'{ROOT_DIR}\\test_logs\\expected.log', 'r') as file:
         expected = file.readlines()
-    with open(f'./test_logs/{test_log}', 'r') as file:
+    with open(f'{ROOT_DIR}\\test_logs\\{test_log}', 'r') as file:
         test_result = file.readlines()
 
     assert test_result == expected

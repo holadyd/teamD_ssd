@@ -2,11 +2,12 @@ import os
 import time
 from datetime import datetime
 
+from settings import ROOT_DIR
 
 class Logger:
-    def __init__(self, log_dir='logs', log_file='latest.log', max_bytes=10 * 1024):
+    def __init__(self, log_dir=f'{ROOT_DIR}\\logs', log_file='latest.log', max_bytes=10 * 1024):
         self.log_dir = log_dir
-        self.log_file = self.log_dir + "/" + log_file
+        self.log_file = self.log_dir + "\\" + log_file
         self.max_bytes = max_bytes
         os.makedirs(self.log_dir, exist_ok=True)
 

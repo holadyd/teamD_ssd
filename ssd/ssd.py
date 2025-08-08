@@ -4,14 +4,15 @@ import os
 from contextlib import contextmanager
 from typing import Literal
 
-from buffer import Buffer
-from ssd_command import *
+from ssd_buffer.buffer import Buffer
+from ssd.ssd_command import *
 
+from settings import ROOT_DIR
 
 class SSD:
     def __init__(self, buffer: Buffer = None):
-        self.nand_file = "ssd_nand.txt"
-        self.output_file = "ssd_output.txt"
+        self.nand_file = f"{ROOT_DIR}\\ssd_nand.txt"
+        self.output_file = f"{ROOT_DIR}\\ssd_output.txt"
         self.buffer: Buffer = buffer
         self._initiate_nand_output()
 
