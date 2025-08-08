@@ -93,7 +93,7 @@ def test_update_buffer_6(buf):
 
 # buffer 생성시  buffer 폴더가 없다면 buffer 폴더 생성 + 파일 초기화 ( {index}_empty )
 def test_init_buffer_dir_and_files(buf):
-    buf_dir = f"{ROOT_DIR}/buffer"
+    buf_dir = f"{ROOT_DIR}\\buffer"
 
     assert os.path.exists(buf_dir) and os.path.isdir(buf_dir)
 
@@ -104,7 +104,7 @@ def test_init_buffer_dir_and_files(buf):
 
 # buffer file의 내용은 아무 것도 없어야 함
 def test_buffer_file_should_be_empty(buf):
-    buf_dir = f"{ROOT_DIR}/buffer"
+    buf_dir = f"{ROOT_DIR}\\buffer"
 
     for i in range(1, 6):
         file_path = os.path.join(buf_dir, f"{i}_empty")
@@ -115,7 +115,7 @@ def test_buffer_file_should_be_empty(buf):
 # buffer write 후에도 buffer file의 내용은 아무 것도 없어야 함
 def test_buffer_file_should_be_empty_after_buffer_write(buf):
     buf._reset_buffer()
-    buf_dir = f"{ROOT_DIR}/buffer"
+    buf_dir = f"{ROOT_DIR}\\buffer"
 
     buf.write_buffer("W 31 0xAAAAAAAA")
     buf.write_buffer("W 32 0xBBBBBBBB")
@@ -130,8 +130,8 @@ def test_buffer_file_should_be_empty_after_buffer_write(buf):
 
 
 # buffer write + update 후에도 buffer file의 내용은 아무 것도 없어야 함
-def test_buffer_file_should_be_empty_after_buffer_writfef2(buf):
-    buf_dir = f"{ROOT_DIR}/buffer"
+def test_buffer_file_should_be_empty_after_buffer_write2(buf):
+    buf_dir = f"{ROOT_DIR}\\buffer"
 
     buf.write_buffer("W 31 0xAAAAAAAA")
     buf.write_buffer("W 32 0xBBBBBBBB")
