@@ -34,3 +34,4 @@
 [2025-08-07 11:53:47] Shell._is_invalid_para_length() : command_args: ['exit']
 [2025-08-07 11:53:47] Shell.run_command()            : run command with exit
 [2025-08-07 11:53:47] Shell.run_command()            : shell exited with exit command
+[2025-08-07 11:53:47] Shell.run_command()            : shell exited with exit command

@@ -5,3 +5,5 @@ buffer
 logs
 ssd_output.txt
 ssd_nand.txt
+test_logs/*.log
+!test_logs/expected.log
