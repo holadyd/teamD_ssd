@@ -5,7 +5,12 @@ class Script:
     def __init__(self, shell):
         self.shell = shell
 
+    def input_dummy_command(self):
+        for i in range(5):
+            self.shell.erase(f'{i*10}', '10')
+
     def script_1(self):
+        self.input_dummy_command()
         self.shell._is_test_pass = True
         self.shell.logger_print(f'script1 executed')
         unique_values = self.shell.generate_unique_random(100)
@@ -19,6 +24,7 @@ class Script:
             self.shell.read_compare(compare_list)
 
     def script_2(self):
+        self.input_dummy_command()
         self.shell._is_test_pass = True
         self.shell.logger_print(f'script2 executed')
         compare_list = [
@@ -37,6 +43,7 @@ class Script:
             self.shell.read_compare(compare_list)
 
     def script_3(self):
+        self.input_dummy_command()
         self.shell._is_test_pass = True
         self.shell.logger_print(f'script3 executed')
         for _ in range(200):
@@ -51,6 +58,7 @@ class Script:
             self.shell.read_compare(compare_list)
 
     def script_4(self):
+        self.input_dummy_command()
         self.shell._is_test_pass = True
         self.shell.logger_print(f'script4 executed')
         self.shell.ssd_erase("0", "1", for_script=True)
