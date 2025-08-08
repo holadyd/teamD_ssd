@@ -3,3 +3,5 @@
 *.pyc
 buffer
 logs
+ssd_output.txt
+ssd_nand.txt
