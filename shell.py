@@ -4,7 +4,7 @@ from enum import Enum
 import os
 from hmac import compare_digest
 import random
-from logger import Logger
+from logger.logger import Logger
 import sys
 from script import Script
 
