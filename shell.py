@@ -10,12 +10,12 @@ from script import Script
 
 
 class Shell:
-
     def __init__(self):
         self.command = None
         self.ret = True
         self.arg_none_param = ["help", "exit", "fullread", '1_', '1_FullWriteAndReadCompare',
-                               '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging']
+                               '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging',
+                               '4_', '4_EraseAndWriteAging']
         self.arg_addr = ["read"]
         self.arg_data = ["fullwrite"]
         self.arg_addr_data = ["write"]
@@ -85,6 +85,16 @@ class Shell:
             self.run_script_2()
         elif commands[0] in ['3_', '3_WriteReadAging']:
             self.run_script_3()
+        elif commands[0] in ['4_', '4_EraseAndWriteAging']:
+            self.run_script_4()
+        elif commands[0] == "erase":
+            address = commands[1]
+            size = commands[2]
+            self.erase(address, size)
+        elif commands[0] == "erase_range":
+            address_1 = commands[1]
+            address_2 = commands[2]
+            self.erase_range(address_1, address_2)
 
         return True
 
@@ -93,20 +103,25 @@ class Shell:
         os.system(f"python ssd.py R {address}")
         result = self.read_output()["0"]
         self.logger_print(f"[Read] LBA {address} : {result}")
-
         if for_script:
             return result
-
         self.console_print(f"[Read] LBA {address} : {result}")
 
     def ssd_write(self, address, content, for_script=False):
-        self.logger_print(f'read {address}, content {content}, for_script is {for_script}')
+        self.logger_print(f'write {address}, content {content}, for_script is {for_script}')
         os.system(f"python ssd.py W {address} {str(hex(int(content, 0)))}")
         self.logger_print(f'[Write] Done - {address}, {content}')
         if for_script:
             return
-
         self.console_print("[Write] Done")
+
+    def ssd_erase(self, address, size, for_script=False):
+        self.logger_print(f'erase {address}, content {size}, for_script is {for_script}')
+        os.system(f"python ssd.py E {address} {str(int(size, 0))}")
+        self.logger_print(f'[Erase] Done - {address}, {size}')
+        if for_script:
+            return
+        self.console_print("[Erase] Done")
 
     def read_command(self, command=None):
         self.logger_print(f'wait command, preset command: {command}')
@@ -115,6 +130,42 @@ class Shell:
         else:
             self.command = command
         self.logger_print(f'input command: {self.command}')
+
+    def erase(self, lba, size):
+        self.logger_print(f'Shell Erase {lba}, {size}')
+        # lba + size 값 boundary 체크
+        if size == 0:
+            return
+        elif size > 0:
+            left_boundary = min(lba, lba + size)
+            right_boundary = max(lba, lba + size) - 1
+        else:
+            left_boundary = min(lba, lba + size) + 1
+            right_boundary = max(lba, lba + size)
+
+        left_boundary = max(left_boundary, 0)
+        right_boundary = min(right_boundary, 99)
+
+        total_size = right_boundary - left_boundary + 1
+        list_size = []
+        while total_size > 0:
+            if total_size >= 10:
+                list_size.append(10)
+                total_size -= 10
+            else:
+                list_size.append(total_size)
+                total_size = 0
+
+        for item in list_size:
+            self.ssd_erase(left_boundary, item)
+            left_boundary += item
+
+    def erase_range(self, addr_1, addr_2):
+        self.logger_print(f'Shell Erase range {addr_1}, {addr_2}')
+        start_lba = min(addr_1, addr_2)
+        # right_boundary = max(addr_1, addr_2)
+        size = abs(addr_1 - addr_2) + 1
+        self.erase(start_lba, size)
 
     def print_help(self):
         self.logger_print(f'print help docs')
@@ -250,6 +301,9 @@ class Shell:
 
     def run_script_3(self):
         self.script.script_3()
+
+    def run_script_4(self):
+        self.script.script_4()
 
     def script_parser(self, script_txt):
         try:
