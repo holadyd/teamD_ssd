@@ -7,7 +7,7 @@ class Script:
 
     def input_dummy_command(self):
         for i in range(5):
-            self.shell.erase(f'{i*10}', '10')
+            self.shell.ssd_erase(f'{i*10}', '10', for_script=True)
 
     def script_1(self):
         self.input_dummy_command()
