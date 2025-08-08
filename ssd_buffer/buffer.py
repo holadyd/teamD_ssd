@@ -5,7 +5,7 @@ import shutil
 class Buffer:
 
     def __init__(self):
-        self._dir_path = "buffer"
+        self._dir_path = "../buffer"
         self._initial_data = "0x00000000"
         self._buffer = []
         os.makedirs(self._dir_path, exist_ok=True)

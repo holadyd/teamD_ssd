@@ -1,17 +1,16 @@
 import argparse
 import json
-import os
 from contextlib import contextmanager
 from typing import Literal
 
-from buffer import Buffer
+from ssd_buffer.buffer import Buffer
 from ssd_command import *
 
 
 class SSD:
     def __init__(self, buffer: Buffer = None):
-        self.nand_file = "ssd_nand.txt"
-        self.output_file = "ssd_output.txt"
+        self.nand_file = "../ssd_nand.txt"
+        self.output_file = "../ssd_output.txt"
         self.buffer: Buffer = buffer
 
     def process_cmd(self, cmd: SSDCommand):
