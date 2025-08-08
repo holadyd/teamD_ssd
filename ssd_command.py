@@ -10,6 +10,17 @@ class SSDCommand(ABC):
     def make_string(self):
         pass
 
+    @staticmethod
+    def convert_number_to_decimal(number_str:str) -> str:
+        return str(int(number_str, 0))
+
+    @staticmethod
+    def convert_number_to_hex(number_str:str) -> str:
+        number_str = str(number_str)
+        if not number_str.startswith('0x'):
+            str_value = hex(int(number_str, 0))
+        return number_str[:2] + f'0000000{number_str[2:]}'[-8:].upper()
+
 
 class InvalidCommand(SSDCommand):
 
@@ -21,34 +32,42 @@ class InvalidCommand(SSDCommand):
 
 
 class WriteCommand(SSDCommand):
-    def __init__(self, lba, data):
+    def __init__(self, lba, value):
         self.lba = lba
-        self.data = data
+        self.value = value
 
     def validate(self) -> bool:
         # value  invalid Check
         try:
-            int(self.data, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
+            int(self.value, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
 
-        except ValueError:
+        except (ValueError, TypeError):
             return False
 
-        if not (0x0 <= int(self.data, 0) <= 0xFFFFFFFF):
+        if not (0x0 <= int(self.value, 0) <= 0xFFFFFFFF):
             return False
         # lba invalid Check
         # 1. int 인지 체크
         try:
-            int(self.lba)
+            int(self.lba, 0)
         except (ValueError, TypeError):
+            print("여기!")
             return False
 
         # 2. 0~ 99 인지 체크
-        if 0 <= int(self.lba) <= 99:
+        if 0 <= int(self.lba, 0) <= 99:
             return True
         return False
 
     def make_string(self):
-        return f'W {self.lba} {self.data}'
+        return f'W {self.lba} {self.value}'
+
+    def convert_value_to_hex(self):
+        str_value = str(self.value)
+        if not str_value.startswith('0x'):
+            str_value = hex(int(str_value, 0))
+        self.value = str_value[:2] + f'0000000{str_value[2:]}'[-8:].upper()
+
 
 
 class ReadCommand(SSDCommand):
@@ -59,18 +78,20 @@ class ReadCommand(SSDCommand):
         # lba invalid Check
         # 1. int 인지 체크
         try:
-            int(self.lba)
+            int(self.lba, 0)
         except (ValueError, TypeError):
             return False
 
         # 2. 0~ 99 인지 체크
-        if 0 <= int(self.lba) <= 99:
+        if 0 <= int(self.lba, 0) <= 99:
             return True
         return False
 
     def make_string(self):
         return f'R {self.lba}'
 
+    def convert_lba_to_decimal(self):
+        self.lba = str(int(self.lba, 0))
 
 class EraseCommand(SSDCommand):
     lba_upper_limit = 99
@@ -83,11 +104,11 @@ class EraseCommand(SSDCommand):
 
     def validate(self):
         try:
-            lba: int = int(self.lba)  # lba 검증(숫자 여부)
+            lba: int = int(self.lba, 0)  # lba 검증(숫자 여부)
             if 0 > lba or lba > 99:
                 raise ValueError
 
-            value: int = int(self.data_size)  # size value 검증(숫자 여부)
+            value: int = int(self.data_size, 0)  # size value 검증(숫자 여부)
             if value < 0 or value > self.erase_size_range:
                 raise ValueError
             if lba + value > self.lba_upper_limit + 1:
@@ -98,6 +119,9 @@ class EraseCommand(SSDCommand):
 
     def make_string(self):
         return f'E {self.lba} {self.data_size}'
+
+    def convert_lba_to_decimal(self):
+        self.lba = str(int(self.lba, 0))
 
 
 class FlushCommand(SSDCommand):

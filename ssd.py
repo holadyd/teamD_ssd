@@ -20,23 +20,45 @@ class SSD:
             return
 
         if isinstance(cmd, ReadCommand):  # Fast Read판단
-            read_cmd = self.buffer.fast_read(str(cmd.lba))
-            if read_cmd is None:
-                self.execute_cmd(cmd)
-            else:
-                self._write_value_to_ssd_output(read_cmd)
+            self.process_read_cmd(cmd)
             return
 
         if isinstance(cmd, FlushCommand):
-            self.flush()
+            self.process_flush_cmd()
             return
 
         if isinstance(cmd, WriteCommand):
-            if int(cmd.data, 0) == 0:
-                cmd = CommandFactory.create("E", cmd.lba, "1")
+            cmd = self.process_write_cmd(cmd)
+            if cmd is None:
+                return
 
+        if isinstance(cmd, EraseCommand):
+            self.process_erase_cmd(cmd)
+
+    def process_erase_cmd(self, cmd):
+        cmd.lba = cmd.convert_number_to_decimal(cmd.lba)
+        cmd.data_size = cmd.convert_number_to_decimal(cmd.data_size)
         cmd_list = self.buffer.write_buffer(cmd.make_string())
         self.excute_flushed_command_list(cmd_list)
+
+    def process_write_cmd(self, cmd):
+        cmd.value = cmd.convert_number_to_hex(cmd.value)
+        cmd.lba = cmd.convert_number_to_decimal(cmd.lba)
+        if int(cmd.value, 0) == 0:
+            cmd = CommandFactory.create("E", cmd.lba, "1")
+            return cmd
+        cmd_list = self.buffer.write_buffer(cmd.make_string())
+        self.excute_flushed_command_list(cmd_list)
+        return None
+
+    def process_read_cmd(self, cmd):
+        cmd.lba = cmd.convert_number_to_decimal(cmd.lba)
+        read_cmd = self.buffer.fast_read(str(cmd.lba))
+        if read_cmd is None:
+            self.execute_cmd(cmd)
+        else:
+            self._write_value_to_ssd_output(read_cmd)
+        return
 
     def excute_flushed_command_list(self, cmd_list):
         if not cmd_list is None:
@@ -49,7 +71,7 @@ class SSD:
 
     def execute_cmd(self, cmd: SSDCommand):
         if isinstance(cmd, WriteCommand):
-            self.write(cmd.lba, cmd.data)
+            self.write(cmd.lba, cmd.value)
         elif isinstance(cmd, ReadCommand):
             self.read(cmd.lba)
         elif isinstance(cmd, EraseCommand):
@@ -74,9 +96,9 @@ class SSD:
         with open(self.output_file, "w") as f:
             json.dump({"0": value}, f, indent=2)
 
-    def flush(self):
+    def process_flush_cmd(self):
         try:
-            cmd_list = self.buffer.flsuh_buffer()
+            cmd_list = self.buffer.flush_buffer()
 
             self.excute_flushed_command_list(cmd_list)
         except Exception as e:
@@ -133,6 +155,9 @@ class SSD:
         finally:
             if f:
                 f.close()
+
+    def has_lba(self, command: SSDCommand) -> bool:
+        return hasattr(command, 'lba')
 
 
 def main():
