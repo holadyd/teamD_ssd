@@ -21,9 +21,9 @@ class InvalidCommand(SSDCommand):
 
 
 class WriteCommand(SSDCommand):
-    def __init__(self, lba, data):
-        self.lba = lba
-        self.data = data
+    def __init__(self, args):
+        self.args = args
+        self.lba, self.data = args
 
     def validate(self) -> bool:
         # value  invalid Check
@@ -52,8 +52,9 @@ class WriteCommand(SSDCommand):
 
 
 class ReadCommand(SSDCommand):
-    def __init__(self, lba):
-        self.lba = lba
+    def __init__(self, args):
+        self.args = args
+        self.lba = args[0]
 
     def validate(self):
         # lba invalid Check
@@ -77,9 +78,9 @@ class EraseCommand(SSDCommand):
     lba_lower_limit = 0
     erase_size_range = 10
 
-    def __init__(self, lba, data_size):
-        self.lba = lba
-        self.data_size = data_size
+    def __init__(self, args):
+        self.args = args
+        self.lba, self.data_size = args
 
     def validate(self):
         try:
@@ -102,6 +103,9 @@ class EraseCommand(SSDCommand):
 
 class FlushCommand(SSDCommand):
 
+    def __init__(self, args):
+        self.args = args
+
     def validate(self):
         return True
 
@@ -111,14 +115,17 @@ class FlushCommand(SSDCommand):
 
 class CommandFactory:
     @staticmethod
-    def create(command: str, lba: str, value: str = None) -> SSDCommand:
+    def create(args) -> SSDCommand:
+        if len(args) == 0 or str(args[0]).upper() not in ['R', 'W', 'E', 'F']:
+            return InvalidCommand()
+        command, *rest_args = args
         if command == "R":
-            return ReadCommand(lba)
+            return ReadCommand(rest_args)
         if command == "W":
-            return WriteCommand(lba, value)
+            return WriteCommand(rest_args)
         if command == 'E':
-            return EraseCommand(lba, value)
+            return EraseCommand(rest_args)
         if command == 'F':
-            return FlushCommand()
+            return FlushCommand(rest_args)
         else:
             return InvalidCommand()
