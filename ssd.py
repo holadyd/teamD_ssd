@@ -18,31 +18,60 @@ class SSD:
         if not cmd.validate():
             self._write_value_to_ssd_output("ERROR")
             return
-        if isinstance(cmd, WriteCommand):
-            if int(cmd.data) == 0:
-                cmd = CommandFactory.create("E", cmd.lba, "1")
+
         if isinstance(cmd, ReadCommand):  # Fast Read판단
-            read_cmd = self.buffer.fast_read(cmd.make_string())
-            if read_cmd is None:
-                self.execute_cmd(cmd)
+            self.process_read_cmd(cmd)
+            return
+
         if isinstance(cmd, FlushCommand):
-            self.flush()
+            self.process_flush_cmd()
+            return
+
+        if isinstance(cmd, WriteCommand):
+            cmd = self.process_write_cmd(cmd)
+            if cmd is None:
+                return
+
+        if isinstance(cmd, EraseCommand):
+            self.process_erase_cmd(cmd)
+
+    def process_erase_cmd(self, cmd):
+        cmd.lba = cmd.convert_number_to_decimal(cmd.lba)
+        cmd.data_size = cmd.convert_number_to_decimal(cmd.data_size)
+        cmd_list = self.buffer.write_buffer(cmd.make_string())
+        self.excute_flushed_command_list(cmd_list)
+
+    def process_write_cmd(self, cmd):
+        cmd.value = cmd.convert_number_to_hex(cmd.value)
+        cmd.lba = cmd.convert_number_to_decimal(cmd.lba)
+        if int(cmd.value, 0) == 0:
+            cmd = CommandFactory.create("E", cmd.lba, "1")
+            return cmd
+        cmd_list = self.buffer.write_buffer(cmd.make_string())
+        self.excute_flushed_command_list(cmd_list)
+        return None
+
+    def process_read_cmd(self, cmd):
+        cmd.lba = cmd.convert_number_to_decimal(cmd.lba)
+        read_cmd = self.buffer.fast_read(str(cmd.lba))
+        if read_cmd is None:
+            self.execute_cmd(cmd)
         else:
-            cmd_list = self.buffer.write_buffer(cmd.make_string())
-            self.excute_flushed_command_list(cmd_list)
+            self._write_value_to_ssd_output(read_cmd)
+        return
 
     def excute_flushed_command_list(self, cmd_list):
         if not cmd_list is None:
             for each_cmd in cmd_list:
                 if 'empty' in each_cmd:
                     continue
-                _, command, lba, data = each_cmd.split('_')
-                flushed_cmd = CommandFactory.create(command, lba, data)
+                _, *args = each_cmd.split('_')
+                flushed_cmd = CommandFactory.create(args)
                 self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
         if isinstance(cmd, WriteCommand):
-            self.write(cmd.lba, cmd.data)
+            self.write(cmd.lba, cmd.value)
         elif isinstance(cmd, ReadCommand):
             self.read(cmd.lba)
         elif isinstance(cmd, EraseCommand):
@@ -67,10 +96,10 @@ class SSD:
         with open(self.output_file, "w") as f:
             json.dump({"0": value}, f, indent=2)
 
-    def flush(self):
+    def process_flush_cmd(self):
         try:
-            cmd_list = self.buffer.flsuh_buffer()
-            
+            cmd_list = self.buffer.flush_buffer()
+
             self.excute_flushed_command_list(cmd_list)
         except Exception as e:
             raise e
@@ -127,20 +156,24 @@ class SSD:
             if f:
                 f.close()
 
+    def has_lba(self, command: SSDCommand) -> bool:
+        return hasattr(command, 'lba')
+
 
 def main():
     # argparse.ArgumentParser 객체 생성
     parser = argparse.ArgumentParser(description='SSD 스크립트 실행을 위한 매개변수')
 
     # 매개변수 추가
-    parser.add_argument('command', type=str, help='첫 번째 매개변수 CMD')
-    parser.add_argument('lba', type=str, nargs='?', help='두 번째 매개변수 SSD LBA주소')
-    parser.add_argument('value', type=str, nargs='?', help='세 번째 매개변수 SSD Write시 Value', default=None)
-    args = parser.parse_args()
+    # parser.add_argument('command', type=str, help='첫 번째 매개변수 CMD')
+    # parser.add_argument('lba', type=str, nargs='?', help='두 번째 매개변수 SSD LBA주소')
+    # parser.add_argument('value', type=str, nargs='?', help='세 번째 매개변수 SSD Write시 Value', default=None)
+    parser.add_argument('args', type=str, nargs='*', help='가변 매개변수')
+    args_result = parser.parse_args()
 
     buffer = Buffer()
     ssd = SSD(buffer)
-    command = CommandFactory.create(args.command, args.lba, args.value)
+    command = CommandFactory.create(args_result.args)  # args.command, args.lba, args.value)
     ssd.process_cmd(command)
 
 
