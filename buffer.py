@@ -28,6 +28,7 @@ class Buffer:
         self.read_buffer()
 
         self.update_buffer()
+        self.read_buffer()
 
         buf_idx = self._find_empty()
 
