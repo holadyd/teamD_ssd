@@ -45,7 +45,7 @@ class SSD:
         cmd.value = cmd.convert_number_to_hex(cmd.value)
         cmd.lba = cmd.convert_number_to_decimal(cmd.lba)
         if int(cmd.value, 0) == 0:
-            cmd = CommandFactory.create("E", cmd.lba, "1")
+            cmd = CommandFactory.create(["E", cmd.lba, "1"])
             cmd.validate()
             return cmd
         cmd_list = self.buffer.write_buffer(cmd.make_string())
