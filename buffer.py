@@ -139,7 +139,7 @@ class Buffer:
         if os.path.exists(self._dir_path):
             shutil.rmtree(self._dir_path)
 
-    def fast_read(self, lba):
+    def fast_read(self, lba) -> list[str] | None:
         self.read_buffer()
 
         buf_dict = dict()
