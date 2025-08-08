@@ -125,6 +125,7 @@ class Shell:
         self.logger_print(f'input command: {self.command}')
 
     def erase(self, lba, size):
+        self.logger_print(f'Shell Erase {lba}, {size}')
         # lba + size 값 boundary 체크
         if size == 0:
             return
@@ -151,6 +152,13 @@ class Shell:
         for item in list_size:
             self.ssd_erase(left_boundary, item)
             left_boundary += item
+
+    def erase_range(self, addr_1, addr_2):
+        self.logger_print(f'Shell Erase range {addr_1}, {addr_2}')
+        start_lba = min(addr_1, addr_2)
+        # right_boundary = max(addr_1, addr_2)
+        size = abs(addr_1 - addr_2) + 1
+        self.erase(start_lba, size)
 
     def print_help(self):
         self.logger_print(f'print help docs')
