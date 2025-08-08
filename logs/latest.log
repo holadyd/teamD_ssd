@@ -82,3 +82,5 @@
 [2025-08-07 14:19:31] Shell.read_output()            : function executed
 [2025-08-07 14:19:31] Shell.read_output()            : {'0': '0xE5D75DCD'}
 [2025-08-07 14:19:31] Shell.ssd_read()               : [Read] LBA 13 : 0xE5D75DCD
+[2025-08-08 09:17:34] Shell.run_shell()              : Shell Application Run
+[2025-08-08 09:17:34] Shell.read_command()           : wait command, preset command: None

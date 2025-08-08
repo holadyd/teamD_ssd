@@ -85,6 +85,9 @@ class Shell:
             self.run_script_2()
         elif commands[0] in ['3_', '3_WriteReadAging']:
             self.run_script_3()
+        elif commands[0] == "erase":
+            self.erase()
+            # self.ssd_erase()
 
         return True
 
@@ -120,6 +123,34 @@ class Shell:
         else:
             self.command = command
         self.logger_print(f'input command: {self.command}')
+
+    def erase(self, lba, size):
+        # lba + size 값 boundary 체크
+        if size == 0:
+            return
+        elif size > 0:
+            left_boundary = min(lba, lba + size)
+            right_boundary = max(lba, lba + size) - 1
+        else:
+            left_boundary = min(lba, lba + size) + 1
+            right_boundary = max(lba, lba + size)
+
+        left_boundary = max(left_boundary, 0)
+        right_boundary = min(right_boundary, 99)
+
+        total_size = right_boundary - left_boundary + 1
+        list_size = []
+        while total_size > 0:
+            if total_size >= 10:
+                list_size.append(10)
+                total_size -= 10
+            else:
+                list_size.append(total_size)
+                total_size = 0
+
+        for item in list_size:
+            self.ssd_erase(left_boundary, item)
+            left_boundary += item
 
     def print_help(self):
         self.logger_print(f'print help docs')
