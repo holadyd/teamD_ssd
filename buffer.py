@@ -6,6 +6,7 @@ class Buffer:
 
     def __init__(self):
         self._dir_path = "buffer"
+        self._initial_data = "0x00000000"
         self._buffer = []
         os.makedirs(self._dir_path, exist_ok=True)
 
@@ -79,7 +80,7 @@ class Buffer:
                 else:
                     merged_commands.append(f"E {i - same_next} {same_next}")
                     same_next = -1
-            elif buf_list[i] != "0x00000000":
+            elif buf_list[i] != self._initial_data:
                 if same_next == 10:
                     merged_commands.append(f"E {i - same_next} {same_next}")
                     same_next = -1
@@ -88,7 +89,7 @@ class Buffer:
                 elif same_next != -1:
                     same_next += 1
                 merged_commands.append(f"W {i} {buf_list[i]}")
-            elif buf_list[i] == "0x00000000":
+            elif buf_list[i] == self._initial_data:
                 if same_next == -1:
                     same_next = 1
                 elif same_next < 10:
@@ -109,7 +110,7 @@ class Buffer:
                     cur_lba = int(cmd[2])
                     range_siz = int(cmd[3])
                     for idx in range(abs(int(range_siz))):
-                        buf_list[cur_lba] = "0x00000000"
+                        buf_list[cur_lba] = self._initial_data
                         cur_lba += 1 if range_siz > 0 else -1
 
     def flush_buffer(self) -> list[str]:
@@ -155,7 +156,7 @@ class Buffer:
                     cur_lba = int(cmd[2])
                     range_siz = int(cmd[3])
                     for idx in range(abs(int(range_siz))):
-                        buf_dict[str(cur_lba)] = "0x00000000"
+                        buf_dict[str(cur_lba)] = self._initial_data
                         cur_lba += 1 if range_siz > 0 else -1
 
         try:
