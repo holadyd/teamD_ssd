@@ -26,7 +26,7 @@ class Buffer:
     def write_buffer(self, command):
         self.read_buffer()
 
-        # update
+        self.update_buffer()
 
         buf_idx = self._find_empty()
 
@@ -52,6 +52,55 @@ class Buffer:
     def update_buffer(self):
         self.read_buffer()
         buf_list = [None] * 100
+        self.update_buf_list(buf_list)
+
+        merged_commands = []
+        self.merge_commands(buf_list, merged_commands)
+        merged_commands.sort()
+
+        self.update_buffer_memory(merged_commands)
+
+    def update_buffer_memory(self, merged_commands):
+        self._erase_files()
+        os.makedirs(self._dir_path, exist_ok=True)
+        for cmd_idx in range(len(merged_commands)):
+            with open(os.path.join(self._dir_path, f"{cmd_idx + 1}_{merged_commands[cmd_idx].replace(" ", "_")}"), "w",
+                      encoding="utf-8") as f:
+                pass
+        files = len(os.listdir(self._dir_path))
+        while files != 5:
+            files += 1
+            with open(os.path.join(self._dir_path, f"{files}_empty"), "w", encoding="utf-8") as f:
+                pass
+
+    def merge_commands(self, buf_list, merged_commands):
+        same_next = -1
+        for i in range(100):
+            if buf_list[i] == None:
+                if same_next == -1:
+                    continue
+                else:
+                    merged_commands.append(f"E {i - same_next} {same_next}")
+                    same_next = -1
+            elif buf_list[i] != "0x00000000":
+                if same_next == 10:
+                    merged_commands.append(f"E {i - same_next} {same_next}")
+                    same_next = -1
+                elif 0 < same_next < 10:
+                    same_next += 1
+                elif same_next != -1:
+                    same_next += 1
+                merged_commands.append(f"W {i} {buf_list[i]}")
+            elif buf_list[i] == "0x00000000":
+                if same_next == -1:
+                    same_next = 1
+                elif same_next < 10:
+                    same_next += 1
+                elif same_next == 10:
+                    merged_commands.append(f"E {i - same_next} {same_next}")
+                    same_next = 1
+
+    def update_buf_list(self, buf_list):
         for buf in self._buffer:
             if "empty" not in buf:
                 cmd = buf.split("_")
@@ -65,51 +114,6 @@ class Buffer:
                     for idx in range(abs(int(range_siz))):
                         buf_list[cur_lba] = "0x00000000"
                         cur_lba += 1 if range_siz > 0 else -1
-
-        # print(buf_list)
-
-        tmp = -1
-        cmds = []
-        for i in range(100):
-            if buf_list[i] == None :
-                if tmp == -1:
-                    continue
-                else:
-                    cmds.append(f"E {i - tmp} {tmp}")
-                    tmp = -1
-            elif buf_list[i] != "0x00000000":
-                if tmp == 10:
-                    cmds.append(f"E {i - tmp} {tmp}")
-                    tmp = -1
-                elif 0<tmp<10:
-                    tmp += 1
-                elif tmp != -1:
-                    tmp += 1
-                cmds.append(f"W {i} {buf_list[i]}")
-            elif buf_list[i] == "0x00000000":
-                if tmp == -1:
-                    tmp = 1
-                elif tmp < 10:
-                    tmp += 1
-                elif tmp == 10:
-                    cmds.append(f"E {i - tmp} {tmp}")
-                    tmp = 1
-        cmds.sort()
-        # print(cmds)
-
-        self._erase_files()
-        os.makedirs(self._dir_path, exist_ok=True)
-        for cmd_idx in range(len(cmds)):
-            with open(os.path.join(self._dir_path, f"{cmd_idx + 1}_{cmds[cmd_idx].replace(" ","_")}"), "w", encoding="utf-8") as f:
-                pass
-
-        files = len(os.listdir(self._dir_path))
-
-        while files != 5:
-            files += 1
-            with open(os.path.join(self._dir_path, f"{files}_empty"), "w", encoding="utf-8") as f:
-                pass
-
 
     def flush_buffer(self):
         self.read_buffer()
