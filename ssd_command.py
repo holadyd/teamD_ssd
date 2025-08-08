@@ -23,10 +23,14 @@ class InvalidCommand(SSDCommand):
 class WriteCommand(SSDCommand):
     def __init__(self, args):
         self.args = args
-        self.lba, self.data = args
+        self.lba, self.data = None, None
 
     def validate(self) -> bool:
         # value  invalid Check
+        if len(self.args) != 2:
+            return False
+        self.lba, self.data = self.args
+
         try:
             int(self.data, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
 
@@ -54,9 +58,13 @@ class WriteCommand(SSDCommand):
 class ReadCommand(SSDCommand):
     def __init__(self, args):
         self.args = args
-        self.lba = args[0]
+        self.lba = None
 
     def validate(self):
+        if len(self.args) != 1:
+            return False
+        self.lba = self.args[0]
+
         # lba invalid Check
         # 1. int 인지 체크
         try:
@@ -80,9 +88,13 @@ class EraseCommand(SSDCommand):
 
     def __init__(self, args):
         self.args = args
-        self.lba, self.data_size = args
+        self.lba, self.data_size = None, None
 
     def validate(self):
+        if len(self.args) != 2:
+            return False
+        self.lba, self.data_size = self.args
+
         try:
             lba: int = int(self.lba)  # lba 검증(숫자 여부)
             if 0 > lba or lba > 99:
@@ -107,6 +119,8 @@ class FlushCommand(SSDCommand):
         self.args = args
 
     def validate(self):
+        if len(self.args) != 0:
+            return False
         return True
 
     def make_string(self):
