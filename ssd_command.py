@@ -11,11 +11,11 @@ class SSDCommand(ABC):
         pass
 
     @staticmethod
-    def convert_number_to_decimal(number_str:str) -> str:
+    def convert_number_to_decimal(number_str: str) -> str:
         return str(int(number_str, 0))
 
     @staticmethod
-    def convert_number_to_hex(number_str:str) -> str:
+    def convert_number_to_hex(number_str: str) -> str:
         number_str = str(number_str)
         if not number_str.startswith('0x'):
             str_value = hex(int(number_str, 0))
@@ -72,7 +72,6 @@ class WriteCommand(SSDCommand):
         self.value = str_value[:2] + f'0000000{str_value[2:]}'[-8:].upper()
 
 
-
 class ReadCommand(SSDCommand):
     def __init__(self, args):
         self.args = args
@@ -100,6 +99,7 @@ class ReadCommand(SSDCommand):
 
     def convert_lba_to_decimal(self):
         self.lba = str(int(self.lba, 0))
+
 
 class EraseCommand(SSDCommand):
     lba_upper_limit = 99
