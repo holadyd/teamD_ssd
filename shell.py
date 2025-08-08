@@ -14,7 +14,8 @@ class Shell:
         self.command = None
         self.ret = True
         self.arg_none_param = ["help", "exit", "fullread", '1_', '1_FullWriteAndReadCompare',
-                               '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging']
+                               '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging',
+                               '4_', '4_EraseAndWriteAging']
         self.arg_addr = ["read"]
         self.arg_data = ["fullwrite"]
         self.arg_addr_data = ["write"]
@@ -84,6 +85,8 @@ class Shell:
             self.run_script_2()
         elif commands[0] in ['3_', '3_WriteReadAging']:
             self.run_script_3()
+        elif commands[0] in ['4_', '4_EraseAndWriteAging']:
+            self.run_script_4()
         elif commands[0] == "erase":
             address = commands[1]
             size = commands[2]
@@ -298,6 +301,9 @@ class Shell:
 
     def run_script_3(self):
         self.script.script_3()
+
+    def run_script_4(self):
+        self.script.script_4()
 
     def script_parser(self, script_txt):
         try:
