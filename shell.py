@@ -100,7 +100,7 @@ class Shell:
 
     def ssd_read(self, address, for_script=False):
         self.logger_print(f'read {address}, for_script is {for_script}')
-        os.system(f"python ssd.py R {address}")
+        os.system(f"python ssd/ssd.py R {address}")
         result = self.read_output()["0"]
         self.logger_print(f"[Read] LBA {address} : {result}")
         if for_script:
@@ -109,7 +109,7 @@ class Shell:
 
     def ssd_write(self, address, content, for_script=False):
         self.logger_print(f'write {address}, content {content}, for_script is {for_script}')
-        os.system(f"python ssd.py W {address} {str(hex(int(content, 0)))}")
+        os.system(f"python ssd/ssd.py W {address} {str(hex(int(content, 0)))}")
         self.logger_print(f'[Write] Done - {address}, {content}')
         if for_script:
             return
@@ -117,7 +117,7 @@ class Shell:
 
     def ssd_erase(self, address, size, for_script=False):
         self.logger_print(f'erase {address}, content {size}, for_script is {for_script}')
-        os.system(f"python ssd.py E {address} {size}")
+        os.system(f"python ssd/ssd.py E {address} {size}")
         self.logger_print(f'[Erase] Done - {address}, {size}')
         if for_script:
             return
