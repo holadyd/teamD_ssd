@@ -107,7 +107,7 @@ class Shell:
 
     def ssd_erase(self, address, size, for_script=False):
         self.logger_print(f'erase {address}, content {size}, for_script is {for_script}')
-        os.system(f"python ssd.py E {address} {str(hex(int(size, 0)))}")
+        os.system(f"python ssd.py E {address} {str(int(size, 0))}")
         self.logger_print(f'[Erase] Done - {address}, {size}')
         if for_script:
             return
