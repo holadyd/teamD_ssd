@@ -10,7 +10,6 @@ from script import Script
 
 
 class Shell:
-
     def __init__(self):
         self.command = None
         self.ret = True
@@ -86,8 +85,13 @@ class Shell:
         elif commands[0] in ['3_', '3_WriteReadAging']:
             self.run_script_3()
         elif commands[0] == "erase":
-            self.erase()
-            # self.ssd_erase()
+            address = commands[1]
+            size = commands[2]
+            self.erase(address, size)
+        elif commands[0] == "erase_range":
+            address_1 = commands[1]
+            address_2 = commands[2]
+            self.erase_range(address_1, address_2)
 
         return True
 
