@@ -8,7 +8,6 @@ from pytest_mock import MockFixture, MockerFixture
 
 from settings import ROOT_DIR
 
-# ssd_u1
 def test_console_not_print(capsys):
     ssd = SSD()
 
@@ -19,7 +18,6 @@ def test_console_not_print(capsys):
     assert captured.out == ""
 
 
-# ssd_u2
 def test_read_1_args():
     ssd = SSD()
     result = ssd.read(42)
@@ -27,11 +25,10 @@ def test_read_1_args():
     assert result.startswith("0x") and len(result) == 10
 
 
-# ssd_u3
 @pytest.mark.parametrize("args", [
-    (),  # 인자 0개
-    (1, 2),  # 인자 2개
-    (1, 2, 3),  # 인자 3개
+    (),
+    (1, 2),
+    (1, 2, 3),
 ])
 @pytest.mark.skip
 def test_read_not_1_args(args):
@@ -40,14 +37,13 @@ def test_read_not_1_args(args):
         ssd.read(*args)
 
 
-# ssd_u4
 def test_output_file_exist():
     ssd = SSD()
 
     assert os.path.exists(f'{ROOT_DIR}\\ssd_output.txt'), 'ssd_output.txt 파일이 존재하지 않습니다.'
 
 
-# ssd_u15
+
 def test_nand_file_exit():
     ssd = SSD()
 
@@ -55,9 +51,9 @@ def test_nand_file_exit():
 
 
 @pytest.mark.skip
-# ssd_u5
+
 def test_read_2nd_invalid_args():
-    ## Arrange
+
     command_line1 = "R 100"
     command_line2 = "R -1"
 
@@ -69,16 +65,15 @@ def test_read_2nd_invalid_args():
 
     ssd = SSD()
 
-    ## act
     ret1 = ssd.read(lba1)
     ret2 = ssd.read(lba2)
 
-    ## assert
+
     assert ret1 == "ERROR"
     assert ret2 == "ERROR"
 
 
-# ssd_u6
+
 @pytest.mark.skip
 def test_read_when_not_written():
     from shell import Shell
@@ -86,7 +81,7 @@ def test_read_when_not_written():
     shell.read_command("fullwrite 0\n")
     if shell.valid_check():
         shell.run_command()
-    ## Arrange
+
     command_line1 = "R 99"
     command_line2 = "R 33"
 
@@ -98,21 +93,21 @@ def test_read_when_not_written():
 
     ssd = SSD()
 
-    ## act
+
     ret1 = ssd.read(lba1)
     ret2 = ssd.read(lba2)
 
-    # assert
+
     assert ret1 == "0x00000000"
     assert ret2 == "0x00000000"
 
 
-# ssd_u7
+
 def test_read_value_store_only_one_data():
-    ## arrange
+
     ssd = SSD()
 
-    ## act
+
     ssd.read(0)
 
     with open(f"{ROOT_DIR}\\ssd_output.txt", "r") as f:
@@ -123,13 +118,11 @@ def test_read_value_store_only_one_data():
     with open(f"{ROOT_DIR}\\ssd_output.txt", "r") as f:
         data2 = json.load(f)
 
-    ## assert: 각각의 결과는 {"0": value} 형식으로, 1개의 데이터만 있어야 함
+
     assert len(data1) == 1
     assert len(data2) == 1
 
 
-# ssd_u8
-# W 명령어시 매개변수를 3개 받아야한다.
 @pytest.mark.parametrize("args", [
     ['W', '68', '0x51D0C3A9'],
     ['W', '9', '0xC6F89B2E'],
@@ -155,7 +148,6 @@ def test_write_3_args(mocker: MockFixture, args):
     assert len(ssd.write.call_args.args) == 2
 
 
-# ssd_u10
 @pytest.mark.parametrize("args", [
     ['W', '68', '0x51D0C3A9'],
     ['W', '9', '0xC6F89B2E'],
@@ -175,15 +167,14 @@ def test_write_basic_flow_with_value(args):
     :return: lba 주소에 value를 write 후 lab 주소의 값이 정상적으로 read 동작하는지 확인
     '''
     op, lba, value = args
-    # ssd 클래스 생성
+
     assert op == 'W'
     ssd = SSD()
     ssd.write(lba, value)
-    # 캡처된 출력에 예상 메시지가 포함되어 있는지 검증
+
     assert ssd.read(lba) == value
 
 
-# ssd_u16
 @pytest.mark.parametrize("args", [
     ['W', '144', '0x51D0C3A9'],
     ['W', '2535', '0xC6F89B2E'],
@@ -204,15 +195,15 @@ def test_write_invalid_lba(args):
     :return: invalid 한 lba 주소에 쓰기 동작할때 ERROR 를 return
     '''
     op, lba, value = args
-    # ssd 클래스 생성
+
     assert op == 'W'
     ssd = SSD()
     ssd.write(lba, value)
-    # 캡처된 출력에 예상 메시지가 포함되어 있는지 검증
+
     assert ssd.read(lba) == 'ERROR'
 
 
-# ssd_u11
+
 @pytest.mark.parametrize("args", [
     ['W', '68', '0x51D0C3A9'],
     ['W', '9', '0xC6F89B2E'],
@@ -238,11 +229,10 @@ def test_write_3nd_arg_is_valid(args):
     assert ssd.read(lba) == value
 
 
-# ssd_u17
 @pytest.mark.parametrize("args", [
-    ['W', '77', 'F9B1C2A3'],  # 0x없는 경우
-    ['W', '41', '7D8E9A0B'],  # 0x없는 경우
-    ['W', '50', '2B3C4D5E'],  # 0x없는 경우
+    ['W', '77', 'F9B1C2A3'],
+    ['W', '41', '7D8E9A0B'],
+    ['W', '50', '2B3C4D5E'],
 ])
 @pytest.mark.skip
 def test_write_3nd_arg_is_invalid(args):
@@ -258,11 +248,11 @@ def test_write_3nd_arg_is_invalid(args):
     with open(f"{ROOT_DIR}\\ssd_output.txt", "r") as f:
         data2 = json.load(f)
 
-    # assert
+
     assert data2["0"] == "ERROR"
 
 
-# ssd_u12
+
 @pytest.mark.parametrize("args", [
     ['W', '68', '0x51D0C3A9'],
     ['W', '9', '0xC6F89B2E'],
@@ -287,7 +277,7 @@ def test_write_valid_does_not_append_output(args):
     assert '\n' not in ssd.read(lba)
 
 
-# ssd_u13
+
 def test_write_read_ssd_nand_file(mocker: MockFixture):
     '''
     ssd_nand 파일 읽는 함수를 호출한다.
@@ -297,7 +287,7 @@ def test_write_read_ssd_nand_file(mocker: MockFixture):
     import json
     initial_nand_data = {str(i): 0 for i in range(100)}
     mock_file_content = json.dumps(initial_nand_data)
-    # mocker.mock_open을 사용하여 open 함수를 모킹하고, 읽을 데이터를 설정합니다.
+
     mock_open = mocker.mock_open(read_data=mock_file_content)
     mocker.patch('builtins.open', mock_open)
     # check_para_validataion_method = mocker.patch('ssd.SSD._check_parameter_validation')

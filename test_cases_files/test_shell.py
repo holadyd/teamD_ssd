@@ -1,11 +1,11 @@
+import re
+import sys
+from io import StringIO
 from unittest.mock import patch
 
 import pytest
 
 from shell import Shell
-import sys
-from io import StringIO
-import re
 from ssd_buffer.buffer import Buffer
 
 
@@ -99,7 +99,6 @@ def test_shell_fullread(capsys):
     shell.run_command()
     out, err = capsys.readouterr()
 
-    # 정규표현식: [Read] LBA XX : 0xAAAAAAAA
     pattern = r"\[Read\] LBA \d{1,2} : 0x[0-9A-Fa-f]{8}"
     matches = re.findall(pattern, out)
     assert len(matches) == 100
@@ -320,7 +319,6 @@ def test_ssd_read_write_in_shell_2():
 def test_runner_mode(capsys):
     buf = Buffer()
     buf._reset_buffer()
-    # os.system(f"shell shell_scripts.txt")
     sh = Shell()
     sh._is_runner_mode = True
 

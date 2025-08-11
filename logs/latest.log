@@ -1,113 +1,118 @@
-[2025-08-08 16:11:50] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:50] Shell.ssd_read()               : [Read] LBA 93 : 0x00000000
-[2025-08-08 16:11:50] Shell.ssd_read()               : read 94, for_script is True
-[2025-08-08 16:11:50] Shell.read_output()            : function executed
-[2025-08-08 16:11:50] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:50] Shell.ssd_read()               : [Read] LBA 94 : 0x00000000
-[2025-08-08 16:11:50] Shell.ssd_write()              : write 94, content 0xBE9CF09E, for_script is True
-[2025-08-08 16:11:50] Shell.ssd_write()              : [Write] Done - 94, 0xBE9CF09E
-[2025-08-08 16:11:50] Shell.ssd_write()              : write 94, content 0x3D39F1DF, for_script is True
-[2025-08-08 16:11:50] Shell.ssd_write()              : [Write] Done - 94, 0x3D39F1DF
-[2025-08-08 16:11:50] Shell.ssd_erase()              : erase 94, content 1, for_script is True
-[2025-08-08 16:11:50] Shell.ssd_erase()              : [Erase] Done - 94, 1
-[2025-08-08 16:11:50] Shell.ssd_erase()              : erase 95, content 1, for_script is True
-[2025-08-08 16:11:50] Shell.ssd_erase()              : [Erase] Done - 95, 1
-[2025-08-08 16:11:50] Shell.ssd_erase()              : erase 96, content 1, for_script is True
-[2025-08-08 16:11:50] Shell.ssd_erase()              : [Erase] Done - 96, 1
-[2025-08-08 16:11:50] Shell.read_compare()           : command_args: [('94', '0x00000000'), ('95', '0x00000000'), ('96', '0x00000000')]
-[2025-08-08 16:11:50] Shell.ssd_read()               : read 94, for_script is True
-[2025-08-08 16:11:50] Shell.read_output()            : function executed
-[2025-08-08 16:11:50] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:50] Shell.ssd_read()               : [Read] LBA 94 : 0x00000000
-[2025-08-08 16:11:50] Shell.ssd_read()               : read 95, for_script is True
-[2025-08-08 16:11:50] Shell.read_output()            : function executed
-[2025-08-08 16:11:50] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:50] Shell.ssd_read()               : [Read] LBA 95 : 0x00000000
-[2025-08-08 16:11:50] Shell.ssd_read()               : read 96, for_script is True
-[2025-08-08 16:11:51] Shell.read_output()            : function executed
-[2025-08-08 16:11:51] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:51] Shell.ssd_read()               : [Read] LBA 96 : 0x00000000
-[2025-08-08 16:11:51] Shell.ssd_write()              : write 96, content 0xCE19B87A, for_script is True
-[2025-08-08 16:11:51] Shell.ssd_write()              : [Write] Done - 96, 0xCE19B87A
-[2025-08-08 16:11:51] Shell.ssd_write()              : write 96, content 0x3EC19C79, for_script is True
-[2025-08-08 16:11:51] Shell.ssd_write()              : [Write] Done - 96, 0x3EC19C79
-[2025-08-08 16:11:51] Shell.ssd_erase()              : erase 96, content 1, for_script is True
-[2025-08-08 16:11:51] Shell.ssd_erase()              : [Erase] Done - 96, 1
-[2025-08-08 16:11:51] Shell.ssd_erase()              : erase 97, content 1, for_script is True
-[2025-08-08 16:11:51] Shell.ssd_erase()              : [Erase] Done - 97, 1
-[2025-08-08 16:11:51] Shell.ssd_erase()              : erase 98, content 1, for_script is True
-[2025-08-08 16:11:51] Shell.ssd_erase()              : [Erase] Done - 98, 1
-[2025-08-08 16:11:51] Shell.read_compare()           : command_args: [('96', '0x00000000'), ('97', '0x00000000'), ('98', '0x00000000')]
-[2025-08-08 16:11:51] Shell.ssd_read()               : read 96, for_script is True
-[2025-08-08 16:11:51] Shell.read_output()            : function executed
-[2025-08-08 16:11:51] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:51] Shell.ssd_read()               : [Read] LBA 96 : 0x00000000
-[2025-08-08 16:11:51] Shell.ssd_read()               : read 97, for_script is True
-[2025-08-08 16:11:51] Shell.read_output()            : function executed
-[2025-08-08 16:11:51] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:51] Shell.ssd_read()               : [Read] LBA 97 : 0x00000000
-[2025-08-08 16:11:51] Shell.ssd_read()               : read 98, for_script is True
-[2025-08-08 16:11:51] Shell.read_output()            : function executed
-[2025-08-08 16:11:51] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:51] Shell.ssd_read()               : [Read] LBA 98 : 0x00000000
-[2025-08-08 16:11:51] Shell.read_command()           : wait command, preset command: write 3 0x3
-[2025-08-08 16:11:51] Shell.read_command()           : input command: write 3 0x3
-[2025-08-08 16:11:51] Shell.valid_check()            : command_args: ['write', '3', '0x3']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : command_args: ['write', '3', '0x3']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : return False
-[2025-08-08 16:11:51] Shell._is_invalid_para_length() : command_args: ['write', '3', '0x3']
-[2025-08-08 16:11:51] Shell.run_command()            : run command with write 3 0x3
-[2025-08-08 16:11:51] Shell.ssd_write()              : write 3, content 0x3, for_script is False
-[2025-08-08 16:11:51] Shell.ssd_write()              : [Write] Done - 3, 0x3
-[2025-08-08 16:11:51] Shell.read_command()           : wait command, preset command: erase 3 1
-[2025-08-08 16:11:51] Shell.read_command()           : input command: erase 3 1
-[2025-08-08 16:11:51] Shell.valid_check()            : command_args: ['erase', '3', '1']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : command_args: ['erase', '3', '1']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : return False
-[2025-08-08 16:11:51] Shell._is_invalid_para_length() : command_args: ['erase', '3', '1']
-[2025-08-08 16:11:51] Shell.run_command()            : run command with erase 3 1
-[2025-08-08 16:11:51] Shell.erase()                  : Shell Erase 3, 1
-[2025-08-08 16:11:51] Shell.ssd_erase()              : erase 3, content 1, for_script is False
-[2025-08-08 16:11:51] Shell.ssd_erase()              : [Erase] Done - 3, 1
-[2025-08-08 16:11:51] Shell.read_command()           : wait command, preset command: read 3
-[2025-08-08 16:11:51] Shell.read_command()           : input command: read 3
-[2025-08-08 16:11:51] Shell.valid_check()            : command_args: ['read', '3']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : command_args: ['read', '3']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : return False
-[2025-08-08 16:11:51] Shell._is_invalid_para_length() : command_args: ['read', '3']
-[2025-08-08 16:11:51] Shell.run_command()            : run command with read 3
-[2025-08-08 16:11:51] Shell.ssd_read()               : read 3, for_script is False
-[2025-08-08 16:11:51] Shell.read_output()            : function executed
-[2025-08-08 16:11:51] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:51] Shell.ssd_read()               : [Read] LBA 3 : 0x00000000
-[2025-08-08 16:11:51] Shell.read_command()           : wait command, preset command: write 3 0x3
-[2025-08-08 16:11:51] Shell.read_command()           : input command: write 3 0x3
-[2025-08-08 16:11:51] Shell.valid_check()            : command_args: ['write', '3', '0x3']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : command_args: ['write', '3', '0x3']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : return False
-[2025-08-08 16:11:51] Shell._is_invalid_para_length() : command_args: ['write', '3', '0x3']
-[2025-08-08 16:11:51] Shell.run_command()            : run command with write 3 0x3
-[2025-08-08 16:11:51] Shell.ssd_write()              : write 3, content 0x3, for_script is False
-[2025-08-08 16:11:51] Shell.ssd_write()              : [Write] Done - 3, 0x3
-[2025-08-08 16:11:51] Shell.read_command()           : wait command, preset command: erase_range 3 5
-[2025-08-08 16:11:51] Shell.read_command()           : input command: erase_range 3 5
-[2025-08-08 16:11:51] Shell.valid_check()            : command_args: ['erase_range', '3', '5']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : command_args: ['erase_range', '3', '5']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : return False
-[2025-08-08 16:11:51] Shell._is_invalid_para_length() : command_args: ['erase_range', '3', '5']
-[2025-08-08 16:11:51] Shell.run_command()            : run command with erase_range 3 5
-[2025-08-08 16:11:51] Shell.erase_range()            : Shell Erase range 3, 5
-[2025-08-08 16:11:51] Shell.erase()                  : Shell Erase 3, 3
-[2025-08-08 16:11:51] Shell.ssd_erase()              : erase 3, content 3, for_script is False
-[2025-08-08 16:11:51] Shell.ssd_erase()              : [Erase] Done - 3, 3
-[2025-08-08 16:11:51] Shell.read_command()           : wait command, preset command: read 3
-[2025-08-08 16:11:51] Shell.read_command()           : input command: read 3
-[2025-08-08 16:11:51] Shell.valid_check()            : command_args: ['read', '3']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : command_args: ['read', '3']
-[2025-08-08 16:11:51] Shell._is_invalid_command()    : return False
-[2025-08-08 16:11:51] Shell._is_invalid_para_length() : command_args: ['read', '3']
-[2025-08-08 16:11:51] Shell.run_command()            : run command with read 3
-[2025-08-08 16:11:51] Shell.ssd_read()               : read 3, for_script is False
-[2025-08-08 16:11:51] Shell.read_output()            : function executed
-[2025-08-08 16:11:51] Shell.read_output()            : {'0': '0x00000000'}
-[2025-08-08 16:11:51] Shell.ssd_read()               : [Read] LBA 3 : 0x00000000
+[2025-08-11 09:58:34] Shell.ssd_write()              : [Write] Done - 2, 0x0000FFFF
+[2025-08-11 09:58:34] Shell.read_compare()           : command_args: [('0', '0x0000FFFF'), ('1', '0x0000FFFF'), ('2', '0x0000FFFF'), ('3', '0x0000FFFF'), ('4', '0x0000FFFF')]
+[2025-08-11 09:58:34] Shell.ssd_read()               : read 0, for_script is True
+[2025-08-11 09:58:34] Shell.read_output()            : function executed
+[2025-08-11 09:58:34] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:34] Shell.ssd_read()               : [Read] LBA 0 : 0x0000FFFF
+[2025-08-11 09:58:34] Shell.ssd_read()               : read 1, for_script is True
+[2025-08-11 09:58:34] Shell.read_output()            : function executed
+[2025-08-11 09:58:34] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:34] Shell.ssd_read()               : [Read] LBA 1 : 0x0000FFFF
+[2025-08-11 09:58:34] Shell.ssd_read()               : read 2, for_script is True
+[2025-08-11 09:58:35] Shell.read_output()            : function executed
+[2025-08-11 09:58:35] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:35] Shell.ssd_read()               : [Read] LBA 2 : 0x0000FFFF
+[2025-08-11 09:58:35] Shell.ssd_read()               : read 3, for_script is True
+[2025-08-11 09:58:35] Shell.read_output()            : function executed
+[2025-08-11 09:58:35] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:35] Shell.ssd_read()               : [Read] LBA 3 : 0x0000FFFF
+[2025-08-11 09:58:35] Shell.ssd_read()               : read 4, for_script is True
+[2025-08-11 09:58:35] Shell.read_output()            : function executed
+[2025-08-11 09:58:35] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:35] Shell.ssd_read()               : [Read] LBA 4 : 0x0000FFFF
+[2025-08-11 09:58:35] Shell.ssd_write()              : write 4, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:35] Shell.ssd_write()              : [Write] Done - 4, 0x0000FFFF
+[2025-08-11 09:58:35] Shell.ssd_write()              : write 0, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:35] Shell.ssd_write()              : [Write] Done - 0, 0x0000FFFF
+[2025-08-11 09:58:35] Shell.ssd_write()              : write 3, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:35] Shell.ssd_write()              : [Write] Done - 3, 0x0000FFFF
+[2025-08-11 09:58:35] Shell.ssd_write()              : write 1, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:35] Shell.ssd_write()              : [Write] Done - 1, 0x0000FFFF
+[2025-08-11 09:58:35] Shell.ssd_write()              : write 2, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:35] Shell.ssd_write()              : [Write] Done - 2, 0x0000FFFF
+[2025-08-11 09:58:35] Shell.read_compare()           : command_args: [('0', '0x0000FFFF'), ('1', '0x0000FFFF'), ('2', '0x0000FFFF'), ('3', '0x0000FFFF'), ('4', '0x0000FFFF')]
+[2025-08-11 09:58:35] Shell.ssd_read()               : read 0, for_script is True
+[2025-08-11 09:58:35] Shell.read_output()            : function executed
+[2025-08-11 09:58:35] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:35] Shell.ssd_read()               : [Read] LBA 0 : 0x0000FFFF
+[2025-08-11 09:58:35] Shell.ssd_read()               : read 1, for_script is True
+[2025-08-11 09:58:36] Shell.read_output()            : function executed
+[2025-08-11 09:58:36] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:36] Shell.ssd_read()               : [Read] LBA 1 : 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_read()               : read 2, for_script is True
+[2025-08-11 09:58:36] Shell.read_output()            : function executed
+[2025-08-11 09:58:36] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:36] Shell.ssd_read()               : [Read] LBA 2 : 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_read()               : read 3, for_script is True
+[2025-08-11 09:58:36] Shell.read_output()            : function executed
+[2025-08-11 09:58:36] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:36] Shell.ssd_read()               : [Read] LBA 3 : 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_read()               : read 4, for_script is True
+[2025-08-11 09:58:36] Shell.read_output()            : function executed
+[2025-08-11 09:58:36] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:36] Shell.ssd_read()               : [Read] LBA 4 : 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_write()              : write 4, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:36] Shell.ssd_write()              : [Write] Done - 4, 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_write()              : write 0, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:36] Shell.ssd_write()              : [Write] Done - 0, 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_write()              : write 3, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:36] Shell.ssd_write()              : [Write] Done - 3, 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_write()              : write 1, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:36] Shell.ssd_write()              : [Write] Done - 1, 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_write()              : write 2, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:36] Shell.ssd_write()              : [Write] Done - 2, 0x0000FFFF
+[2025-08-11 09:58:36] Shell.read_compare()           : command_args: [('0', '0x0000FFFF'), ('1', '0x0000FFFF'), ('2', '0x0000FFFF'), ('3', '0x0000FFFF'), ('4', '0x0000FFFF')]
+[2025-08-11 09:58:36] Shell.ssd_read()               : read 0, for_script is True
+[2025-08-11 09:58:36] Shell.read_output()            : function executed
+[2025-08-11 09:58:36] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:36] Shell.ssd_read()               : [Read] LBA 0 : 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_read()               : read 1, for_script is True
+[2025-08-11 09:58:36] Shell.read_output()            : function executed
+[2025-08-11 09:58:36] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:36] Shell.ssd_read()               : [Read] LBA 1 : 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_read()               : read 2, for_script is True
+[2025-08-11 09:58:36] Shell.read_output()            : function executed
+[2025-08-11 09:58:36] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:36] Shell.ssd_read()               : [Read] LBA 2 : 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_read()               : read 3, for_script is True
+[2025-08-11 09:58:36] Shell.read_output()            : function executed
+[2025-08-11 09:58:36] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:36] Shell.ssd_read()               : [Read] LBA 3 : 0x0000FFFF
+[2025-08-11 09:58:36] Shell.ssd_read()               : read 4, for_script is True
+[2025-08-11 09:58:37] Shell.read_output()            : function executed
+[2025-08-11 09:58:37] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:37] Shell.ssd_read()               : [Read] LBA 4 : 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_write()              : write 4, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:37] Shell.ssd_write()              : [Write] Done - 4, 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_write()              : write 0, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:37] Shell.ssd_write()              : [Write] Done - 0, 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_write()              : write 3, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:37] Shell.ssd_write()              : [Write] Done - 3, 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_write()              : write 1, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:37] Shell.ssd_write()              : [Write] Done - 1, 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_write()              : write 2, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:37] Shell.ssd_write()              : [Write] Done - 2, 0x0000FFFF
+[2025-08-11 09:58:37] Shell.read_compare()           : command_args: [('0', '0x0000FFFF'), ('1', '0x0000FFFF'), ('2', '0x0000FFFF'), ('3', '0x0000FFFF'), ('4', '0x0000FFFF')]
+[2025-08-11 09:58:37] Shell.ssd_read()               : read 0, for_script is True
+[2025-08-11 09:58:37] Shell.read_output()            : function executed
+[2025-08-11 09:58:37] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:37] Shell.ssd_read()               : [Read] LBA 0 : 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_read()               : read 1, for_script is True
+[2025-08-11 09:58:37] Shell.read_output()            : function executed
+[2025-08-11 09:58:37] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:37] Shell.ssd_read()               : [Read] LBA 1 : 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_read()               : read 2, for_script is True
+[2025-08-11 09:58:37] Shell.read_output()            : function executed
+[2025-08-11 09:58:37] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:37] Shell.ssd_read()               : [Read] LBA 2 : 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_read()               : read 3, for_script is True
+[2025-08-11 09:58:37] Shell.read_output()            : function executed
+[2025-08-11 09:58:37] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:37] Shell.ssd_read()               : [Read] LBA 3 : 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_read()               : read 4, for_script is True
+[2025-08-11 09:58:37] Shell.read_output()            : function executed
+[2025-08-11 09:58:37] Shell.read_output()            : {'0': '0x0000FFFF'}
+[2025-08-11 09:58:37] Shell.ssd_read()               : [Read] LBA 4 : 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_write()              : write 4, content 0x0000FFFF, for_script is True
+[2025-08-11 09:58:37] Shell.ssd_write()              : [Write] Done - 4, 0x0000FFFF
+[2025-08-11 09:58:37] Shell.ssd_write()              : write 0, content 0x0000FFFF, for_script is True

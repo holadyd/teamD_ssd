@@ -1,13 +1,15 @@
-from logger.logger import Logger
-from shell import Shell
 import time
 
+from logger.logger import Logger
 from settings import ROOT_DIR
+from shell import Shell
+
 
 def input_command(shell, command):
     shell.read_command(command)
     if shell.valid_check():
         shell.run_command()
+
 
 def test_log_print(mocker):
     shell = Shell()
@@ -27,5 +29,3 @@ def test_log_print(mocker):
         test_result = file.readlines()
 
     assert test_result == expected
-
-

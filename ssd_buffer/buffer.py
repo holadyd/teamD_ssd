@@ -171,10 +171,3 @@ class Buffer:
             return buf_dict[lba]
         except:
             return None
-
-b = Buffer()
-b._reset_buffer()
-b.write_buffer("E 0 3")
-b.write_buffer("E 4 3")
-b.write_buffer("E 99 1")
-b.write_buffer("w 3 1")
