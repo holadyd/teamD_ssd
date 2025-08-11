@@ -121,10 +121,10 @@ class Buffer:
             cur_lba += 1 if range_siz > 0 else -1
 
     def flush_buffer(self) -> list[str]:
-            self.read_buffer()
-            buffer = self._buffer
-            self._reset_buffer()
-            return buffer
+        self.read_buffer()
+        buffer = self._buffer
+        self._reset_buffer()
+        return buffer
 
     def _find_empty(self):
         for idx in range(len(self._buffer)):

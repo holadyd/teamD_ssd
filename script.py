@@ -7,7 +7,7 @@ class Script:
 
     def input_dummy_command(self):
         for i in range(5):
-            self.shell.ssd_erase(f'{i*10}', '10', for_script=True)
+            self.shell.ssd_erase(f'{i * 10}', '10', for_script=True)
 
     def script_1(self):
         self.input_dummy_command()
@@ -70,16 +70,16 @@ class Script:
                 value1 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
                 value2 = f'0x{randrange(0xFFFFFFFF + 1):08X}'
                 compare_list = [
-                    (f'{2*i+2}', '0x00000000'),
-                    (f'{2*i+3}', '0x00000000'),
-                    (f'{2*i+4}', '0x00000000'),
+                    (f'{2 * i + 2}', '0x00000000'),
+                    (f'{2 * i + 3}', '0x00000000'),
+                    (f'{2 * i + 4}', '0x00000000'),
                 ]
-                self.shell.ssd_write(f'{2*i+2}', value1, for_script=True)
-                self.shell.ssd_write(f'{2*i+2}', value2, for_script=True)
+                self.shell.ssd_write(f'{2 * i + 2}', value1, for_script=True)
+                self.shell.ssd_write(f'{2 * i + 2}', value2, for_script=True)
 
-                self.shell.ssd_erase(f'{2*i+2}', "1", for_script=True)
-                self.shell.ssd_erase(f'{2*i+3}', "1", for_script=True)
-                self.shell.ssd_erase(f'{2*i+4}', "1", for_script=True)
+                self.shell.ssd_erase(f'{2 * i + 2}', "1", for_script=True)
+                self.shell.ssd_erase(f'{2 * i + 3}', "1", for_script=True)
+                self.shell.ssd_erase(f'{2 * i + 4}', "1", for_script=True)
 
                 self.shell.read_compare(compare_list)
             break
