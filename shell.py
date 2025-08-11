@@ -128,6 +128,8 @@ class Shell:
         self.logger_print(f'wait command, preset command: {command}')
         if command == None:
             self.command = input("Shell>")
+            while len(self.command.strip()) == 0:
+                self.command = input("Shell>")
         else:
             self.command = command
         self.logger_print(f'input command: {self.command}')
