@@ -113,15 +113,18 @@ class Buffer:
             elif cmd[1] == "E":
                 cur_lba = int(cmd[2])
                 range_siz = int(cmd[3])
-                for idx in range(abs(int(range_siz))):
-                    buf_list[cur_lba] = self._initial_data
-                    cur_lba += 1 if range_siz > 0 else -1
+                self.update_buf_list_erase(buf_list, cur_lba, range_siz)
+
+    def update_buf_list_erase(self, buf_list, cur_lba, range_siz):
+        for idx in range(abs(int(range_siz))):
+            buf_list[cur_lba] = self._initial_data
+            cur_lba += 1 if range_siz > 0 else -1
 
     def flush_buffer(self) -> list[str]:
-            self.read_buffer()
-            buffer = self._buffer
-            self._reset_buffer()
-            return buffer
+        self.read_buffer()
+        buffer = self._buffer
+        self._reset_buffer()
+        return buffer
 
     def _find_empty(self):
         for idx in range(len(self._buffer)):

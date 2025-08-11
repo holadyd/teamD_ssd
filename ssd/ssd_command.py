@@ -37,27 +37,25 @@ class WriteCommand(SSDCommand):
         self.lba, self.value = None, None
 
     def validate(self) -> bool:
-        # value  invalid Check
+
         if len(self.args) != 2:
             return False
         self.lba, self.value = self.args
 
         try:
-            int(self.value, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
+            int(self.value, 0)
 
         except (ValueError, TypeError):
             return False
 
         if not (0x0 <= int(self.value, 0) <= 0xFFFFFFFF):
             return False
-        # lba invalid Check
-        # 1. int 인지 체크
+
         try:
             int(self.lba, 0)
         except (ValueError, TypeError):
             return False
 
-        # 2. 0~ 99 인지 체크
         if 0 <= int(self.lba, 0) <= 99:
             return True
         return False
@@ -82,14 +80,11 @@ class ReadCommand(SSDCommand):
             return False
         self.lba = self.args[0]
 
-        # lba invalid Check
-        # 1. int 인지 체크
         try:
             int(self.lba, 0)
         except (ValueError, TypeError):
             return False
 
-        # 2. 0~ 99 인지 체크
         if 0 <= int(self.lba, 0) <= 99:
             return True
         return False
@@ -116,11 +111,11 @@ class EraseCommand(SSDCommand):
         self.lba, self.data_size = self.args
 
         try:
-            lba: int = int(self.lba, 0)  # lba 검증(숫자 여부)
+            lba: int = int(self.lba, 0)
             if 0 > lba or lba > 99:
                 raise ValueError
 
-            value: int = int(self.data_size, 0)  # size value 검증(숫자 여부)
+            value: int = int(self.data_size, 0)
             if value < 0 or value > self.erase_size_range:
                 raise ValueError
             if lba + value > self.lba_upper_limit + 1:

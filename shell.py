@@ -138,7 +138,6 @@ class Shell:
         lba = int(lba, 0)
         size = int(size, 0)
 
-        # lba + size 값 boundary 체크
         if size == 0:
             return
         elif size > 0:
@@ -172,7 +171,6 @@ class Shell:
         addr_2 = int(addr_2, 0)
 
         start_lba = min(addr_1, addr_2)
-        # right_boundary = max(addr_1, addr_2)
         size = abs(addr_1 - addr_2) + 1
         self.erase(f'{start_lba}', f'{size}')
 
@@ -205,7 +203,7 @@ class Shell:
 
     def _is_valid_number(self, num):
         try:
-            int(num, 0)  # 0이면 0x면 16진수, 0o면 8진수, 아니면 10진수
+            int(num, 0)
             return True
         except ValueError:
             return False
@@ -349,10 +347,7 @@ class Shell:
 
 
 def main():
-    # argparse.ArgumentParser 객체 생성
     parser = argparse.ArgumentParser(description='Shell 스크립트 실행을 위한 매개변수')
-
-    # 매개변수 추가
     parser.add_argument('scripts', type=str, nargs='?', help='첫 번째 매개변수 : scripts txt 파일명')
     args = parser.parse_args()
 

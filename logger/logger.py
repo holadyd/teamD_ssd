@@ -1,8 +1,8 @@
 import os
-import time
 from datetime import datetime
 
 from settings import ROOT_DIR
+
 
 class Logger:
     def __init__(self, log_dir=f'{ROOT_DIR}\\logs', log_file='latest.log', max_bytes=10 * 1024):
@@ -15,7 +15,6 @@ class Logger:
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     def _get_backup_filename(self):
-        # until_20250807_17h_12m_11s.log
         log_timestamp_format = f"until_{datetime.now().strftime('%Y%m%d_%Hh_%Mm_%Ss')}"
         return os.path.join(self.log_dir, f"{log_timestamp_format}.log")
 
