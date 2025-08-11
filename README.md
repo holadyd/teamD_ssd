@@ -1,8 +1,10 @@
+## 발표 자료
+https://docs.google.com/presentation/d/1b_y8qS0LHroZm0pe3gc9B7pZ1iO4PPj9f8Zr36XFhYM/edit?pli=1&slide=id.p1#slide=id.p1
+
 ## Unit Test Specification Link for "SSD" module:
 https://docs.google.com/spreadsheets/d/1pivpHUavfY_BKSAiOs6C8QNKokpPM2BYMxlEpfTssiA/edit?pli=1&gid=0#gid=0
 
 <img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/50815c8a-b73c-45f3-a699-b2009bba93b4" />
-
 
 # Digital Ninjas SSD: 가상 SSD 및 테스트 셸 개발
 
