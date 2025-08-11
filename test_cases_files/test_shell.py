@@ -73,6 +73,8 @@ def test_shell_help(capsys):
                 '        Usage) erase [LBA] [Size]\n'
                 '      erase_range   LBA1 부터 LBA2 까지의 Data를 삭제한다.\n'
                 '        Usage) erase_range [LBA1] [LBA2]\n'
+                '      flush         Buffer 내 명령어를 실행한다.\n'
+                '        Usage) flush\n'
                 '      exit          Test Shell을 종료한다.\n'
                 '      help          도움말을 출력한다.\n'
                 '\n'
