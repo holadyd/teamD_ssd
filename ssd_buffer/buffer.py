@@ -100,6 +100,9 @@ class Buffer:
                 elif same_next == 10:
                     merged_commands.append(f"E {i - same_next} {same_next}")
                     same_next = 1
+        i += 1
+        if same_next > 0:
+            merged_commands.append(f"E {i - same_next} {same_next}")
 
     def update_buf_list(self, buf_list):
         for buf in self._buffer:
