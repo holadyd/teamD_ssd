@@ -20,22 +20,25 @@ class SSD:
         self.initial_data = "0x00000000"
 
         if not os.path.exists(self.nand_file):
-            initial_data_dict = {}
-
-            for i in range(100):
-                key = str(i)
-
-                initial_data_dict[key] = self.initial_data
-
-            with open(self.nand_file, "w") as f:
-                json.dump(initial_data_dict, f, indent=2)
+            self._init_nand_file()
 
         if not os.path.exists(self.output_file):
-            initial_data_dict = {}
-            initial_data_dict["0"] = self.initial_data
+            self._init_output_file()
 
-            with open(self.output_file, "w") as f:
-                json.dump(initial_data_dict, f, indent=2)
+    def _init_output_file(self):
+        initial_data_dict = {}
+        initial_data_dict["0"] = self.initial_data
+        with open(self.output_file, "w") as f:
+            json.dump(initial_data_dict, f, indent=2)
+
+    def _init_nand_file(self):
+        initial_data_dict = {}
+        for i in range(100):
+            key = str(i)
+
+            initial_data_dict[key] = self.initial_data
+        with open(self.nand_file, "w") as f:
+            json.dump(initial_data_dict, f, indent=2)
 
     def process_cmd(self, cmd: SSDCommand):
         if not cmd.validate():
@@ -85,14 +88,15 @@ class SSD:
         return
 
     def excute_flushed_command_list(self, cmd_list):
-        if not cmd_list is None:
-            for each_cmd in cmd_list:
-                if 'empty' in each_cmd:
-                    continue
-                _, *args = each_cmd.split('_')
-                flushed_cmd = CommandFactory.create(args)
-                flushed_cmd.validate()
-                self.execute_cmd(flushed_cmd)
+        if cmd_list is None:
+            return
+        for each_cmd in cmd_list:
+            if 'empty' in each_cmd:
+                continue
+            _, *args = each_cmd.split('_')
+            flushed_cmd = CommandFactory.create(args)
+            flushed_cmd.validate()
+            self.execute_cmd(flushed_cmd)
 
     def execute_cmd(self, cmd: SSDCommand):
         if isinstance(cmd, WriteCommand):
