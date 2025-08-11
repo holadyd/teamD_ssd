@@ -4,10 +4,10 @@ import os
 from contextlib import contextmanager
 from typing import Literal
 
-from ssd_buffer.buffer import Buffer
-from ssd.ssd_command import *
-
 from settings import ROOT_DIR
+from ssd.ssd_command import *
+from ssd_buffer.buffer import Buffer
+
 
 class SSD:
     def __init__(self, buffer: Buffer = None):
@@ -18,23 +18,23 @@ class SSD:
 
     def _initiate_nand_output(self):
         self.initial_data = "0x00000000"
-        # init ssd_nand.txt file
+
         if not os.path.exists(self.nand_file):
             initial_data_dict = {}
 
             for i in range(100):
-                key = str(i)  # json key는 string
-                # 모든 lba value를 "0x00000000"로 초기화
-                initial_data_dict[key] = self.initial_data  # 딕셔너리에 추가
+                key = str(i)
 
-            with open(self.nand_file, "w") as f:  # file에 작성
+                initial_data_dict[key] = self.initial_data
+
+            with open(self.nand_file, "w") as f:
                 json.dump(initial_data_dict, f, indent=2)
-        # init ssd_output.txt file
+
         if not os.path.exists(self.output_file):
             initial_data_dict = {}
-            initial_data_dict["0"] = self.initial_data  # 딕셔너리에 추가
+            initial_data_dict["0"] = self.initial_data
 
-            with open(self.output_file, "w") as f:  # file에 작성
+            with open(self.output_file, "w") as f:
                 json.dump(initial_data_dict, f, indent=2)
 
     def process_cmd(self, cmd: SSDCommand):
@@ -42,7 +42,7 @@ class SSD:
             self._write_value_to_ssd_output("ERROR")
             return
 
-        if isinstance(cmd, ReadCommand):  # Fast Read판단
+        if isinstance(cmd, ReadCommand):
             self.process_read_cmd(cmd)
             return
 
@@ -106,13 +106,12 @@ class SSD:
 
     def read(self, lba):
         lba_int = int(lba)
-        key = str(lba_int)  # JSON은 문자열 키 사용
-        # ssd_nand.txt 읽기
+        key = str(lba_int)
+
         with open(self.nand_file, "r") as f:
             nand_data = json.load(f)
         value = nand_data.get(key)
 
-        # ssd_output.txt에 읽은 값 저장
         self._write_value_to_ssd_output(value)
 
         return value
@@ -130,18 +129,15 @@ class SSD:
             raise e
 
     def write(self, lba, value):
-        # if not self._check_parameter_validation(lba, value):
-        #     self._write_value_to_ssd_output("ERROR")
-        #     return
+
         try:
             nand_data = None
-            # 파일 핸들러를 사용해 'r' 모드로 파일 열기
+
             with self._open_file(self.nand_file, 'r') as f:
                 nand_data = json.load(f)
 
             converted_value = self.convert_value_to_hex(value)
 
-            # 파일 핸들러를 사용해 'w' 모드로 파일 열기
             with self._open_file(self.nand_file, 'w') as f:
                 nand_data[str(lba)] = converted_value
                 json.dump(nand_data, f, indent=2)
@@ -186,19 +182,14 @@ class SSD:
 
 
 def main():
-    # argparse.ArgumentParser 객체 생성
     parser = argparse.ArgumentParser(description='SSD 스크립트 실행을 위한 매개변수')
 
-    # 매개변수 추가
-    # parser.add_argument('command', type=str, help='첫 번째 매개변수 CMD')
-    # parser.add_argument('lba', type=str, nargs='?', help='두 번째 매개변수 SSD LBA주소')
-    # parser.add_argument('value', type=str, nargs='?', help='세 번째 매개변수 SSD Write시 Value', default=None)
     parser.add_argument('args', type=str, nargs='*', help='가변 매개변수')
     args_result = parser.parse_args()
 
     buffer = Buffer()
     ssd = SSD(buffer)
-    command = CommandFactory.create(args_result.args)  # args.command, args.lba, args.value)
+    command = CommandFactory.create(args_result.args)
     ssd.process_cmd(command)
 
 
