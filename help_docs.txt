@@ -11,6 +11,8 @@
         Usage) erase [LBA] [Size]
       erase_range   LBA1 부터 LBA2 까지의 Data를 삭제한다.
         Usage) erase_range [LBA1] [LBA2]
+      flush         Buffer 내 명령어를 실행한다.
+        Usage) flush
       exit          Test Shell을 종료한다.
       help          도움말을 출력한다.
 

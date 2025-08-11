@@ -16,7 +16,7 @@ class Shell:
         self.ret = True
         self.arg_none_param = ["help", "exit", "fullread", '1_', '1_FullWriteAndReadCompare',
                                '2_', '2_PartialLBAWrite', '3_', '3_WriteReadAging',
-                               '4_', '4_EraseAndWriteAging']
+                               '4_', '4_EraseAndWriteAging', 'flush']
         self.arg_addr = ["read"]
         self.arg_data = ["fullwrite"]
         self.arg_addr_data = ["write"]
@@ -96,6 +96,8 @@ class Shell:
             address_1 = commands[1]
             address_2 = commands[2]
             self.erase_range(address_1, address_2)
+        elif commands[0] == 'flush':
+            self.ssd_flush()
 
         return True
 
@@ -123,6 +125,14 @@ class Shell:
         if for_script:
             return
         self.console_print("[Erase] Done")
+
+    def ssd_flush(self, for_script=False):
+        self.logger_print(f'flush, for_script is {for_script}')
+        os.system(f"cd {ROOT_DIR} && python -m ssd.ssd F")
+        self.logger_print(f'[Flush] Done')
+        if for_script:
+            return
+        self.console_print("[Flush] Done")
 
     def read_command(self, command=None):
         self.logger_print(f'wait command, preset command: {command}')
