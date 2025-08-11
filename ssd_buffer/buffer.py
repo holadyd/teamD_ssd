@@ -3,6 +3,7 @@ import shutil
 
 from settings import ROOT_DIR
 
+
 class Buffer:
 
     def __init__(self):
@@ -102,28 +103,25 @@ class Buffer:
 
     def update_buf_list(self, buf_list):
         for buf in self._buffer:
-            if "empty" not in buf:
-                cmd = buf.split("_")
-                if cmd[1] == "W":
-                    lba = int(cmd[2])
-                    value = cmd[3]
-                    buf_list[lba] = value
-                elif cmd[1] == "E":
-                    cur_lba = int(cmd[2])
-                    range_siz = int(cmd[3])
-                    for idx in range(abs(int(range_siz))):
-                        buf_list[cur_lba] = self._initial_data
-                        cur_lba += 1 if range_siz > 0 else -1
+            if "empty" in buf:
+                continue
+            cmd = buf.split("_")
+            if cmd[1] == "W":
+                lba = int(cmd[2])
+                value = cmd[3]
+                buf_list[lba] = value
+            elif cmd[1] == "E":
+                cur_lba = int(cmd[2])
+                range_siz = int(cmd[3])
+                for idx in range(abs(int(range_siz))):
+                    buf_list[cur_lba] = self._initial_data
+                    cur_lba += 1 if range_siz > 0 else -1
 
     def flush_buffer(self) -> list[str]:
-        self.read_buffer()
-        buffer = self._buffer
-        self._reset_buffer()
-        return buffer
-
-    # def __del__(self):
-    #     if os.path.exists(self._dir_path):
-    #         shutil.rmtree(self._dir_path)
+            self.read_buffer()
+            buffer = self._buffer
+            self._reset_buffer()
+            return buffer
 
     def _find_empty(self):
         for idx in range(len(self._buffer)):
@@ -148,18 +146,19 @@ class Buffer:
         buf_dict = dict()
 
         for buf in self._buffer:
-            if "empty" not in buf:
-                cmd = buf.split("_")
-                if cmd[1] == "W":
-                    cmd_lba = cmd[2]
-                    cmd_value = cmd[3]
-                    buf_dict[cmd_lba] = cmd_value
-                elif cmd[1] == "E":
-                    cur_lba = int(cmd[2])
-                    range_siz = int(cmd[3])
-                    for idx in range(abs(int(range_siz))):
-                        buf_dict[str(cur_lba)] = self._initial_data
-                        cur_lba += 1 if range_siz > 0 else -1
+            if "empty" in buf:
+                continue
+            cmd = buf.split("_")
+            if cmd[1] == "W":
+                cmd_lba = cmd[2]
+                cmd_value = cmd[3]
+                buf_dict[cmd_lba] = cmd_value
+            elif cmd[1] == "E":
+                cur_lba = int(cmd[2])
+                range_siz = int(cmd[3])
+                for idx in range(abs(int(range_siz))):
+                    buf_dict[str(cur_lba)] = self._initial_data
+                    cur_lba += 1 if range_siz > 0 else -1
 
         try:
             return buf_dict[lba]
