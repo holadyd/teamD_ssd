@@ -100,6 +100,10 @@ class Buffer:
                 elif same_next == 10:
                     merged_commands.append(f"E {i - same_next} {same_next}")
                     same_next = 1
+        i += 1
+        if  same_next > 0:
+            merged_commands.append(f"E {i - same_next} {same_next}")
+
 
     def update_buf_list(self, buf_list):
         for buf in self._buffer:
@@ -167,3 +171,10 @@ class Buffer:
             return buf_dict[lba]
         except:
             return None
+
+b = Buffer()
+b._reset_buffer()
+b.write_buffer("E 0 3")
+b.write_buffer("E 4 3")
+b.write_buffer("E 99 1")
+b.write_buffer("w 3 1")
