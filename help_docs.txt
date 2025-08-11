@@ -7,6 +7,10 @@
         Usage) read [LBA]
       fullread      모든 LBA에 대해 Data를 출력한다.
         Usage) fullread
+      erase         LBA부터 Size 수만큼 Data를 삭제한다.
+        Usage) erase [LBA] [Size]
+      erase_range   LBA1 부터 LBA2 까지의 Data를 삭제한다.
+        Usage) erase_range [LBA1] [LBA2]
       exit          Test Shell을 종료한다.
       help          도움말을 출력한다.
 
